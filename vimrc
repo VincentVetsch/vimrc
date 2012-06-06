@@ -339,24 +339,24 @@
     
     "List Buffers in Quickfix buffev
     function s:ListBuffers() 
-                let save_more = &more 
-                set nomore 
-                redir @" 
-                buffers 
-                redir END 
+                let save_more = &more
+                set nomore
+                redir @"
+                buffers
+                redir END
                 let &more = save_more 
-                new 
-                0putnmap <F2> :ls<CR>:b  
-        endfunction 
-        command -bar -nargs=0 LBuf call s:ListBuffers() 
-        map <S-F11> :LBuf<CR> 
-       function! s:BufferWindowJump() 
-      let buffer = matchstr(getline('.'), '^\s*\(\d\+\)') 
-      exe 'bd! '.s:bufferWindowBuffer 
-      exe s:windowRestore 
-      exec s:originWindow.'wincmd w' 
-      exec 'buffer '.buffer 
-   endfunction 
+                new
+                0putnmap <F2> :ls<CR>:b
+        endfunction
+        command -bar -nargs=0 LBuf call s:ListBuffers()
+        map <S-F11> :LBuf<CR>
+   function! s:BufferWindowJump()
+      let buffer = matchstr(getline('.'), '^\s*\(\d\+\)')
+      exe 'bd! '.s:bufferWindowBuffer
+      exe s:windowRestore
+      exec s:originWindow.'wincmd w"
+      exec 'buffer '.buffer
+   endfunction
    
    " BufferWindow - Creates a buffer window with a list of current buffers
    function! BufferWindow()
@@ -378,7 +378,7 @@
       nmap <buffer><silent> <cr> :call <SID>BufferWindowJump()<CR>
     endfunction
 
-    nnoremap <leader>ll :call BufferWindow()<cr>
+       
     "ToggleExtraWhitespace {
     function! ToggleExtraWhitespace()
         if !exists("s:hi_whitespace")
@@ -410,6 +410,7 @@
     nmap <S-F3> :GrepBuffer -w #FIXME-C:<cr>
     "Switch and list buffers
     nmap <C-F6> :ls<cr>
+    nmap <C-F6> :call BufferWindow()<cr>
     nmap <F6> :bn<cr>
     nmap <S-F6> :bp<cr>
     "Tagbar vim class outline viewer
