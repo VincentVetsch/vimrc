@@ -1,0 +1,23 @@
+Dish Database Todo List:
+    - Add GUI
+       ✓ Create DishView.ui
+       - Create Search Form
+       - Create Data Entry Form
+    - Finish DishDB.py
+    - Finish ReturnAuthorized.py
+    - Finish Points.py
+    - Finish Hours.py
+    - Finish Product.py
+    - UML Document
+        ✓ Add DishDB
+        ✓ Add ReturnAuthorized
+        - Add Hours
+        - Add Points
+        - Add Product
+        ✓ Add Import Packages
+            ✓ sqlite3
+            ✓ sys
+            ✓ String.Template
+            ✓ Time
+            ✓ QT4
+

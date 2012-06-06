@@ -1,0 +1,22 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+proc            /proc           proc    nodev,noexec,nosuid 0       0
+# / was on /dev/sda1 during installation
+UUID=75eec702-30f4-4c75-8682-2a0dd97e1c38 /               ext4    errors=remount-ro 0       1
+# /home was on /dev/sda5 during installation
+UUID=3f63d8c1-5a52-499b-8f31-6a1c7fff6d8c /home           ext4    defaults        0       2
+# /var was on /dev/sda7 during installation
+UUID=2f2e924c-434f-4064-b6be-1d0850199eab /var            ext4    defaults        0       2
+# swap was on /dev/sda6 during installation
+UUID=4e0d0d40-aa3a-41cb-96cd-947c474244a1 none            swap    sw              0       0
+/dev/sdc1 /media/Video ext3 user,nofail 0 2
+//iMac/Movies3 /media/iTunes cifs user,username=Vince,password=%%%$Peedy505,_netdev,noauto,nofail   0 0
+//iMac/Projects /media/Projects cifs user,username=Vince,password=%%%$Peedy505,_netdev,noauto,nofail   0 0
+//iMac/TV /media/TV cifs user,username=Vince,password=%%%$Peedy505,_netdev,noauto,nofail   0 0
+//iMac/work /media/Work cifs user,username=Vince,password=%%%$Peedy505,_netdev,noauto,nofail   0 0
+//iMac/Files /media/Files cifs user,username-Vince,password=%%%$Peedy505,_netdev,noauto,nofail 0 0

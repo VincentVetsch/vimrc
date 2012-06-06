@@ -1,0 +1,2 @@
+supertab.vmb: call delete('/home/vince/.vim/doc/supertab.txt')|call delete('/home/vince/.vim/plugin/supertab.vim')
+tagbar.vmb: call delete('/home/vince/.vim/autoload/tagbar.vim')|call delete('/home/vince/.vim/doc/tagbar.txt')|call delete('/home/vince/.vim/plugin/tagbar.vim')|call delete('/home/vince/.vim/syntax/tagbar.vim')

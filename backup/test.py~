@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+
+class MyClass():
+    '''
+    Test class for developing python apps in vim
+    '''
+    def __init__(self):
+        '''
+            Class constructor
+        '''
+        self.test = "Hello World"
+
+    def getTest(self):
+        '''
+        Getter for self.test
+        '''
+        return self.test
+
+    def setTest(self, x):
+        '''
+        Setter for self.test
+        '''
+        self.test = x
+
+if __name__ == "__main__":
+    p = MyClass()
+    print p.getTest()

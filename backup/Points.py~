@@ -1,0 +1,22 @@
+'''
+Created on May 4, 2012
+
+@author:  Vincent E. Vetsch
+@emial:     vincent.vetsch@gmail.com
+'''
+import sys
+from DishDB import DishDB
+sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
+
+class Points(DishDB):
+    '''The Points Database'''
+    #TODO:  Add methods to the Points(DishDB) Class
+
+    def __init__(self):
+        '''
+        Constructor
+        '''
+        #TODO:  Add Comments
+        #TODO:  Add code for constructor
+        #TODO:  Add setters and getters for all parameters
+        pass

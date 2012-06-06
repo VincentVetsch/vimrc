@@ -1,0 +1,425 @@
+'''
+Created on May 2, 2012
+
+@author:    Vincent E. Vetsch
+@emial:     vincent.vetsch@gmail.com
+'''
+import unittest
+import sys
+sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
+
+class Test(unittest.TestCase):
+    '''
+    Test Cases for DishDB Module
+    '''
+    #TODO:  Add test case for DishDB.createDataBaseFromSQLFile(self, filePath) method
+    #TODO:  Add test case for DishDB.between method
+    #TODO:  Add test case for DishDB.dumpDB method
+    #TODO:  Add test case for DishDB.dumpTable method
+
+    def testDBandTable(self):
+        '''
+        TestDBandTable - is a test case for the Database path and table name
+        '''
+        #TODO-C:  Add Comments Completed: Sat 02 Jun 2012 12:46:27 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        print ra.fields
+        self.assertEqual(ra.dbpath, "/home/vince/Databases/Dish.db")
+        self.assertEqual(ra.table, "ra")
+
+    def testShipmentDates(self):
+        '''
+        TestShipmentDates - is a test case which test ra.ShipmentDates.  If
+        the code is working properly the ra.getQuery() should equal "SELECT *
+        FROM 'ra.ship.dates"
+        '''
+        #TODO-C:  Add Comments Completed: Sat 02 Jun 2012 12:46:35 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.ShipmentDates()
+        self.assertEqual(ra.getQuery(), "SELECT * FROM 'ra.ship.dates'")
+        ra.cleardata()
+
+    def testDataBaseIntegrity(self):
+        '''
+        TestDataBaseIntegrity - test the database integrity
+        '''
+        #TODO-C:  Add Comments Completed: Sat 02 Jun 2012 12:44:56 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        #Should retun OK
+        self.assertEqual(ra.getIntegrity(), "OK")
+        ra.cleardata()
+
+    def testTable(self):
+        '''
+        TestTable - test the database against a list of tables
+        '''
+        #TODO-C:  Add Comments Completed: Sat 02 Jun 2012 12:44:01 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.cleardata()
+        ra.getTables()
+        a = [(u'TimeClock',), (u'PointsPerDay',), (u'RA',), (u'startend',), (u'Product',), (u'Connectivity',), (u'polemounts',)]
+        self.assertEqual(ra.data, a)
+        ra.cleardata()
+
+    def testTableFields(self):
+        '''
+        TestTableFields - test the table RA against a list of fields
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:54 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        a = ['id', 'TheDate', 'Name', 'Account', 'Model', 'Serial', 'FailReason', 'JobType', 'Shipped', 'ShipDate']
+        self.assertEqual(ra.getFields(), a)
+        ra.cleardata()
+
+    def testView(self):
+        '''
+        testView - test the database against a list of views
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:46 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        a = [(u'ALL',), (u'1000.4 EA',), (u'1000.4 WA',), (u'211',), (u'722',), (u'625',), (u'612',), (u'211K',), (u'222k',), (u'311',), (u'311k',), (u'322',), (u'722k',), (u'922',), (u'currentcount',), (u'NonSerialNumber',), (u'V2V',), (u'1000.2',), (u'1000.2 NEW',), (u'512',), (u'211 used',), (u'211k used',), (u'222k used',), (u'311 used',), (u'311k used',), (u'322 used',), (u'512 used',), (u'612 used',), (u'625 used',), (u'722 used',), (u'722k used',), (u'922 used',), (u'1000.2 Used',), (u'1000.2 new Used',), (u'All Used',), (u'Easy Days',), (u'currentrcvrcount',), (u'average points',), (u'shpra',), (u'hard days',), (u'Max points',), (u'Min points',), (u'RA.Ship.dates',), (u'new ',), (u'all used 4-14',), (u'Joey',), (u'Joey Used',), (u'Hopper Used',), (u'HOPPER',)]
+        ra.getViews()
+        self.assertEqual(ra.data, a)
+        ra.cleardata()
+
+    def testInsert(self):
+        '''
+        testInsert  - test the insert method using two different call styles
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:39 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        self.assertEqual(ra.insert([1, 2, 4, 3]), "INSERT INTO ra VALUES ('1', '2', '4', '3')")
+        ra.cleardata()
+        a = "INSERT INTO ra (Name, Account, Model, Serial, FailReason, JobType, Shipped) VALUES ('1', '2', '3', '4', '5', '6', '7')"
+        self.assertEqual(ra.insert([1, 2, 3, 4, 5, 6, 7], ra.updateFields), a)
+
+    def testSelect(self):
+        '''
+        testSelect - test the select method using createSearchList and select.  It also, test for
+        criteria and fields errors plus select all statement
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:32 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.createSearchList("TheDate", "<", '2012-05-24')
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Shipped", "=", "YES")
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Model", "IS", "722")
+        ra.createSearchList(operator="OR")
+        ra.createSearchList("Model", "IS", "722K")
+        self.assertEqual(ra.select(criteria="2, 3"), "Error:  Criteria must be a List type")
+        self.assertEqual(ra.select(fields="1, 2"), "Error:  Fields must be a List type")
+
+        self.assertEqual(ra.select(), "SELECT * FROM ra")
+        self.assertEqual(ra.select(criteria=ra.searchList), "SELECT * FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES' AND Model IS '722' OR Model IS '722K'")
+        self.assertEqual(ra.select(fields=['TheDate', 'Model'], criteria=ra.searchList), "SELECT TheDate, Model FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES' AND Model IS '722' OR Model IS '722K'")
+        self.assertEqual(ra.select(fields=['TheDate', 'Account', 'Model']), "SELECT TheDate, Account, Model FROM ra")
+
+    def testSelectInto(self):
+        '''
+        testSelectInto - Test the select into method using createSearchList and selectInto.  It
+        also test for types on criteria, fields, and newtablem plus the default select into temp
+        statement.
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:25 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.createSearchList("TheDate", "<", '2012-05-24')
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Shipped", "=", "YES")
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Model", "IS", "722")
+        ra.createSearchList(operator="OR")
+        ra.createSearchList("Model", "IS", "722K")
+        self.assertEqual(ra.selectInto(criteria="2, 3"), "Error:  Criteria must be a List type")
+        self.assertEqual(ra.selectInto(fields="1, 2"), "Error:  Fields must be a List type")
+        self.assertEqual(ra.selectInto(newTable=[1, 2]), "Error:  newTable must be a String type")
+        self.assertEqual(ra.selectInto(), "SELECT * INTO Temp FROM ra")
+        self.assertEqual(ra.selectInto(criteria=ra.searchList), "SELECT * INTO Temp FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES' AND Model IS '722' OR Model IS '722K'")
+        self.assertEqual(ra.selectInto(fields=['TheDate', 'Model'], criteria=ra.searchList), "SELECT TheDate, Model INTO Temp FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES' AND Model IS '722' OR Model IS '722K'")
+        self.assertEqual(ra.selectInto(fields=['TheDate', 'Account', 'Model']), "SELECT TheDate, Account, Model INTO Temp FROM ra")
+        self.assertEqual(ra.selectInto(newTable="Models", fields=['TheDate', 'Account', 'Model']), "SELECT TheDate, Account, Model INTO Models FROM ra")
+
+    def testDelete(self):
+        '''
+        testDelete - Test the delete method using createSearchList and delete. It also
+        test for type errors on searchlist and a simple search and delete.
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:17 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.createSearchList("TheDate", "<", '2012-05-24')
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Shipped", "=", "YES")
+        self.assertEqual(ra.delete("Hello"), "Error:  The criteria must be a list")
+        self.assertEqual(ra.delete([]), "Error:  The list must be a valid search list")
+        self.assertEqual(ra.delete(ra.searchList), "DELETE FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES'")
+
+    def testUpdate(self):
+        '''
+        testUpdate - test using createSearchList, createUpdateList and update methods.
+        test for the searchList type, and a proper responce sql string.
+        '''
+        #TODO-C:  Add Comments  Completed: Sat 02 Jun 2012 12:43:07 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.createSearchList("TheDate", "<", '2012-05-24')
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Shipped", "=", "YES")
+        ra.createUpdateList("Account", "89009012834908123")
+        ra.createUpdateList("Model", "722K")
+        ra.createUpdateList("JobType", "CH")
+        self.assertEqual(ra.update([]), "Error:  Criteria must be a List type and must have more at least one element")
+        self.assertEqual(ra.update(ra.searchList), "UPDATE ra SET Account = '89009012834908123', Model = '722K', JobType = 'CH' WHERE TheDate < '2012-05-24' AND Shipped = 'YES'")
+
+    def testOrderBy(self):
+        '''
+        testOrderBy - test using createSearchList and orderBy methods.  Test for criteria
+        fields for the searchList type, and a proper responce sql string.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 01:10:46 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        ra.createSearchList("TheDate", "<", '2012-05-24')
+        ra.createSearchList(operator="AND")
+        ra.createSearchList("Shipped", "=", "YES")
+        self.assertEqual(ra.orderBy("id", criteria="2, 3", ), "Error:  Criteria must be a List type")
+        self.assertEqual(ra.orderBy("id", fields="1, 2"), "Error:  Fields must be a List type")
+        self.assertEqual(ra.orderBy("id", criteria=ra.searchList), "SELECT * FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES' ORDER BY id DESC")
+        self.assertEqual(ra.orderBy("id", fields=['TheDate', 'Model'], criteria=ra.searchList, direction="ASC"), "SELECT TheDate, Model FROM ra WHERE TheDate < '2012-05-24' AND Shipped = 'YES' ORDER BY id ASC")
+        self.assertEqual(ra.orderBy("id", fields=['TheDate', 'Account', 'Model'],  direction="UP"), 'Error:  Direction must be ASC or DESC')
+
+    def testShipDate(self):
+        '''
+        testShipDate -  Test ShipmentDates against the test data list.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 01:14:24 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        td = [(u'2011-10-07',),
+              (u'2011-10-13',),
+              (u'2011-11-17',),
+              (u'2011-12-09',),
+              (u'2012-01-10',),
+              (u'2012-02-01',),
+              (u'2012-02-08',),
+              (u'2012-02-15',),
+              (u'2012-02-25',),
+              (u'2012-02-29',),
+              (u'2012-03-07',),
+              (u'2012-03-14',),
+              (u'2012-03-28',),
+              (u'2012-04-04',),
+              (u'2012-04-25',),
+              (u'2012-05-02',),
+              (u'2012-05-09',),
+              (None,)]
+        self.assertEqual(ra.ShipmentDates(), td)
+
+    def testDistinct(self):
+        '''
+        TestDistinct - Test distinct method against a SQL statement
+        '''
+        #TODO-C:  Add Comments Completed: Sat 02 Jun 2012 01:49:16 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        self.assertEqual(ra.distinct("Model"), "SELECT DISTINCT Model FROM ra")
+
+    def testRelationTable(self):
+        '''
+        testRelationTable - Test using a list of table.field list
+        '''
+        #TODO-C:  Add Comments Completed: Sat 02 Jun 2012 01:51:58 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        t1 = ra.tableRelation("ra", ["Account", "Model", "Failreason"])
+        self.assertEqual(t1, ['ra.Account', 'ra.Model', 'ra.Failreason'])
+
+    def testInnerJoin(self):
+        '''
+        testInnerJoin - Test using tableRelation, createSearchList and join to create a select
+        statement with an implicit inner join statement.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 02:37:10 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        t1 = ra.tableRelation("ra", ["Account", "Model", "Failreason", "TheDate"])
+        t2 = ra.tableRelation("points", ["id", "TheDate"])
+        ra.createSearchList(t1[3], "<", t2[1])
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[0], "=", "123019239071854091q2438")
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[1], "IS", t2[0])
+        ra.createSearchList(operator="OR")
+        ra.createSearchList(t1[2], "IS", "722K")
+        a = "SELECT ra.Account, ra.Model, ra.Failreason, ra.TheDate FROM ra INNER JOIN pointsperhour ON ra.TheDate < 'points.TheDate' AND ra.Account = '123019239071854091q2438' AND ra.Model IS 'points.id' OR ra.Failreason IS '722K'"
+        self.assertEqual(ra.join(ra.table, "pointsperhour", t1, ra.searchList, "innerjoin"), a)
+
+    def testLeftOuterJoin(self):
+        '''
+        testLeftOuterJoin - Test using tableRelation, createSearchList and join to create a select
+        statement with an implicit left outer join statement.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 02:37:20 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        t1 = ra.tableRelation("ra", ["Account", "Model", "Failreason", "TheDate"])
+        t2 = ra.tableRelation("points", ["id", "TheDate"])
+        ra.createSearchList(t1[3], "<", t2[1])
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[0], "=", "123019239071854091q2438")
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[1], "IS", t2[0])
+        ra.createSearchList(operator="OR")
+        ra.createSearchList(t1[2], "IS", "722K")
+        a = "SELECT ra.Account, ra.Model, ra.Failreason, ra.TheDate FROM ra LEFT JOIN pointsperhour ON ra.TheDate < 'points.TheDate' AND ra.Account = '123019239071854091q2438' AND ra.Model IS 'points.id' OR ra.Failreason IS '722K'"
+        self.assertEqual(ra.join(ra.table, "pointsperhour", t1, ra.searchList, "leftouterjoin"), a)
+
+    def testRightOuterJoin(self):
+        '''
+        testRightOuterJoin -   Test using tableRelation, createSearchList and join to create a select
+        statement with an implicit right outer join statement.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 02:37:31 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        t1 = ra.tableRelation("ra", ["Account", "Model", "Failreason", "TheDate"])
+        t2 = ra.tableRelation("points", ["id", "TheDate"])
+        ra.createSearchList(t1[3], "<", t2[1])
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[0], "=", "123019239071854091q2438")
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[1], "IS", t2[0])
+        ra.createSearchList(operator="OR")
+        ra.createSearchList(t1[2], "IS", "722K")
+        a = "SELECT ra.Account, ra.Model, ra.Failreason, ra.TheDate FROM ra RIGHT JOIN pointsperhour ON ra.TheDate < 'points.TheDate' AND ra.Account = '123019239071854091q2438' AND ra.Model IS 'points.id' OR ra.Failreason IS '722K'"
+        self.assertEqual(ra.join(ra.table, "pointsperhour", t1, ra.searchList, "rightouterjoin"), a)
+
+    def testFullJoin(self):
+        '''
+        testFullJoin -  Test using tableRelation, createSearchList and join to create a select
+        statement with an implicit full join statement.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 02:37:43 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        t1 = ra.tableRelation("ra", ["Account", "Model", "Failreason", "TheDate"])
+        t2 = ra.tableRelation("points", ["id", "TheDate"])
+        ra.createSearchList(t1[3], "<", t2[1])
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[0], "=", "123019239071854091q2438")
+        ra.createSearchList(operator="AND")
+        ra.createSearchList(t1[1], "IS", t2[0])
+        ra.createSearchList(operator="OR")
+        ra.createSearchList(t1[2], "IS", "722K")
+        a = "SELECT ra.Account, ra.Model, ra.Failreason, ra.TheDate FROM ra FULL JOIN pointsperhour ON ra.TheDate < 'points.TheDate' AND ra.Account = '123019239071854091q2438' AND ra.Model IS 'points.id' OR ra.Failreason IS '722K'"
+        self.assertEqual(ra.join(ra.table, "pointsperhour", t1, ra.searchList, "fulljoin"), a)
+
+    def testUnion(self):
+        '''
+        testUnion - Test union method by matching select statement
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 04:09:09 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        a = "SELECT Acount, Model, Failreason, TheDate FROM ra UNION SELECT Acount, Model, Failreason, TheDate FROM ra_temp"
+        self.assertEqual(ra.union("ra", "ra_temp", ["Acount", "Model", "Failreason", "TheDate"], ALL=False), a)
+
+    def testUnionAll(self):
+        '''
+        testUnionAll - Test union all method by matching select statement
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 04:10:34 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        a = "SELECT Acount, Model, Failreason, TheDate FROM ra UNION ALL SELECT Acount, Model, Failreason, TheDate FROM ra_temp"
+        self.assertEqual(ra.union(ra.table, "ra_temp", ["Acount", "Model", "Failreason", "TheDate"], ALL=True), a)
+
+    def testGetFields(self):
+        '''
+        testGetFields - Test getFields method by compairing data output to list.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 04:13:10 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        '''
+        a = [(0, u'id', u'INTEGER', 0, None, 1),
+             (1, u'TheDate', u'DATE', 0, None, 0),
+             (2, u'Name', u'TEXT', 0, None, 0),
+             (3, u'Account', u'INTEGER', 0, None, 0),
+             (4, u'Model', u'TEXT', 0, None, 0),
+             (5, u'Serial', u'TEXT', 0, None, 0),
+             (6, u'FailReason', u'TEXT', 0, None, 0),
+             (7, u'JobType', u'TEXT', 0, None, 0),
+             (8, u'Shipped', u'TEXT', 0, None, 0),
+             (9, u'ShipDate', u'Date', 0, None, 0)]
+        '''
+        b = ['id', 'TheDate', 'Name', 'Account', 'Model', 'Serial', 'FailReason', 'JobType', 'Shipped', 'ShipDate']
+
+        self.assertEqual(ra.getFields(), b)
+
+    def testToText(self):
+        '''
+        testToText - test the toText method by writting a text file to file system.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 04:16:01 PM CDT
+        #TODO-C:  Add file test to toText method Completed:  Sat 02 Jun 2012 04:41:36 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        from os import path
+        ra = RetunAuthorized()
+        fn = "/home/vince/ras.txt"
+        ra.listall()
+        ra.toTEXT(fn, author="Vincent Vetsch", title="List of all Receivers Processed for Retun")
+        if path.exists(fn):
+            return True
+        else:
+            return False
+
+    def testToCSV(self):
+        '''
+        testToCSV - test the toCSV method by writting a text file to file system.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 04:26:06 PM CDT
+        #TODO-C:  Add file test to toCSV method Completed:  Sat 02 Jun 2012 04:47:52 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        from os import path
+        ra = RetunAuthorized()
+        ra.listall()
+        fn = "/home/vince/ras.csv"
+        ra.toCSV(fn)
+        if path.exists(fn):
+            return True
+        else:
+            return False
+
+    def testToHTML(self):
+        '''
+        testToHTML - test the toHTML method by writting a text file to file system.
+        '''
+        #TODO-C:  Add Comments Completed:  Sat 02 Jun 2012 04:26:22 PM CDT
+        #TODO-C:  Add file test to toHTML method Completed:  Sat 02 Jun 2012 04:48:50 PM CDT
+        from RetunAuthorized import RetunAuthorized
+        ra = RetunAuthorized()
+        from os import path
+        fn = "/home/vince/ras.html"
+        ra.listall()
+        ra.toHTML(fn,
+                  "List of all RA's",
+                  "RA, DISH, Vince",
+                  "List of all RA's Vince Vetsch has collected",
+                  "Vincent Vetsch")
+        if path.exists(fn):
+            return True
+        else:
+            return False
+
+if __name__ == "__main__":
+    unittest.main()

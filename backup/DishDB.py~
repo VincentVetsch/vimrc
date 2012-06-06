@@ -1,0 +1,885 @@
+#!/usr/bin/env python
+'''
+Created on May 3, 2012
+
+@Author:    Vincent E. Vetsch
+@Emial:     vincent.vetsch@gmail.com
+'''
+import sqlite3
+#import sys
+from os import path
+from time import localtime, strftime
+from string import Template
+
+#sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
+
+
+class DishDB:
+    '''Creates a Database Object using the provided sqlite3 database.'''
+    #TODO-C:  Add getters and setters for all parameters in __init__Completed: Mon 04 Jun 2012 07:13:53 PM CDT
+
+    def __init__(self, theDB, theTable):
+        '''
+        Dish Database Constructor
+
+        Arguments:
+            -self        The instance
+            -theDB       The Database path
+            -theTable    The Table Name
+        '''
+        #TODO-C:  Add file test for self.dbpath Completed:  Sun 03 Jun 2012 10:53:00 AM CDT
+        #TODO-C:  Add sql test for table Completed:  Sun 03 Jun 2012 11:09:37 AM CDT
+        if path.exists(theDB):
+            self.dbpath = theDB
+        else:
+            #TODO-C:  Create the database file with self.createDatabaseFromSQLFile() Completed:  Sun 03 Jun 2012 10:52:29 AM CDT
+            if path.exists("DishDB.sql"):
+                self.createDatabaseFromSQLFile(theDB)
+            else:
+                raise IOError
+
+        if theTable in self.getTables():
+            self.table = theTable
+        else:
+            raise IOError
+
+        self.tableFields = self.getFields()
+        self.allTables = self.getTables()
+        self.fields = self.getFields(True)
+        self.updateFields = []
+        #TODO-C:  Create a default query for this instance Completed:  Sun 03 Jun 2012 11:29:06 AM CDT
+        self.query = self.select()
+        self.data = self.setData([])
+        self.searchList = []
+        self.updateList = []
+
+    def createDataBaseFromSQLFile(self, filePath):
+        '''
+        Creates a database from an SQLite3 sql statement file
+
+        Arguments:
+           - self            Instance
+           - filePath        The SQL File path
+        Retuns:
+           SQL Statement from filePath
+        '''
+        if path.exists(path.split(filePath)[0]):
+            f = open(filePath, 'rU')
+            #Create the Connection
+            connection = sqlite3.connect(filePath)
+            cursor = connection.cursor()
+            #Execute the script
+            cursor.executesript(f.read())
+            connection.commit()
+            cursor.close()
+        else:
+            raise IOError
+
+    def createCSVfromListWithQuotes(self, theList):
+        '''
+        Creates a Comma seperated value from a list
+        Arguments:
+            -self:    The instance
+            -theList: A list of anything
+        Retuns:
+           -A string of comma seperated values
+        '''
+        t = ""
+        for i, v in enumerate(theList):
+            if i + 1 < len(theList):
+                t = t + "'" + str(v) + "', "
+            else:
+                t = t + "'" + str(v) + "'"
+        return t
+
+    def createCSVfromList(self, theList):
+        '''
+        Creates a Comma seperated value from a list
+
+        Arguments:
+            -self:    The instance
+            -theList: A list of anything
+        Retuns:
+           -A string of comma seperated values
+        '''
+        t = ""
+        for i, v in enumerate(theList):
+            if i + 1 < len(theList):
+                t = t + "" + str(v) + ", "
+            else:
+                t = t + "" + str(v) + ""
+
+        return t
+
+    def createCurrentDateString(self):
+        '''
+        Creates a Current Date String
+
+        Arguments:
+            -self    The instance
+        Retuns:
+            -Retuns current date string
+        '''
+        return strftime("%Y-%m-%d", localtime())
+
+    def createCurrentTimeString(self):
+        '''
+        Create a current Time string
+
+        Arguments:
+            -self   The instance
+        Retuns:
+            -Retuns  current time string
+        '''
+        return strftime("%H:%M:%S", localtime())
+
+    def createSearchList(self, field='', operator='', condition=''):
+        '''
+        Creates a Search list for use with queryBuilder modifies
+        self.searchList
+
+        Arguments:
+            -self         The instance
+            -field        The field in which the search will be applied to
+            -operator     EQUAL, NOT EQUAL, <, >, !=, =
+            -condition    The value
+        Retuns:
+            -Retuns nothing
+        '''
+        if field == '' or condition == '':
+            self.searchList.append(" " + operator + " ")
+        else:
+            self.searchList.append(field + " " + operator + " '" + \
+                                   condition + "'")
+
+    def createUpdateList(self, field='', data=''):
+        '''
+        Fills self.updateList with data from field and data.  The updateList
+        will be used to update the database.
+
+        Arguments:
+            -self:    The instance
+            -field:   The field as string
+            -data:    The data as string
+        Retuns:
+            -No Retun values
+        '''
+        if self.updateList == []:
+            self.updateList.append(field + " = '" + str(data) + "'")
+        else:
+            self.updateList.append(", " + field + " = '" + str(data) + "'")
+
+    def createStringFromList(self, theList):
+        '''
+        Creates a string from a list
+
+        Arguments:
+            self:         Instance
+            theList:      A list
+        Retuns:
+            Retuns a string that represents theList
+        '''
+        return "".join(theList)
+
+    def cleardata(self):
+        '''
+        This method clears the data List
+
+        Arguments:
+            -self   Instance
+        Retuns:
+            -Retuns Nothing
+        '''
+        self.data = []
+
+    def clearSearchList(self):
+        '''
+        Clears the searchList
+
+        Arguments:
+          -None
+        Retuns:
+            -Retuns  Nothing
+        '''
+        self.searchList = []
+
+    def clearUpdateList(self):
+        '''
+        Clears the updateList
+
+        Arguments:
+            -None
+        Retuns:
+            -Retuns  Nothing
+        '''
+        self.updateList = []
+
+    def clearQuery(self):
+        '''
+        Clears the query string
+
+        Arguments:
+            -None
+        Retuns:
+            -Retuns Nothing
+        '''
+        self.query = ""
+
+    def fetchRecords(self):
+        '''
+        Performs the connection and fetch to the DishDB database.
+        All records are contained in self.data.
+
+        Arguments:
+            -None
+        Retuns:
+            -Retuns Nothing
+        '''
+        connection = sqlite3.connect(self.dbpath)
+        cursor = connection.cursor()
+        cursor.execute(self.query)
+        connection.commit()
+        self.setData(cursor.fetchall())
+        cursor.close()
+
+    def setQuery(self,  sql):
+        '''
+        Setter for self.query  It clears the query before setting
+
+        Arguments:
+            -self    Instance
+            -sql     SQL query string
+
+        Example:
+            s = DishDb(data.db, testTable)
+            s.setQuery("Select * FROM " + testTable)
+            print s.data
+        '''
+        self.clearQuery()
+        self.query = sql
+
+    def getQuery(self):
+        '''
+        Is the getter for self.query
+
+        Arguments:
+            -self   The Instance
+        Retuns:
+            -Retuns the self.query string
+        '''
+        return self.query
+
+    def getFields(self, rtnList=False):
+        '''
+        Gets the fields of current table
+
+        Arguments:
+            -self  The instance
+
+        Retuns:
+            -Retuns the table in a list
+        '''
+        temp = Template('PRAGMA table_info(${s})')
+        self.setQuery(temp.substitute(s=self.table))
+        self.fetchRecords()
+        y = []
+        for x in self.data:
+            y.append(str(x[1]))
+        return y
+
+    def setFields(self, fieldList):
+        '''
+        Sets the fields of current table
+
+        Arguments:
+            -self         The instance
+            -fieldList    The list of fields to be viewed
+        Retuns:
+            -Retuns nothing
+        '''
+        self.fields = fieldList
+
+    def getIntegrity(self):
+        '''
+        Gets the integrity of current database
+
+        Arguments:
+            -self   The instance
+        Retuns:
+            -Retuns ok if database is good and sqlite error code
+        '''
+        self.setQuery('PRAGMA integrity_check')
+        self.cleardata()
+        self.fetchRecords()
+        if self.data[0][0] == u'ok':
+            return "OK"
+        else:
+            return self.data[0][0]
+
+    def getViews(self):
+        '''
+        Gets the views of current database
+
+        Arguments:
+            -self    The instance
+        Retuns:
+            -Retuns the self.data in a list of tuples
+        '''
+        self.setQuery("SELECT name FROM sqlite_master WHERE type='view' AND name NOT LIKE 'sqlite_%'")
+        self.fetchRecords()
+        return self.data
+
+    def setData(self, dataList=[]):
+        '''
+        Sets self.data to dataList
+
+        Arguments:
+            -self   The instance
+            -dataList   The list of information
+        Returns:
+            -Returns Nothing sets self.data
+        '''
+        if len(dataList) < 1:
+            self.data = []
+        else:
+            self.data = dataList
+
+    def getData(self):
+        '''
+        Get the data list from the instance
+
+        Arguments:
+            -self       The instance
+        Returns:
+            -Returns a list of tuples
+        '''
+        return self.data
+
+    def getTables(self):
+        '''
+        Get list of tables from database
+
+        Arguments:
+            -self     The Instance
+        Retuns:
+            -Retuns self.data as a list of tuples
+        '''
+        self.setQuery("SELECT name FROM sqlite_master WHERE type='table'\
+                    AND name NOT LIKE 'sqlite_%'")
+        self.fetchRecords()
+        return self.data
+
+    def getTriggers(self):
+        '''
+        Get list of triggers from database
+
+        Arguments:
+            -self     The Instance
+        Retuns:
+            -Retuns self.data as a list of tuples
+        '''
+        self.setQuery("SELECT name FROM sqlite_master WHERE type='trigger'")
+        self.fetchRecords()
+        return self.data
+
+    def getTableStructure(self, tableName):
+        '''
+        Gets the current structure of tableName
+
+        Arguments:
+            -self    The instance
+            -tableName    The name of the table
+        Retuns:
+            -Retuns the SQL Statement in a List
+        '''
+        q = Template("SELECT sql FROM sqlite_master WHERE type='table' AND tbl_name='${t}'")
+        self.setQuery(q.substitute(t=tableName))
+        self.fetchRecords()
+        return self.data
+
+    def getViewStructure(self, viewName):
+        '''
+        Gets the current structure of tableName
+
+        Arguments:
+            -self         The instance
+            -viewName    The name of the view
+        Retuns:
+            -Retuns the SQL Statement in a List
+        '''
+        q = Template("SELECT sql FROM sqlite_master WHERE type='view' AND tbl_name='${t}'")
+        self.setQuery(q.substitute(t=viewName))
+        self.fetchRecords()
+        return self.data
+
+    def getTriggerStructure(self, triggerName):
+        '''
+        Gets the current structure of Triggers
+
+        Arguments:
+            -self         The instance
+            -tirggerName    The name of the view
+        Retuns:
+            -Retuns the SQL Statement in a List
+        '''
+        q = Template("SELECT sql FROM sqlite_master WHERE type='trigger' AND tbl_name='${t}'")
+        self.setQuery(q.substitute(t=triggerName))
+        self.fetchRecords()
+        return self.data
+
+    def insert(self, dataList, fields=["*"]):
+        '''
+        Creates an insert SQL statement
+
+        Arguments:
+            -self:        The instance
+            -fields:      The fields in which data will be inserted
+            -dataList:    The data to be inserted
+        Retuns:
+            -Retuns the SQL Statement
+        '''
+        if type(fields) != list:
+            return "Error:  Fields must be a List type"
+        elif type(dataList) != list:
+            return "Error:  Criteria must be a List type"
+
+        if fields[0] == "*":
+            return "INSERT INTO " + self.table + " VALUES (" + self.createCSVfromListWithQuotes(dataList) + ")"
+        else:
+            return "INSERT INTO " + self.table + " (" + self.createCSVfromList(fields) + ") VALUES (" + self.createCSVfromListWithQuotes(dataList) + ")"
+
+    def select(self, fields=["*"], criteria=[]):
+        '''
+        Creates a select SQL statement
+
+        Arguments:
+            -self:          The instance
+            -fields:        The fields in which data will be inserted
+            -criteria:      The search list for the WHERE statement.
+                            Use self.createSearchList() to create the
+                            search list
+
+        Retuns:
+            -Retuns the SQL Statement
+        '''
+        if type(fields) != list:
+            return "Error:  Fields must be a List type"
+        elif type(criteria) != list:
+            return "Error:  Criteria must be a List type"
+
+        if fields[0] == "*" and criteria == []:
+            return "SELECT * FROM " + self.table
+        elif fields[0] != "*" and criteria != []:
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + self.table + " WHERE " + self.createStringFromList(criteria)
+        elif fields[0] != "*" and criteria == []:
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + self.table
+        elif fields[0] == "*" and criteria != []:
+            return "SELECT * FROM " + self.table + " WHERE " + self.createStringFromList(criteria)
+
+    def selectInto(self, newTable="Temp", fields=["*"], criteria=[]):
+        '''
+        Creates a select into SQL statement
+
+        Arguments:
+            -self:        The instance
+            -newTable:    A new table
+            -fields:      The fields which will be inserted into the new table
+            -criteria:    The Search List
+        Retuns:
+            -Retuns the SQL Statement
+        '''
+        if type(fields) != list:
+            return "Error:  Fields must be a List type"
+        elif type(criteria) != list:
+            return "Error:  Criteria must be a List type"
+        elif type(newTable) != str:
+            return "Error:  newTable must be a String type"
+
+        if fields[0] == "*" and criteria == []:
+            return "SELECT * INTO " + newTable + " FROM " + self.table
+        elif fields[0] != "*" and criteria != []:
+            return "SELECT " + self.createCSVfromList(fields) + " INTO " + newTable + " FROM " + self.table + " WHERE " + self.createStringFromList(criteria)
+        elif fields[0] != "*" and criteria == []:
+            return "SELECT " + self.createCSVfromList(fields) + " INTO " + newTable + " FROM " + self.table
+        elif fields[0] == "*" and criteria != []:
+            return "SELECT * INTO " + newTable + " FROM " + self.table + " WHERE " + self.createStringFromList(criteria)
+
+    def delete(self, criteria=[]):
+        '''
+        Creates a delete SQL statement.  With this SQL Statement, the
+        criteria MUST Contain a valid search list.  Otherwise the data
+        contained within the table could be deleted
+
+        Arguments:
+            -self:        The instance
+            -criteria:    The Search List
+        Retuns:
+            -Retuns the SQL Statement
+        '''
+        if type(criteria) != list:
+            return "Error:  The criteria must be a list"
+        elif len(criteria) < 1:
+            return "Error:  The list must be a valid search list"
+        else:
+            return "DELETE FROM " + self.table + " WHERE " + self.createStringFromList(criteria)
+
+    def update(self, criteria=[]):
+        '''
+        Creates a Update SQL statement.  With this SQL Statement, the
+        criteria MUST Contain a valid search list.  Otherwise all records
+        contained within the table could be updated with the same data
+
+        Arguments:
+            -self:        The instance
+            -criteria:    The Search List
+        Retuns:
+            -Retuns the SQL Statement
+        '''
+
+        if type(criteria) != list or len(criteria) < 1:
+            return "Error:  Criteria must be a List type and must have more at least one element"
+        else:
+            #ud = map(lambda x,y: str(x) + "='" + str(y) + "'", fields, values)
+            return "UPDATE " + self.table + " SET " + self.createStringFromList(self.updateList) + " WHERE " + self.createStringFromList(criteria)
+
+    def orderBy(self, column, fields=["*"], criteria=[], direction="DESC"):
+        '''
+        Creates a Select OrderBy statement using The fields and criteria variables for a method
+        call to self.select
+
+        Arguments:
+            -self         The instance
+            -column       The field that sqlite will sort the data
+            -fields       The fields that will be displayed
+            -criteria     The search parameters
+            -direction    The direction of the sort.  Use only ASC = Ascending DESC = Desending
+        Retuns:
+            -Retuns an SQL search statement as a string
+
+        SELECT column_name(s)
+        FROM table_name
+        ORDER BY column_name(s) ASC|DESC
+        '''
+        if type(fields) != list:
+            return "Error:  Fields must be a List type"
+        elif type(criteria) != list:
+            return "Error:  Criteria must be a List type"
+        elif direction == "DESC" or direction == "ASC":
+            return self.select(fields, criteria) + " ORDER BY " + column + " " + direction
+        else:
+            return "Error:  Direction must be ASC or DESC"
+
+    def distinct(self, column=""):
+        '''
+        This method list only the different (distinct) values in a table
+
+        Arguments:
+            -self        The instance
+            -column      The column that needs to be distict
+        Retuns:
+            -Retuns sql statement
+
+        SELECT DISTINCT column_name(s)
+        FROM table_name
+        '''
+        return "SELECT DISTINCT " + column + " FROM " + self.table
+
+    def join(self, table1='', table2='', fields=[], criteria=[], flag=""):
+        '''
+        Generates a SQL Statement for inner, left, right, and full joins
+
+        Arguments:
+            -self        The instance
+            -table1      The primary selection table
+            -table2      The relation table
+            -fields      The fields that will be retuned
+            -criteria    The conditions that must be met
+            -flags       Flag words for the type of join
+                         innerjoin
+                         leftouterjoin
+                         rightouterjoin
+                         fulljoin
+        Retuns:
+            -Retuns a SQL statement for the join
+
+         SELECT column_name(s)
+         FROM table_name1
+         INNER JOIN table_name2
+         ON table_name1.column_name=table_name2.column_name
+
+         SELECT column_name(s)
+         FROM table_name1
+         LEFT JOIN table_name2
+         ON table_name1.column_name=table_name2.column_name
+
+         SELECT column_name(s)
+         FROM table_name1
+         RIGHT JOIN table_name2
+         ON table_name1.column_name=table_name2.column_name
+
+         SELECT column_name(s)
+         FROM table_name1
+         FULL JOIN table_name2
+         ON table_name1.column_name=table_name2.column_name
+        '''
+        if type(flag) != str:
+            return "Error:  flag must be a string"
+        if flag == "innerjoin":
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + table1 + " INNER JOIN " + table2 + " ON " + self.createStringFromList(criteria)
+        elif flag == "leftouterjoin":
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + table1 + " LEFT JOIN " + table2 + " ON " + self.createStringFromList(criteria)
+        elif flag == "rightouterjoin":
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + table1 + " RIGHT JOIN " + table2 + " ON " + self.createStringFromList(criteria)
+        elif flag == "fulljoin":
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + table1 + " FULL JOIN " + table2 + " ON " + self.createStringFromList(criteria)
+        else:
+            return "Error:  Must use the following flags: innerjoin, leftouterjoin, rightouterjoin, or fulljoin"
+
+    def between(self, Column, value1, value2):
+        '''
+        Creates a select statement with between criteria
+
+        Arguments:
+            -self:      The instance
+            -Column:    The field that the search will be conducted
+            -value1:    The beginning of the Between statement
+            -value2:    The end of the Between statemenbt
+
+        Retuns:
+            -Retuns the SQL statement
+
+         SELECT column_name(s)
+         FROM table_name
+         WHERE column_name
+         BETWEEN value1 AND value2
+        '''
+        #TODO:  Add Code to DishDB.between(column, value1, value2) method
+        pass
+
+    def tableRelation(self, theTable, fields):
+        '''
+        Combines theTable and fields[] of that table into a table.field
+
+        Arguments:
+            -self        The instance
+            -theTable    A string table name
+            -fields      A list of fields
+        Retun:
+            -Retuns a list of table.field titles
+        '''
+        #Table fields "What is displayed"
+        return map(lambda x: theTable + "." + str(x), fields)
+
+    def union(self, table1="", table2="", fields=[], ALL=False):
+        '''
+        Generates a SQL Statement for union and union all.
+
+        NOTE:  All field names must be the same in table1 and table2
+
+        Arguments:
+            -self        The instance
+            -table1      The primary selection table
+            -table2      The secondary table
+            -fields      The fields that will be retuned
+            -criteria    The conditions that must be met
+            -ALL         The switch for UNION ALL is boolean
+
+        Retuns:
+            -Retuns a SQL statement for the union
+
+         Column names must be the same
+
+         SELECT column_name(s) FROM table_name1
+         UNION
+         SELECT column_name(s) FROM table_name2
+
+         SELECT column_name(s) FROM table_name1
+         UNION ALL
+         SELECT column_name(s) FROM table_name2
+        '''
+        if ALL == False:
+            #Retun the sql statement for UNION for distinct values only
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + table1 + " UNION SELECT " \
+                + self.createCSVfromList(fields) + " FROM " + table2
+        else:
+            #Retun the sql statement for UNION all values
+            return "SELECT " + self.createCSVfromList(fields) + " FROM " + table1 + " UNION ALL SELECT " \
+                + self.createCSVfromList(fields) + " FROM " + table2
+        pass
+
+    def toTEXT(self, filenamepath, author="", title=""):
+        '''
+        Creates a plain text data file of the results from the last successful
+        Query.
+
+        Arguments:
+            -self            the instance
+            -filenamepath    The path and file name
+            -author          The Author of the document(optional)
+            -title           The title of the document(optional
+        Retuns:
+            -Retuns a file at filenamepath
+        '''
+        #TODO:  Add try for opening file and varify path
+        filename = open(filenamepath, 'w')
+        f = ""
+        f = f + title + "\n"
+        f = f + "Date and Time:  " + self.createCurrentDateString() + " - " + self.createCurrentTimeString() + "\n"
+        f = f + author + "\n\n"
+        #Formating For Field
+        for x in self.fields:
+            f = f + str(x).ljust(20)[:20] + "\t"
+
+        #Formating For Data
+        for x in self.data:
+            f = f + "\n"
+            for y in x:
+                f = f + str(y).ljust(20)[:20] + "\t"
+        filename.write(f)
+        filename.close()
+
+    def toCSV(self, filenamepath):
+        '''
+        Creates a CSV data file of the results from the last successful
+        Query.
+
+        Arguments:
+            -self            the instance
+            -filenamepath    The path and file name
+        Retuns:
+            -Retuns a file at filenamepath
+            '''
+        #TODO:  Add path.exists for filenamepath
+        filename = open(filenamepath, 'w')
+        f = self.createCSVfromListWithQuotes(self.fields) + "\n"
+        for x in self.data:
+            f = f + self.createCSVfromListWithQuotes(x) + "\n"
+        filename.write(f)
+        filename.close()
+
+    def toHTML(self, filenamepath, title, keywords, description, author):
+        '''
+        Creates an HTML File of the results from the last successful
+        Query.
+
+        Arguments:
+            -self            the instance
+            -filenamepath    The path and file name
+            -keywords        The keywords used in metatags
+            -description     The Discription of the report
+            -title           The title of the document
+            -author          The Author of the document
+        Retuns:
+            -Retuns an HTML file at filenamepath
+        '''
+        #TODO:  Add file and path tests for filename and f
+        filename = open(filenamepath, 'w')
+        f = open('hh.dat', 'r')
+        htmlhead = Template(f.read())
+        f.close()
+        htmltail = '</table>\n</body>\n</html>'
+        #The alt value is for the color of the row of data
+        alt = False
+        head = htmlhead.substitute(t=title,
+                                   k=keywords,
+                                   d=description,
+                                   a=author,
+                                   date=self.createCurrentDateString(),
+                                   time=self.createCurrentTimeString())
+        #Start creating the table for the HTML Document
+        f = "<tr>"
+        #Formating the Headers
+        for x in self.fields:
+            f = f + "<th>" + str(x) + "</th>"
+
+        f = f + "</tr>\n"
+
+        #Formating the data rows
+        for x in self.data:
+            if alt == True:
+                f = f + '<tr class="alt">'
+                alt = False
+            else:
+                f = f + "<tr>"
+                alt = True
+            for y in x:
+                f = f + "<td>" + str(y) + "</td>"
+            f = f + "</tr>\n"
+
+        filename.write(head + f + htmltail)
+        filename.close()
+
+    def dumpDB(self, toFile=False, filepath=""):
+        '''
+        Creates a sql statement of the complete database structure
+        including tables, views, triggers, and data for all tables.
+
+        Arguments:
+            -self:      The instance
+            -toFile:    Return the sql statement to a file (False is
+                        default)
+            -filepath:  The file name and path
+
+        Retuns:
+            -Retuns the sql statement to the application or to file.
+        '''
+        #TODO:  Add code to DishDB.dumpDB(toFile, filePath)
+        pass
+
+    def dumpTable(self, toFile=False, filepath=""):
+        '''
+        Creates a sql statement of the table structure and data in
+
+        Arguments:
+            -self:      The instance
+            -toFile:    Retun the sql statement to a file (False is
+                        default)
+            -filepath:  The file name and path
+
+        Retuns:
+            -Retuns the sql statement to the application or to file.
+        '''
+        #TODO:  Add code to DishDB.dumpTable(toFile, filepath)
+        pass
+
+if __name__ == '__main__':
+    dishPath = '/home/vince/Databases/Dish.db'
+    raTable = "ra"
+
+    t = DishDB(dishPath, raTable)
+    t.select()
+    t.toTEXT("TEST.txt", "Vincent Vetsch")
+    '''
+    testdata = ['Vetsch, Vincent',
+                '8255909280525038',
+                '722k',
+                'WZEDQPKC0PBG',
+                'Fucked up',
+                'CH',
+                'NO']
+    updateFields = "Name, Account, Model, Serial, FailReason, JobType, Shipped"
+    ra = DishDB(dishPath, raTable)
+    ra.createSearchList("TheDate", "IS", ra.createCurrentDateString())
+    ra.createSearchList(operator="AND")
+    ra.createSearchList("Shipped", "IS", "YES")
+    ra.createSearchList(operator="AND")
+    ra.createSearchList("Model", "IS NOT", "722")
+    ra.createSearchList(operator="OR")
+    ra.createSearchList("Model", "IS NOT", "722K")
+    ra.createUpdateList("Account", "89009012834908123")
+    ra.createUpdateList("Model", "722K")
+    ra.createUpdateList("JobType", "CH")
+    print "1 Search String:  " + ra.createStringFromList(ra.searchList)
+    print "2 Update String:  " + ra.createStringFromList(ra.updateList)
+    ra.queryBuilder(ra.select(), raTable,  ['WHERE', 'DISTINCT', ra.orderBy('id', 'ASC'), ra.orderBy('id')], testdata)
+    ra.queryBuilder(table="RA")
+    ra.queryBuilder()
+    print ra.unique("Model, TheDate")
+
+    ra.searchList = ra.searchList[0:len(ra.searchList)-2]
+    print ra.searchList
+    ra.getTableStructure("RA")
+    print ra.data[0][0]
+    ra.getViewStructure("shpra")
+    print ra.data[0][0]
+    '''

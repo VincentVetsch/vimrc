@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+#
+#
+#@Author:       Vincent Vetsch
+#@Email:        vincent.vetsch@gmail.com
+
+from time import localtime, strftime
+
+def createCurrentDateString():
+        '''
+        Creates a Current Date String
+
+        Arguments:
+            -self    The instance
+        Returns:
+            -Returns current date string
+        '''
+        return strftime("%Y-%m-%d", localtime())
+
+def createCurrentTimeString():
+        '''
+        Create a current Time string
+
+        Arguments:
+            -self
+        Returns:
+            -Returns  current time string
+        '''
+        return strftime("%H:%M:%S", localtime())
+
+
+now = createCurrentDateString() + " - " + createCurrentTimeString()

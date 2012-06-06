@@ -1,0 +1,40 @@
+'''
+Created on May 4, 2012
+
+@author:    Vincent E. Vetsch
+@emial:     vincent.vetsch@gmail.com
+'''
+import sys
+from DishDB import DishDB
+sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
+
+class Product(DishDB):
+    '''
+    The Product Database
+    '''
+    #TODO:  Add methods to Product(DishDB) Class
+
+    def __init__(self):
+        '''
+        Product database constructor
+        '''
+        self.theTable = "Product"
+        self.theDB = "/home/vince/Databases/Dish.db"
+
+    def setTheTable(self, tableString):
+        """
+        Setter for self.theTable
+
+        Arguments:
+            -self:          The instance
+            -tableString:   The name of the table
+        Retuns:
+            -Retuns nothing sets the value of self.theTable
+        """
+        #TODO:  Add Code
+        #TODO-C:  Add Comments Completed:  Sun 03 Jun 2012 02:49:28 PM CDT
+        self.theTable = tableString
+
+
+if __init__ == "__main__":
+    pass

@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+#
+# @Author:      Vincent Vetsch
+# @Email:       vincent.vetsch@gmail.com
+#
+
+
+class ProjectCenter():
+    '''
+    Project center is the class that helps create a new project under a svn repository.
+    It will help create the required files for the classes within your project with
+    unittest, docstring documents, uml diagrams, and implementation files.
+    '''
+
+    def __init__(self, x):
+        '''
+        Object Constructor
+        '''
+        self.x = r
+
+    def x(self):
+        print "X = " + self.x
+        return self.x
+
+
+if __name__ == '__main__':
+    print "Create the Object"
+    pc = ProjectCenter(29)
+    pc.x()

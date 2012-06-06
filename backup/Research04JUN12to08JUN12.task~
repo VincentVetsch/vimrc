@@ -1,0 +1,53 @@
+Rrsearch for 04JUN12 to 08JUN12:
+    ✓ Search Paths
+        ✓ Install $PYTHONPATHS to .bashrc
+        ✓ Find all paths to Projects and system modules
+    ✓ VCS
+    ✓ Tasklist
+        ✓ Get the plugin to colorize completed tasks properly
+        ✓ Create a mapping to insert a check mark
+          ✓ Revisit mappings so that insert mode works currently (,v)
+                ✓ The binding is still (,v) but modified it to R✓<ESC>
+        ✓ Fix indentation
+            ✓ Look at indent/python.vim for ideas
+        ✓ Fix wordwrap for fileType "task"
+        ✓ Fix colors
+        ✓ Apply indent folding
+        ✓ Apply spell checking
+        ✓ Apply ideas from <http://ifacethoughts.net/2008/05/11/task-management-using-vim/>
+    - Debugging
+    - Using Diff
+    ✓ Install powerline - Dead Sexy Statusbar
+    - Refactor
+        - Read Rope help
+        - <http://vim.wikia.com/wiki/Search_and_replace>
+        - <http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers>
+        ✓ Use :bufdo with extreme care
+            ✓ Can cause unexpected results
+         ✓ Can result in hours of debuging and scratching your head
+    ✓ killBuffer
+    ✓ <http://spv13.com/post/the-15-best-vim-plugins>
+DishDB:
+    - Add setters and getters to all classes
+        ✓ DishDB Completed
+        ✓ ReturnAuthorized.py
+        - Hours.py
+        - Points.py
+        ✓ Ratest.py
+    - Add test cases to new methods
+    ✓ Recreate UML in Dia
+    - Create a application that displays an HTML document which will be the face of the DishDB application.
+Vim:
+    ✓ Modify statusbar for MiniBufExplorer and Quickfix List
+    - Look at mksession
+    - Use sys.modules and pydoc to improve python interface with vim
+    - Use nosetest for unit testing python code
+    - Add menus
+        - Plugins
+        - Custom characters
+        - Debug
+        - Editing common files
+        - Review :smenu
+            ✓ Initial view, it is a cool command because if displays all of the menus.
+            - Look at structure
+            - Look for ideas about good menu structure

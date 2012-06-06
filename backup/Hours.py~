@@ -1,0 +1,23 @@
+'''
+Created on May 4, 2012
+
+@author:  Vincent E. Vetsch
+@emial:     vincent.vetsch@gmail.com
+'''
+from DishDB import DishDB
+
+
+class Hours(DishDB):
+    '''
+    The Hours Database
+    '''
+    #TODO:  Add methods to the Hours Class
+
+    def __init__(self):
+        '''
+
+        '''
+        #TODO:  Add code for constructor
+        #TODO:  Add comments
+        #TODO:  Add setters and getters for all parameters
+        pass

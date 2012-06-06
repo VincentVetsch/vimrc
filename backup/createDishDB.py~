@@ -1,0 +1,20 @@
+'''
+Created on May 26, 2012
+
+@author: vince
+'''
+from DishDB import DishDB
+
+
+class CreateDishDB(DishDB):
+    '''
+    classdocs
+    '''
+    Completed: Sun 03 Jun 2012 04:03:26 PM CDT
+    #TODO:  Remove class
+
+    def __init__(self):
+        '''
+        Constructor
+        '''
+        pass

@@ -1,0 +1,160 @@
+#!/usr/bin/python
+'''
+Created on May 2, 2012
+
+@author:    Vincent E. Vetsch
+@emial:     vincent.vetsch@gmail.com
+'''
+import sys
+sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
+from DishDB import DishDB
+from string import Template
+
+
+class ReturnAuthorized(DishDB):
+    '''
+    This class is for accessing and updating the ra table and ra views of
+    Dish.db invoke the class as follows.
+
+    Example:
+        ra = RetunAuthorized()
+        print ra.ShipmentDates()
+    '''
+    thePath = '/home/vince/Databases/Dish.db'
+
+    def __init__(self, theDB=thePath, theTable='ra'):
+        '''
+        RA Database Constructor
+
+        Arguments:
+            -self        The instance
+            -theDB       The Database path
+            -theTable    The Table Name
+        '''
+        #TODO:  Add Setters and Getters for all parameters
+        self.dbpath = theDB
+        self.table = theTable
+        self.fields = self.getFields()
+        self.searchList = []
+        self.updateList = []
+        self.updateFields = ['Name', 'Account', 'Model', 'Serial', 'FailReason', 'JobType', 'Shipped']
+        self.updateTemplate = Template("UPDATE ra SET Shipped = 'YES', ShipDate = '${d}' WHERE Shipped = 'NO'")
+
+    def ShipmentDates(self):
+        '''
+        Get the shipping dates of all processed ra's
+
+        Arguments:
+            -self     The instance
+        Retuns:
+            -Retuns a list of tuples
+        '''
+        self.setQuery("SELECT * FROM 'ra.ship.dates'")
+        self.fetchRecords()
+        return self.data
+
+    def addToRA(self, inputData):
+        '''
+        Add data to RA Table
+
+        Arguments:
+           -inputData    List data for input
+        Retuns:
+           -Retuns nothing
+        '''
+        sql = "INSERT INTO " + self.table + " (" + self.updateFields + ") \
+             VALUES "
+        sql = sql + "('" + "' , '".join(inputData) + "')"
+        print sql
+
+    def preprocess(self):
+        '''
+        Sets the query to shpra view and fetch records
+
+        Arguments:
+            -None
+        Retuns:
+            -Retuns none
+        '''
+        self.setQuery('SELECT * FROM shpra')
+        self.fetchRecords()
+
+    def listall(self):
+        '''
+        Sets the Query to select all records
+
+        Arguments:
+            -self     Instance
+
+        Retuns:
+           -Retuns nothing
+        '''
+        self.setQuery('SELECT * FROM ra')
+        self.fetchRecords()
+
+    def shipToday(self):
+        '''
+        Sets the query to Ship Retuns to yes and the current date
+
+        Arguments:
+            -self    Instance
+
+        Retuns:
+            -Retuns nothing
+        '''
+
+        self.setQuery(self.updateTemplate.substitute(d=ra.createCurrentDateString()))
+        return self.query
+        #self.fetchRecords()
+
+    def ship(self, theDate):
+        '''
+        Sets the query to Ship Retuns to yes and the date to the user
+        specified date
+
+        Arguments:
+            -self       Instance
+            -theDate    The Date in the following format "%Y-%m-%d"
+
+        Retuns:
+            -Retuns the SQL query
+        '''
+        self.setQuery(self.updateTemplate.substitute(d=theDate))
+        return self.query
+
+if __name__ == "__main__":
+    ra = ReturnAuthorized()
+
+    '''
+    print ra.fields
+
+    #manually set the query and fetch records
+    ra.setQuery("SELECT * from 'ra.ship.dates'")
+    ra.fetchRecords()
+    print "Shipment Dates"
+    for x in ra.data:
+        print "\t" + str(x[0])
+    ra.cleardata()
+
+    #Perform preprocess ra data
+    ra.preprocess()
+    print ra.query
+    print ra.data
+
+    testdata = ['Vetsch, Vincent', \
+                '8255909280525038', \
+                '722k', \
+                'WZEDQPKC0PBG', \
+                'Fucked up', \
+                'CH', \
+                'NO']
+    #ra.add(testdata)
+    #Print  the date STRING
+    print "The date is:  " + ra.createCurrentDateString()
+    print "The time is:  " + ra.createCurrentTimeString()
+
+    #print the Ship RA Today Query
+    ra.shipToday()
+    #print the Ship RA query
+    ra.ship('2012-01-09')
+    '''
