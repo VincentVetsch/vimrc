@@ -336,7 +336,49 @@
         unlet _resp
     endfunction
     au BufWrite *.cpp, *.h, *.c, *.py call UPDATE_TAGS()
+    
+    "List Buffers in Quickfix buffev
+    function s:ListBuffers() 
+                let save_more = &more 
+                set nomore 
+                redir @" 
+                buffers 
+                redir END 
+                let &more = save_more 
+                new 
+                0putnmap <F2> :ls<CR>:b  
+        endfunction 
+        command -bar -nargs=0 LBuf call s:ListBuffers() 
+        map <S-F11> :LBuf<CR> 
+       function! s:BufferWindowJump() 
+      let buffer = matchstr(getline('.'), '^\s*\(\d\+\)') 
+      exe 'bd! '.s:bufferWindowBuffer 
+      exe s:windowRestore 
+      exec s:originWindow.'wincmd w' 
+      exec 'buffer '.buffer 
+   endfunction 
+   
+   " BufferWindow - Creates a buffer window with a list of current buffers
+   function! BufferWindow()
+      let s:windowRestore = winrestcmd()
+      let s:originWindow = winnr()
+      let originBuffer = bufnr('%')
 
+      redir => buffersOutput
+      silent! buffers
+      redir END
+
+      let lines = split(buffersOutput, '\n')
+      exe 'bot ' . min([20, len(lines)]) . ' new'
+      call setline(1, lines)
+      call search('^\s*'.originBuffer, 'w')
+      let s:bufferWindowBuffer = bufnr('%')
+
+      nmap <buffer><silent> q    :bd!<cr>
+      nmap <buffer><silent> <cr> :call <SID>BufferWindowJump()<CR>
+    endfunction
+
+    nnoremap <leader>ll :call BufferWindow()<cr>
     "ToggleExtraWhitespace {
     function! ToggleExtraWhitespace()
         if !exists("s:hi_whitespace")
@@ -352,7 +394,7 @@
         endif
     endfunction
 
-    nnoremap <Leader>w :call ToggleExtraWhitespace()<CR>
+   nnoremap <Leader>w :call ToggleExtraWhitespace()<CR>
     au FileType c,h,cpp,python,vala,javascript hi ExtraWhitespace ctermbg=red
     au FileType c,h,cpp,python,vala,javascript match ExtraWhitespace /\s\+\%#\@<!$/
     " }
