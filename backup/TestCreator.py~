@@ -125,3 +125,4 @@ class TestCreator:
 
 
 if __name__ == '__main__':
+    pass

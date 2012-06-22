@@ -12,8 +12,10 @@ position your cursor on the highlighted name and press ‘gf’ in normal mode:
 
  Current Locations and Files of Interest:
  • ~/Projects/Dish/
+ • ~/Projects/TestCreator/
+ • ~/Projects/ProjectCenter/
  • ~/Documents/DailyTasks/
- • ~/Documents/Research04JUN12to08JUN12.tasks 
+ • ~/Documents/Research04JUN12to08JUN12.tasks
  • ~/.vimrc
  • ~/Documents/Notes/Ideas.note
 
@@ -21,7 +23,7 @@ position your cursor on the highlighted name and press ‘gf’ in normal mode:
  • DONE — Create a vim Project for DishDB
  • DONE — Integrate Notes into my vim configuration
  • TODO — Create UML diagram of my gvim plugin structure
- • TODO — Clean Up vimrc and commit changes
+ • DONE — Clean Up vimrc and commit changes
  • TODO — Continue work on TestCreate make into a plugin for vim
  • TODO — Continue work on ProjectBuilder make into a plugin for vim
 
@@ -38,10 +40,6 @@ position your cursor on the highlighted name and press ‘gf’ in normal mode:
  • TODO — Sharpen Drill Bits
 
  Household Items Needed:
- • Wart Remover
- ✓ Milk
- • Mouthwash
- • Daypro
 
  Family Issues:
  • DONE — Check on the price of a tap and die set, see if you have on in the RV

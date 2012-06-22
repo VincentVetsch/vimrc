@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+# coding:
+from os import path
+
+
+class Test(path):
+    def __init__(self, x, y, z, d):
+        pass
+
+def tesft():
+    pass
+
+
+def t(self, x):
+    pass
+
+
+def tt(x, y, t, g, one=path):
+    pass
+
+if __name__ == "__main__":
+    pass
