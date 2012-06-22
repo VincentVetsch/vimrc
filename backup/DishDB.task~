@@ -3,6 +3,8 @@ Dish Database Todo List:
        ✓ Create DishView.ui
        - Create Search Form
        - Create Data Entry Form
+       - Create CSS for HTML Files
+       - Create HTML Files
     - Finish DishDB.py
     - Finish ReturnAuthorized.py
     - Finish Points.py

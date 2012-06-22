@@ -4,7 +4,9 @@ Created on May 4, 2012
 @author:  Vincent E. Vetsch
 @emial:     vincent.vetsch@gmail.com
 '''
+import sys
 from DishDB import DishDB
+sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
 
 
 class Hours(DishDB):
@@ -21,3 +23,6 @@ class Hours(DishDB):
         #TODO:  Add comments
         #TODO:  Add setters and getters for all parameters
         pass
+
+if __name__ == '__main__':
+    h = Hours()

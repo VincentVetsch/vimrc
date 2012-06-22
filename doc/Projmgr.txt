@@ -1,0 +1,52 @@
+*Projmgr.txt* Plugin for loading/unloading/switching Vim sessions
+
+This plugin provides a more easy to use interface for the Vim session
+feature.
+
+I wrote it first only for my own needs. I have a bunch of small
+projects lying around on my hard disk. I would like to load a whole
+project, play around with it, switch to another if I like, or simply
+unload it.
+
+This plugin provide a menu system for 'Load', 'Unload' 'Switch to' a
+project(session), etc. None-menu-driven version is not available at the
+moment. 
+
+Install:
+1. Automatic: 
+   Simply use the install.sh script and following the instruction. 
+   Requires:
+   bash, Perl.
+2. Manual:
+   You don't need to do this ideally. But if for whatever reason the 
+   install shell script is not working for you, try to following these
+   steps:
+   a) Copy the projmgr.vim into your plugin directory or
+      $HOME/.vim/plugin.
+   b) Copy the Perl script to somewhere. E.g plugin/perl.
+   c) Copy this documentation into the corresponding doc directory.
+   d) Make a directory: $HOME/.vim/projects. This where the vim session
+      files will be stored.
+   e) Modify the script and change the s:projmgr_dir to the plugin
+      directory where you installed projmgr.vim.
+   f) Copy all (if you have any) your session files into the directory
+      mentioned in d).
+
+Usage:
+Once it is installed, a menu 'Projects' will appear in your Vim
+window. Load all your project file, define your view, folding etc. (Or
+you can load a session file altogether.) And use the 'Projects->Save
+to Project' to save a session. The file will be save at
+$HOME/.vim/projects/. (You can copy your vim session file directly
+into that directory if you want.) After that, 'Projects->Load-> will
+load that project. Obviously enough, 'Unload' will unload all buffers
+for that project and you can switch between projects.
+
+Known bug:
+1. Vim will not be notified when you unload the current session so that
+   when you use 'Projects->Current Project', vim will still be reporting
+   the latest one you loaded.
+2. Unload/switch are not working on Windows :(.
+3. Sometime if I try to load/unload a project several times, not all the
+   file in the session will be loaded by Vim. But all this script does 
+   is call :so <session_file> so I am wondering if it is a Vim bug.

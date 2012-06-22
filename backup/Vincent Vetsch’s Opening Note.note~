@@ -1,0 +1,47 @@
+Vincent Vetsch’s Opening Note
+
+To get started enter a title for your note above. When you’re ready to save
+your note just use Vim’s :write or :update commands, a filename will be picked
+automatically based on the title.
+
+The notes plug-in comes with self hosting documentation. To jump to these notes
+position your cursor on the highlighted name and press ‘gf’ in normal mode:
+
+ • Note taking syntax
+ • Note taking commands
+
+ Current Locations and Files of Interest:
+ • ~/Projects/Dish/
+ • ~/Documents/DailyTasks/
+ • ~/Documents/Research04JUN12to08JUN12.tasks 
+ • ~/.vimrc
+ • ~/Documents/Notes/Ideas.note
+
+ Important Tasks:
+ • DONE — Create a vim Project for DishDB
+ • DONE — Integrate Notes into my vim configuration
+ • TODO — Create UML diagram of my gvim plugin structure
+ • TODO — Clean Up vimrc and commit changes
+ • TODO — Continue work on TestCreate make into a plugin for vim
+ • TODO — Continue work on ProjectBuilder make into a plugin for vim
+
+ Dish Network Upcomming Tasks:
+ • DONE — Restock Van 06-10-2012
+ • DONE — Order Consumables
+ • DONE — Restock Van 06-11-2012
+ • DONE — Restock Van 06-12-2012
+ • DONE — Restock Van 06-13-2012
+ • DONE — Restock Tote
+ • DONE — Restock VAN
+ • DONE — Sharpen Drill Bits
+ • DONE — Perform hard count 06-13-2012
+ • TODO — Sharpen Drill Bits
+
+ Household Items Needed:
+ • Wart Remover
+ ✓ Milk
+ • Mouthwash
+ • Daypro
+
+ Family Issues:
+ • DONE — Check on the price of a tap and die set, see if you have on in the RV

@@ -1,8 +1,10 @@
-Rrsearch for 04JUN12 to 08JUN12:
+Research for 04JUN12 to 08JUN12:
     ✓ Search Paths
         ✓ Install $PYTHONPATHS to .bashrc
         ✓ Find all paths to Projects and system modules
     ✓ VCS
+    ✓ Good command for ctags and python
+        ✓ 'ctags -R -f ~/.vim/tags/python27.ctags /usr/lib/python2.7'
     ✓ Tasklist
         ✓ Get the plugin to colorize completed tasks properly
         ✓ Create a mapping to insert a check mark
@@ -15,18 +17,36 @@ Rrsearch for 04JUN12 to 08JUN12:
         ✓ Apply indent folding
         ✓ Apply spell checking
         ✓ Apply ideas from <http://ifacethoughts.net/2008/05/11/task-management-using-vim/>
-    - Debugging
-    - Using Diff
+    - Debugging with vim
+        ✓ pdb
+            ✓ <https://dev.launchpad.net/UltimateVimPythonSetup>
+               ✓ Be very careful with .vimrc modifications do one at a time and test thouroghly
+            ✓ <http://shanit.blogspot.com/2010/06/debugging-python-with-pdb-and-ipython.html>
+               ✓ a very good site it actually explains how to set breakpoints in python code
+        - gdb
+        - jdb
+    ✓ Read up on ConqueTerm
+    - Using Diff with vim
+    ✓ Add man page reader
     ✓ Install powerline - Dead Sexy Statusbar
     - Refactor
         - Read Rope help
         - <http://vim.wikia.com/wiki/Search_and_replace>
+            - Create some short cuts with comfirmation
+            - Try using diff for final confirmation against svn head
         - <http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers>
+        - <http://vim.wikia.com/wiki/Search_and_replace>
         ✓ Use :bufdo with extreme care
             ✓ Can cause unexpected results
          ✓ Can result in hours of debuging and scratching your head
     ✓ killBuffer
     ✓ <http://spv13.com/post/the-15-best-vim-plugins>
+    ✓ Put :ls into a Quickfix buffer
+    ✓ Make a vimgrep function to use Quickfix buffer for TODO items
+        ✓ <F2> For open items
+        ✓ <S-F2> For completed items
+        ✓ <F3> For FIXME items
+        ✓ <S-F3> For completed FIXME items
 DishDB:
     - Add setters and getters to all classes
         ✓ DishDB Completed
@@ -35,12 +55,23 @@ DishDB:
         - Points.py
         ✓ Ratest.py
     - Add test cases to new methods
+        - Make a vim function which will create a unit-test framework for new methods
+        - Make a test directory in src
     ✓ Recreate UML in Dia
     - Create a application that displays an HTML document which will be the face of the DishDB application.
 Vim:
+    - List Mappings
+    ✓ NOT GOING TO HAPPEN - Figure out how to use tab view for multiple projects
+        ✓ Limit it to a sessions.
     ✓ Modify statusbar for MiniBufExplorer and Quickfix List
-    - Look at mksession
+    ✓ Read up on git and Github
+        ✓ Setup repo on github for my .vimrc
+        ✓ Distribute it to my other computers
+    ✓ Look at mksession
+        ✓ Create a new session with mksession ~/sessionFileName
+        ✓ Open with vim -S ~/sessionFileName
     - Use sys.modules and pydoc to improve python interface with vim
+        
     - Use nosetest for unit testing python code
     - Add menus
         - Plugins

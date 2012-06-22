@@ -3,6 +3,10 @@
 # @Author:      Vincent Vetsch
 # @Email:       vincent.vetsch@gmail.com
 #
+#from IPython.core.debugger import Tracer
+import pdb
+
+#TODO:  Add proper initializer and proper methods
 
 
 class ProjectCenter():
@@ -16,14 +20,18 @@ class ProjectCenter():
         '''
         Object Constructor
         '''
-        self.x = r
+        self.x = x
 
-    def x(self):
-        print "X = " + self.x
+    def y(self):
+        #import pdb
+        pdb.set_trace()
+        #breakpoint1()
+        print "X = " + str(self.x)
         return self.x
 
 
 if __name__ == '__main__':
-    print "Create the Object"
+    #print "Create the Object"
+    #breakpoint1 = Tracer()
     pc = ProjectCenter(29)
-    pc.x()
+    pc.y()

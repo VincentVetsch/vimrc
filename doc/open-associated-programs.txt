@@ -1,0 +1,67 @@
+*open-associated-programs.txt*  Open files and web pages in associated programs from Vim
+
+The 'open.vim' plug-in knows how to open files, directories, URLs and e-mail
+addresses from inside Vim using the associated programs. It should work on
+Windows, Mac OS X and most Linux installations.
+
+This plug-in doesn't define any mappings or commands so that other Vim
+plug-ins that need to launch a web browser can easily bundle the 'open.vim'
+script. If you are looking for mappings / commands you can try my shell.vim
+plugin [1].
+
+==============================================================================
+Installation ~
+
+Unzip the most recent ZIP archive [2] file inside your Vim profile directory
+(usually this is '~/.vim' on UNIX and '%USERPROFILE%\vimfiles' on Windows),
+restart Vim and execute the command ':helptags ~/.vim/doc' (use ':helptags
+~\vimfiles\doc' instead on Windows).
+
+Note that on Windows a command prompt window pops up temporarily when either
+of the functions is called. If this bothers you then you can install my
+shell.vim [1] plug-in which includes a DLL [3] that works around this issue.
+Once you’ve installed both plug-ins it should work out of the box!
+
+==============================================================================
+Usage ~
+
+------------------------------------------------------------------------------
+The *xolox#open#file()* function
+
+This function takes a string argument containing a file or directory path and
+opens it just like double clicking the file or directory in your desktop
+environment would do. This means directories are opened in your file manager,
+image files are opened in an image viewer, ZIP files are opened in an
+archiving application, etc.
+
+------------------------------------------------------------------------------
+The *xolox#open#url()* function
+
+This function takes a string argument containing a URL or e-mail address and
+opens it in your favorite or the best available web browser / e-mail client.
+
+==============================================================================
+Contact ~
+
+If you have questions, bug reports, suggestions, etc. the author can be
+contacted at peter@peterodding.com. The latest version is available at
+http://peterodding.com/code/vim/open-associated-programs/ and
+http://github.com/xolox/vim-open-associated-programs. If you like the plug-in
+please vote for it on Vim Online [4].
+
+==============================================================================
+License ~
+
+This software is licensed under the MIT license [5].
+© 2010 Peter Odding <peter@peterodding.com>.
+
+==============================================================================
+References ~
+
+[1] http://peterodding.com/code/vim/shell/
+[2] http://peterodding.com/code/vim/downloads/open-associated-programs
+[3] http://en.wikipedia.org/wiki/Dynamic-link_library
+[4] http://www.vim.org/scripts/script.php?script_id=3242
+[5] http://en.wikipedia.org/wiki/MIT_License
+
+vim: syntax=help nospell

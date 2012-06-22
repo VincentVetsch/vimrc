@@ -1,0 +1,79 @@
+*mcol.txt*	Multi-Column Tables			Apr 24, 2007
+
+Author:    Charles E. Campbell, Jr.  <NdrOchip@ScampbellPfamily.AbizM>
+           (remove NOSPAM from Campbell's email first)
+Copyright: (c) 2004-2007 by Charles E. Campbell, Jr.	*mcol-copyright*
+           The VIM LICENSE applies to mcol.vim, mcolMaps.vim, and mcol.txt
+           (see |copyright|) except use "mcol and mcolMaps" instead of "Vim"
+           No warranty, express or implied.  Use At-Your-Own-Risk.
+
+==============================================================================
+1. Contents					*mcol* *mcol-contents*
+
+	1. Contents.....................: |mcol-contents|
+	2. Usage........................: |mcol-usage|
+	3. History......................: |mcol-history|
+
+==============================================================================
+2. Usage								*mcol-usage*
+
+   Converts a one-item per line list into a columnar table: >
+
+		\mn2 	 2 column table, items read using fgets
+		\mn3 	 3 column table, items read using fgets
+		\mn4 	 4 column table, items read using fgets
+		\mn5 	 5 column table, items read using fgets
+		\mn6 	 6 column table, items read using fgets
+		\mn7 	 7 column table, items read using fgets
+		\mn8 	 8 column table, items read using fgets
+		\mn9 	 9 column table, items read using fgets
+		\mn0	10 column table, items read using fgets
+
+		\MN0	1000 columns, items read using fgets
+		\MNT	1000 columns, transposed table, items read using fgets
+
+		\ms2 	 2 column table, items read using fscanf
+		\ms3 	 3 column table, items read using fscanf
+		\ms4 	 4 column table, items read using fscanf
+		\ms5 	 5 column table, items read using fscanf
+		\ms6 	 6 column table, items read using fscanf
+		\ms7 	 7 column table, items read using fscanf
+		\ms8 	 8 column table, items read using fscanf
+		\ms9 	 9 column table, items read using fscanf
+		\ms0	10 column table, items read using fscanf
+
+		\mw6	fit table for 60 column display
+		\mw7	fit table for 70 column display
+		\mw8	fit table for 80 column display
+		\mw9	fit table for 90 column display
+		\mw0	fit table for 100 column display
+		\mw1	fit table for 110 column display
+		\mw2	fit table for 120 column display
+		\mw3	fit table for 130 column display
+
+		\vt2	 mark a, move to end-of-region, \vt2 (uses \mn2)
+		\vt3	 mark a, move to end-of-region, \vt3 (uses \mn3)
+		\vt4	 mark a, move to end-of-region, \vt4 (uses \mn4)
+		\vt5	 mark a, move to end-of-region, \vt5 (uses \mn5)
+		\vt6	 mark a, move to end-of-region, \vt6 (uses \mn6)
+		\vt7	 mark a, move to end-of-region, \vt7 (uses \mn7)
+		\vt8	 mark a, move to end-of-region, \vt8 (uses \mn8)
+		\vt9	 mark a, move to end-of-region, \vt9 (uses \mn9)
+		\vt0	 mark a, move to end-of-region, \vt0 (uses \mn10)
+
+		\VT0	 mark a, move to end-of-region, \VT0 (uses \MN0)
+		\VTT	 mark a, move to end-of-region, \VTT (uses \MNT)
+<
+	I usually put mcol.vim into AsNeeded; you'll need to load it with
+	something like >
+
+		:AN mn5
+<
+
+==============================================================================
+3. Mcol History				*mcol-history* {{{1
+
+
+==============================================================================
+Modelines: {{{1
+vim:tw=78:ts=8:ft=help:fdm=marker:

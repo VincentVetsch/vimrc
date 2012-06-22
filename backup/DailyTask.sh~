@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#  DialyTask.sh - is an application that will create a new 
+#
+#
+#
+#
+
+taskForm=`date '+%Y-%m-%d'`':\n\tApartment:\n\n\tTahoo:\n\n\tVan:\n\n\tFamily:\n\n\tProgramming:\n\n'
+theFileName=~/Documents/DailyTasks/`date '+%Y-%m-%d'`-dialy.task
+
+echo -e $taskForm > $theFileName
