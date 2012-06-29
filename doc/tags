@@ -351,6 +351,7 @@ GundoUsage	gundo.txt	/*GundoUsage*
 HEMan	manpageview.txt	/*HEMan*
 HMan	manpageview.txt	/*HMan*
 Include:	xpt.snippet.syn.txt	/*Include:*
+LooponFail	pytest.txt	/*LooponFail*
 MatchError	matchit.txt	/*MatchError*
 N()	xpt-function.txt	/*N()*
 NERDTree	NERD_tree.txt	/*NERDTree*
@@ -448,6 +449,13 @@ PyLint	pymode.txt	/*PyLint*
 PyLintToggle	pymode.txt	/*PyLintToggle*
 Pydoc	pymode.txt	/*Pydoc*
 Pyrun	pymode.txt	/*Pyrun*
+Pytest-contents	pytest.txt	/*Pytest-contents*
+PytestBugs	pytest.txt	/*PytestBugs*
+PytestCredits	pytest.txt	/*PytestCredits*
+PytestIntro	pytest.txt	/*PytestIntro*
+PytestLicense	pytest.txt	/*PytestLicense*
+PytestPDB	pytest.txt	/*PytestPDB*
+PytestUsage	pytest.txt	/*PytestUsage*
 Python-mode-contents	pymode.txt	/*Python-mode-contents*
 PythonMode	pymode.txt	/*PythonMode*
 PythonModeCommands	pymode.txt	/*PythonModeCommands*
@@ -474,6 +482,7 @@ Ropevim	ropevim.txt	/*Ropevim*
 S()	xpt-function.txt	/*S()*
 S({expr},{pat},{sub},{flags})	xpt-function.txt	/*S({expr},{pat},{sub},{flags})*
 SV()	xpt-function.txt	/*SV()*
+ShellSupport	pytest.txt	/*ShellSupport*
 ShowMarksClearAll	showmarks.txt	/*ShowMarksClearAll*
 ShowMarksClearMark	showmarks.txt	/*ShowMarksClearMark*
 ShowMarksOn	showmarks.txt	/*ShowMarksOn*
@@ -639,6 +648,7 @@ cvscommand-changes	vcscommand.txt	/*cvscommand-changes*
 dav	pi_netrw.txt	/*dav*
 davs	pi_netrw.txt	/*davs*
 ds	surround.txt	/*ds*
+extra	pytest.txt	/*extra*
 fetch	pi_netrw.txt	/*fetch*
 ftp	pi_netrw.txt	/*ftp*
 fuf	fuf.txt	/*fuf*
@@ -1680,6 +1690,7 @@ py2stdlib-zipimport	py2stdlib.txt	/*py2stdlib-zipimport*
 py2stdlib-zlib	py2stdlib.txt	/*py2stdlib-zlib*
 py2stdlib.txt	py2stdlib.txt	/*py2stdlib.txt*
 pymode.txt	pymode.txt	/*pymode.txt*
+pytest.txt	pytest.txt	/*pytest.txt*
 python-mode.txt	pymode.txt	/*python-mode.txt*
 rcp	pi_netrw.txt	/*rcp*
 ropevim.txt	ropevim.txt	/*ropevim.txt*
