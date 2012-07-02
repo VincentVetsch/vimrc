@@ -51,6 +51,7 @@
      set hidden " you can change buffers without saving
      set iskeyword+=_,$,@,%,# " none of these are word dividers 
      set mouse=a " use mouse everywhere
+     "set mousemodel=popup
      set noerrorbells " don't make noise
      set wildmenu " turn on command line completion wild style
      " ignore these list file extensions
@@ -82,6 +83,8 @@
      set lines=50
      colorscheme railscasts
      set background=dark
+     " Enable Txtfmt formatting inside notes.
+        setlocal filetype=notes.txtfmt
      " }
  " NERD Tree Plugin Settings {
     " Show the bookmarks table on startup
@@ -98,7 +101,7 @@
     " }
  " xptemplate
     let g:xptemplate_key = '<C-\>'
-    let g:xptemplate_key_pum_only = '<S-C-\>'
+    let g:xptemplate_key_pum_only = '<Leader><Tab>'
  " Pymode {
     "Python Mode Plugin configuration
     let g:pymode_lint_write = 1 " Enable pylint checking every save
