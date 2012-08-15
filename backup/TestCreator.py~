@@ -12,6 +12,7 @@ from re import findall
 import cPickle
 from sys import stdin
 
+
 class TestCreator:
     '''Creates a test class for a python class '''
     InputFile = ''
@@ -39,7 +40,7 @@ class TestCreator:
         self.ClassName = self.setClassName(self.fileData)  # List
         self.MethodNamesList = self.setMethodNamesList()  # List
         self.TestCaseMethodList = self.setTestCaseMethodList()  # List
-        self.authorDict = self.getEmailandAuthor()
+        self.authorDict = self.setEmailandAuthor()  # Dictionary
 
     def setInputFile(self, fileName):
         ''' Sets self.inputFile to the handle '''
@@ -133,8 +134,8 @@ class TestCreator:
         # Write the shebang to the outputfile
         self.setOutputFile(self.shebang)
         # Write the comments to the outputfile
-        self.setOutputFile(self.author)
-        self.setOutputFile(self.email)
+        self.setOutputFile(self.author.substitute(author=self.authorDict["Author"]))
+        self.setOutputFile(self.email.substitute(email=self.authorDict["Email"]))
         # Write the imports to the outputfile
         self.setOutputFile(self.imports)
         # Write the testClass to the outputfile
@@ -157,16 +158,15 @@ class TestCreator:
         #TODO:  Add code
         pass
 
-    def getEmailandAuthor(self, authorFile='~/.testAuthor'):
+    def setEmailandAuthor(self, authorFile='~/.testAuthor'):
         ''' Gets data from the author file .testAuthor,
         if it doesn't exist it will ask for the author
         information and create the file'''
         if path.exists(path.expanduser(authorFile)):
             f = open(path.expanduser(authorFile), "r")
             p = cPickle.Unpickler(f)
-            d = p.load()
+            self.authorDict = p.load()
             f.close()
-            return d
         else:
             f = open(path.expanduser(authorFile), "w")
             p = cPickle.Pickler(f)
@@ -177,7 +177,6 @@ class TestCreator:
             self.authorDict["Email"] = stdin.readlines()
             p.dump(self.authorDict)
             f.close()
-            return self.authorDict
 
 
 if __name__ == '__main__':

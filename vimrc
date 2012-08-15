@@ -1,47 +1,37 @@
-     set nocompatible " explicitly get out of vi-compatible mode
-     set noexrc " don't use local version of .(g)vimrc, .exrc
-     "set background=dark " we plan to use a dark background
-     "Enables 256 colors in vim
-     set t_Co=256
-     set timeoutlen=1000
-     set cpoptions=aABceFsmq
-     "             |||||||||
-     "             ||||||||+-- When joining lines, leave the cursor 
-     "             |||||||      between joined lines
-     "             |||||||+-- When a new match is created (showmatch) 
-     "             ||||||      pause for .5
-     "             ||||||+-- Set buffer options when entering the 
-     "             |||||      buffer
-     "             |||||+-- :write command updates current file name
-     "             ||||+-- Automatically add <CR> to the last line 
-     "             |||      when using :@r
-     "             |||+-- Searching continues at the end of the match 
-     "             ||      at the cursor position
-     "             ||+-- A backslash has no special meaning in mappings
-     "             |+-- :write updates alternative file name
-     "             +-- :read updates alternative file name
-     syntax on " syntax highlighting on
-     "Get pathogen up and runing
      filetype off
-     python import vim
      call pathogen#infect()
      call pathogen#runtime_append_all_bundles()
      call pathogen#helptags()
+     set nocompatible " explicitly get out of vi-compatible mode
+     "set noexrc " don't use local version of .(g)vimrc, .exrc
+     set t_Co=256  "Enables 256 colors in vim
+     set timeout
+     set timeoutlen=3000
+     "set cpoptions=ces$ "used to add vi-compatible behavior.
+     syntax on " syntax highlighting on
+     "Get pathogen up and runing
+     python import vim
+     set path+="/usr/lib/python2.7/**"
      "Get filetype stuff
+     "Add xptemplate global personal directory value
+     if has("unix")
+        set runtimepath+=~/.vim/xpt-personal
+     endif
      filetype on
      filetype plugin on
      filetype plugin indent on " load filetype plugins/indent settings
      set ofu=syntaxcomplete#Complete
+     set guioptions=Aiemrcg
      "Don't update the display while executing macros
-     set lazyredraw
+     "set lazyredraw
      "Show what mode you are in
      set showmode
      set modeline
-     set modelines=3
+     set modelines=1
      set autochdir " always switch to the current file directory 
      " When opening a new line and no filetype specific indenting is enabled, keep the same indent as the line you're currently on.
      set autoindent
-     set cmdheight=2
+     set cmdheight=1
      set backspace=indent,eol,start " make backspace a more flexible
      set backup " make backup files
      set backupdir=~/.vim/backup " where to put backup files
@@ -51,13 +41,16 @@
      set hidden " you can change buffers without saving
      set iskeyword+=_,$,@,%,# " none of these are word dividers 
      set mouse=a " use mouse everywhere
+     "set mousemodel=popup
      set noerrorbells " don't make noise
+     set ballooneval
+     set balloondelay=300
      set wildmenu " turn on command line completion wild style
      " ignore these list file extensions
      set wildignore=*.dll,*.o,*.obj,*.bak,*.exe,*.pyc,
                      \*.jpg,*.gif,*.png
      set wildmode=list:longest " turn on wild mode huge list
-     set cpoptions+=$
+     " set cpoptions+=$
      let mapleader=","
      set complete=.,w,b,t,i,d
      " When completing by tag, show the whole tag, not just the function name
@@ -71,21 +64,20 @@
      set autoread
      let g:pydiction_location = '~/.vim/ftplugin/complete-dict'
      let g:pydiction_menu_height = 20
-     "set spell
-     " set guioptions=
-     " set guioptions-=T
      set history=100
      " Allow the cursor to go in to "invalid" places
-     "set virtualedit=all
+     set virtualedit=all
      "Enable search highlighting
      set hlsearch
      set lines=50
-     colorscheme railscasts
+     colorscheme railscasts2
      set background=dark
+     " Enable Txtfmt formatting inside notes.
+        setlocal filetype=notes.txtfmt
      " }
  " NERD Tree Plugin Settings {
     " Show the bookmarks table on startup
-    let NERDTreeShowBookmarks=1
+    let NERDTreeShowBookmarks=0
 
     " Don't display these kinds of files
     let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$', '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$', '\.embed\.manifest$', '\.embed\.manifest.res$','\.intermediate\.manifest$', '^mt.dep$' ]
@@ -96,18 +88,22 @@
     let g:miniBufExplMapCTabSwitchBufs = 1
     let g:miniBufExplModSelTarget = 1
     " }
+ " xptemplate http://goo.gl/zRW9g
+    let g:xptemplate_key = '<C-\>'
+    let g:xptemplate_always_show_pum = 1
+    let g:xptemplate_vars="email=vincent.vetsch@gmail.com&author=Vincent Vetsch"
  " Pymode {
     "Python Mode Plugin configuration
-    let g:pymode_lint_write = 1 " Enable pylint checking every save
-    let g:pymode_doc = 1 " Load show documentation plugin
-    let g:pymode_doc_key = 'K' " Key for show python documentation
-    let g:pymode_run = 1  " Load run code plugin
+    let g:pymode_lint_write=1 " Enable pylint checking every save
+    let g:pymode_doc=1 " Load show documentation plugin
+    let g:pymode_doc_key='K' " Key for show python documentation
+    let g:pymode_run=1  " Load run code plugin
     let g:pymode_run_key='<leader>r' " Key for run python code
     let g:pymode_lint=1 " Load pylint code plugin
     let g:pymode_lint_checker="pyflakes,pep8,mccabe" " Switch pylint, pyflakes, pep8, mccabe code-checkers
-    let g:pymode_lint_ignore="E501" " Skip errors and warnings
+    let g:pymode_lint_ignore="E501,E201" " Skip errors and warnings
     let g:pymode_lint_select="" " Select errors and warnings
-    let g:pymode_lint_onfly=0 " Run linter on the fly
+    let g:pymode_lint_onfly=1 " Run linter on the fly
     let g:pymode_lint_config="$HOME/.pylintrc" " Pylint configuration file
     let g:pymode_lint_write=1 " Check code every save
     let g:pymode_lint_cwindow=1 " Auto open cwindow if errors be finded
@@ -127,7 +123,7 @@
         let g:pymode_rope_codeassist_maxfixes=10
         let g:pymode_rope_sorted_completions=1
         let g:pymode_rope_extended_complete=1
-        let g:pymode_rope_autoimport_modules=["os","shutil","datetime"]
+        let g:pymode_rope_autoimport_modules=["os","sys","shutil","datetime"]
         let g:pymode_rope_confirm_saving=1
         let g:pymode_rope_global_prefix="<C-x>p"
         let g:pymode_rope_local_prefix="<C-c>r"
@@ -135,49 +131,40 @@
         let g:pymode_rope_guess_project=0
         let g:pymode_rope_goto_def_newwin=""
         let g:pymode_rope_always_show_complete_menu=1
-    let g:pymode_folding = 1 " Enable python folding
-    let g:pymode_motion = 1 " Enable python objects and motion
-    let g:pymode_virtualenv = 1 " Auto fix vim python paths if virtualenv enabled
-    let g:pymode_paths = [] " Additional python paths
-    let g:pymode_breakpoint = 1 " Load breakpoints plugin
-    let g:pymode_breakpoint_key = '<leader>b' " Key for set/unset breakpoint
-    let g:pymode_utils_whitespaces = 1 " Autoremove unused whitespaces
-    let g:pymode_options_indent = 1 " Set default pymode python indent options
-    let g:pymode_options_other = 1 " Set default pymode python other options
-    let g:pymode_syntax = 1 " Enable pymode's custom syntax highlighting
-    let g:pymode_syntax_all = 1 " Enable all python highlightings
-    let g:pymode_syntax_print_as_function = 0 " Highlight "print" as function
-    let g:pymode_syntax_indent_errors = g:pymode_syntax_all " Highlight indentation errors
-    let g:pymode_syntax_space_errors = g:pymode_syntax_all " Highlight trailing spaces
-    let g:pymode_syntax_string_formatting = g:pymode_syntax_all " Highlight string formatting
-     let g:pymode_syntax_string_format = g:pymode_syntax_all " Highlight str.format syntax
-    let g:pymode_syntax_string_templates = g:pymode_syntax_all    " Highlight string.Template syntax
-    let g:pymode_syntax_doctests = g:pymode_syntax_all    " Highlight doc-tests
-    let g:pymode_syntax_builtin_objs = g:pymode_syntax_all    " Highlight builtin objects (__doc__, self, etc)
-    let g:pymode_syntax_builtin_funcs = g:pymode_syntax_all    " Highlight builtin functions
-    let g:pymode_syntax_highlight_exceptions = g:pymode_syntax_all    " Highlight exceptions
-    let g:pymode_syntax_slow_sync = 0    " For fast machines
+    let g:pymode_folding=1 " Enable python folding
+    let g:pymode_motion=1 " Enable python objects and motion
+    let g:pymode_virtualenv=1 " Auto fix vim python paths if virtualenv enabled
+    " # TODO -- add sys.paths
+    let g:pymode_paths=['', '/usr/bin', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-linux2', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/HTMLgen', '/usr/lib/python2.7/dist-packages/PIL', '/usr/lib/InsightToolkit/WrapITK/Python', '/usr/lib/pymodules/python2.7/gtk-2.0', '/usr/lib/python2.7/dist-packages/omniORB/COS', '/usr/lib/python2.7/dist-packages/gst-0.10', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pymodules/python2.7', '/usr/lib/pymodules/python2.7/input-pad-1.0', '/usr/lib/pymodules/python2.7/scim-0.1', '/usr/lib/python2.7/dist-packages/stfio', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/usr/lib/python2.7/dist-packages/ubuntuone-client', '/usr/lib/python2.7/dist-packages/ubuntuone-control-panel', '/usr/lib/python2.7/dist-packages/ubuntuone-couch', '/usr/lib/python2.7/dist-packages/ubuntuone-dev-tools', '/usr/lib/python2.7/dist-packages/ubuntuone-installer', '/usr/lib/python2.7/dist-packages/ubuntuone-storage-protocol', '/usr/lib/python2.7/dist-packages/wx-2.6-gtk2-unicode', '/usr/lib/python2.7/dist-packages/IPython/extensions']
+    let g:pymode_breakpoint=1 " Load breakpoints plugin
+    let g:pymode_breakpoint_key='<leader>b' " Key for set/unset breakpoint
+    let g:pymode_utils_whitespaces=1 " Autoremove unused whitespaces
+    let g:pymode_options_indent=1 " Set default pymode python indent options
+    let g:pymode_options_other=1 " Set default pymode python other options
+    let g:pymode_syntax=1 " Enable pymode's custom syntax highlighting
+    let g:pymode_syntax_all=1 " Enable all python highlightings
+    let g:pymode_syntax_print_as_function=1 " Highlight "print" as function
+    let g:pymode_syntax_indent_errors=g:pymode_syntax_all " Highlight indentation errors
+    let g:pymode_syntax_space_errors=g:pymode_syntax_all " Highlight trailing spaces
+    let g:pymode_syntax_string_formatting=g:pymode_syntax_all " Highlight string formatting
+     let g:pymode_syntax_string_format=g:pymode_syntax_all " Highlight str.format syntax
+    let g:pymode_syntax_string_templates=g:pymode_syntax_all    " Highlight string.Template syntax
+    let g:pymode_syntax_doctests=g:pymode_syntax_all    " Highlight doc-tests
+    let g:pymode_syntax_builtin_objs=g:pymode_syntax_all    " Highlight builtin objects (__doc__, self, etc)
+    let g:pymode_syntax_builtin_funcs=g:pymode_syntax_all    " Highlight builtin functions
+    let g:pymode_syntax_highlight_exceptions=g:pymode_syntax_all    " Highlight exceptions
+    let g:pymode_syntax_slow_sync=0    " For fast machines
  " Tagbar Configuration {
      let g:tagbar_foldlevel = 3
      let g:tagbar_expand = 1
      let g:tagbar_singleclick = 1
      " }
      "
- " Most Recently Used Configuration
-    " let MRU_File = '~/.vim/mru/files'
-    let MRU_Max_Entries = 10000
-    let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*' " Exclusion Files
-    let MRU_Window_Height = 15
-    let MRU_Use_Current_Window = 1
-    let MRU_Auto_Close = 0
-    let MRU_Max_Menu_Entries = 20
-    let MRU_Max_Submenu_Entries = 15
  " Notes
     let g:notes_directory = '~/Documents/Notes' " The directory the notes will be stored
     let g:notes_suffix = '.note'
  " ConqueShell {
     let g:ConqueTerm_PyVersion = 2
-    let g:ConqueTerm_FastMode = 0
     let g:ConqueTerm_EscKey = '<ESC>'
     let g:ConqueTerm_ToggleKey = '<F8>'
     let g:ConqueTerm_CWInsert = 0
@@ -186,13 +173,18 @@
     let g:ConqueTerm_SendFileKey = '<F10>'
     let g:ConqueTerm_SendVisKey = '<F9>'
     let g:ConqueTerm_SendFunctionKeys = 1
+    let g:ConqueTerm_FastMode = 1
+    let g:ConqueTerm_ReadUnfocused = 1
+    let g:ConqueTerm_InsertOnEnter = 1
+    let g:ConqueTerm_PromptRegex = '^-->'
+    let g:ConqueTerm_TERM = 'xterm'
     "}
  " Vim UI {
      " Powerline setup
      set encoding=utf-8
-     set fillchars+=stl:\ ,stlnc:\ 
+     set fillchars+=stl:\ ,stlnc:\ ,vert:\ ,
      set guifont=DroidSansMono\ 8
-     let Powerline_symbols = 'unicode'
+     let Powerline_symbols = 'compatible' " 'unicode'
      "let g:Powerline_symbols = 'fancy'
      set incsearch " BUT do highlight as you type you 
                     " search phrase
@@ -201,10 +193,9 @@
                       " betweens rows
      set list " we do what to show tabs, to ensure we get them 
                " out of my files
-     set listchars=tab:>-,trail:- " show tabs and trailing 
+     set listchars=tab:>-,trail:- " show tabs and trailing
      set matchtime=5 " how many tenths of a second to blink 
                       " matching brackets for
-     " set nohlsearch " do not highlight searched for phrases
      set nostartofline " leave my cursor where it was
      set novisualbell " don't blink
      set number " turn on line numbers
@@ -212,14 +203,12 @@
      set report=0 " tell us when anything is changed via :...
      set ruler " Always show current positions along the bottom
      set scrolloff=10 " Keep 10 lines (top/bottom) for scope
-     set shortmess=aOstT " shortens messages to avoid 
-                          " 'press a key' prompt
+     set shortmess=aOstT " shortens messages to avoid 'press a key' prompt
      set showcmd " show the command being typed
-     set showmatch " show matching brackets
      set sidescrolloff=10 " Keep 5 lines at the size
      set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
  " Text Formatting/Layout {"{"}
-     set completeopt=longest,menuone "pop up menu for completions
+     set completeopt=menuone,preview "pop up menu for completions
      set expandtab " no real tabs please!
      set formatoptions=rq " Automatically insert comment leader on return, 
                            " and let gq format comments
@@ -235,13 +224,6 @@
      set tabstop=8 " real tabs should be 8, and they will show with 
                     " set list on
  " Functions {
-    "Snipple
-        com! Snippets call Snipple()
-        function! Snipple()
-            for myfiletype in split(&ft, "\\.")
-                exec "split ~/.vim/snippets/" .myfiletype. ".snippets"
-            endfor
-        endfunc
     "Update Tags
         function! UPDATE_TAGS()
             let _f_ = expand("%:p")
@@ -291,50 +273,63 @@
             nmap <buffer><silent> q    :bd!<cr>
             nmap <buffer><silent> <cr> :call <SID>BufferWindowJump()<CR>
         endfunction
-   " ToggleExtraWhitespace
-        function! ToggleExtraWhitespace()
-            if !exists("s:hi_whitespace")
-                let s:hi_whitespace = 1
-            endif
-            if s:hi_whitespace == 0
-                hi ExtraWhitespace ctermbg=red
-                let s:hi_whitespace = 1
-            else
-                hi ExtraWhitespace ctermbg=none
-                hi ExtraWhitespace ctermfg=none
-                let s:hi_whitespace = 0
-            endif
-        endfunction
-        " }
-        "
-    " `gf` jumps to the filename under the cursor.  Point at an import statement
-    " and jump to it!
-python << EOF
-import os
-import sys
-import vim
-for p in sys.path:
-    if os.path.isdir(p):
-        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-EOF
-" Execute a selection of code (very cool!)
-" Use VISUAL to select a range and then hit ctrl-h to execute it.
-python << EOL
-import vim
-def EvaluateCurrentRange():
-    eval(compile('\n'.join(vim.current.range),'','exec'),globals())
-EOL
-map <C-h> :py EvaluateCurrentRange()
- " Mappings {
-    " TODO and FIXME list of all open buffers
-        nmap <F2> :GrepBuffer -w #TODO:<cr>
-        nmap <F5> "=strftime("Completed: %c")<cr>p
-        imap <F5> <C-R>=strftime("Completed:  %c")<cr>
-        nmap <S-F5> i#TODO:  
-        imap <S-F5> <C-R>"#TODO:  
-        nmap <F3> :GrepBuffer -w #FIXME:<cr>
-        nmap <S-F2> :GrepBuffer -w #TODO-C:<cr>
-        nmap <S-F3> :GrepBuffer -w #FIXME-C:<cr>
+   " Move Lines
+    function! MoveLineUp()
+        call MoveLineOrVisualUp(".", "")
+    endfunction
+
+    function! MoveLineDown()
+        call MoveLineOrVisualDown(".", "")
+    endfunction
+
+    function! MoveVisualUp()
+        call MoveLineOrVisualUp("'<", "'<,'>")
+        normal gv
+    endfunction
+
+    function! MoveVisualDown()
+        call MoveLineOrVisualDown("'>", "'<,'>")
+        normal gv
+    endfunction
+
+    function! MoveLineOrVisualUp(line_getter, range)
+        let l_num = line(a:line_getter)
+        if l_num - v:count1 - 1 < 0
+            let move_arg = "0"
+        else
+            let move_arg = a:line_getter." -".(v:count1 + 1)
+        endif
+        call MoveLineOrVisualUpOrDown(a:range."move ".move_arg)
+    endfunction
+
+    function! MoveLineOrVisualDown(line_getter, range)
+        let l_num = line(a:line_getter)
+        if l_num + v:count1 > line("$")
+            let move_arg = "$"
+        else
+            let move_arg = a:line_getter." +".v:count1
+        endif
+        call MoveLineOrVisualUpOrDown(a:range."move ".move_arg)
+    endfunction
+
+    function! MoveLineOrVisualUpOrDown(move_arg)
+        let col_num = virtcol(".")
+        execute "silent! ".a:move_arg
+        execute "normal! ".col_num."|"
+    endfunction
+
+    nnoremap <silent> <A-k> :<C-u>call MoveLineUp()<CR>
+    nnoremap <silent> <A-j> :<C-u>call MoveLineDown()<CR>
+    inoremap <silent> <A-k> <C-o>:call MoveLineUp()<CR>
+    inoremap <silent> <A-j> <C-o>:call MoveLineDown()<CR>
+    "vnoremap <silent> AC-Up> :<C-u>call MoveVisualUp()<CR>
+    "vnoremap <silent> AC-Down> :<C-u>call MoveVisualDown()<CR>
+    xnoremap <silent> <A-k> :<C-u>call MoveVisualUp()<CR>
+    xnoremap <silent> <A-j> :<C-u>call MoveVisualDown()<CR> " Mappings {
+    " OmniComplete
+    inoremap <Nul> <C-x><C-o>
+    " TODO and FIXME> list of all open buffers
+        nmap <Leader>dt "=strftime("%c")<cr>p
     " Switch and list buffers
         " nmap <C-F6> :ls<cr>
         nmap <C-F6> :call BufferWindow()<cr>
@@ -342,26 +337,23 @@ map <C-h> :py EvaluateCurrentRange()
         nmap <F6> :bn<cr>
         nmap <S-F6> :bp<cr>
     " Tagbar vim class outline viewer
-        nmap <F4> :TagbarToggle<cr>
+        nmap <Leader>tgb :TagbarToggle<CR>
     " Gundo application toggle
-        nmap <S-F4> :GundoToggle<cr>
-    " Toggle the NERD Tree on an off with F7
-        nmap <C-S-F4> :NERDTreeToggle<CR>
-    " Close the NERD Tree with Shift-F7
-        nmap <C-F4> :NERDTreeClose<CR>
+        nmap <Leader>gu :GundoToggle<CR>
+    " Toggle the NERD Tree 
+        nmap <Leader>nt :NERDTreeToggle<CR>
+    " Tasklist Mappings
+        map <Leader>tt :TaskList<CR>
     " ConqueShell Mappings (Need to remap the <leader> something
-        nmap <leader>ctsb :ConqueTermSplit bash
-        nmap <leader>ctvb :ConqueTermVSplit bash
-        nmap <leader>ctsi :ConqueTermSplit ipython
-        nmap <leader>ctvi :ConqueTermVSplit ipython
-        nmap <leader>ctsix :execute 'ConqueTermSplit ipython '.expand('%:p')
-        nmap <leader>ctvix :execute 'ConqueTermVSplit ipython '.expand('%:p')
+        nmap <leader>ctb :ConqueTermSplit bash
+        nmap <leader>cti :ConqueTermSplit ipython
+        nmap <leader>ctix :execute 'ConqueTermSplit ipython '.expand('%:p')
     "pdb setting : insert pdb breakpoints
         imap <S-F1> import pdb; pdb.set_trace()
         nmap <S-F1> import pdb; pdb.set_trace()
     "ipython.debugger breakpoint1
-        imap <C-S-F1> from IPython.core.debugger import Tracer; breakpoint1 = Tracer()
-        nmap <C-S-F1> from IPython.core.debugger import Tracer; breakpoint1 = Tracer()
+        imap <C-S-F1> import ipdb; ipdb.set_trace()
+        nmap <C-S-F1> import ipdb; ipdb.set_trace()
         au BufRead *.py nmap <C-S-F5> :!python %<cr>
         au BufRead *.py nmap <C-F5> :!ipython %<cr>
     "Add a check mark ✓✓
@@ -373,28 +365,32 @@ map <C-h> :py EvaluateCurrentRange()
     " Find Double Words
         nmap <leader>du :/\(\<\w\+\>\)\_s*\1<cr>
     " cd to the directory containing the file in the buffer
-        nmap  ,cd :lcd %:h
+        nmap  <Leader>cd :lcd %:h
     " Set up retabbing on a source file
-        nmap  ,rr :1,$retab
+        nmap  <Leader>rr :1,$retab
     " Make the directory that contains the file in the current buffer.
     " This is useful when you edit a file in a directory that doesn't
     " (yet) exist
-        nmap  ,md :!mkdir -p %:p:h
+        nmap  <Leader>md :!mkdir -p %:p:h
     " Create note from selection
         vmap <Leader>ns :NoteFromSelectedText<CR> 
     " Remove extra Whitespace
         nmap <Leader>w :call ToggleExtraWhitespace()<CR>
-    " space / shift-space scroll in normal mode
-        " noremap <S-space> <C-b>
-        " noremap <space> <C-f>
-        " nnoremap <space> za
-        " vnoremap <space> zf
     " Move the cursor to the window left of the current one
+        noremap <silent> <C-Right> :wincmd l<cr>
+    " Move the cursor to the window right of the current one
         noremap <silent> <C-Left> :wincmd h<cr>
     " Move the cursor to the window below the current one
         noremap <silent> <C-Down> :wincmd j<cr>
     " Move the cursor to the window above the current one
         noremap <silent> <C-Up> :wincmd k<cr>
+    " Move the cursor to the window right of the current one
+        noremap <silent> <C-l> :wincmd l<cr>
+        noremap <silent> <C-h> :wincmd h<cr>
+    " Move the cursor to the window below the current one
+        noremap <silent> <C-j> :wincmd j<cr>
+    " Move the cursor to the window above the current one
+        noremap <silent> <C-k> :wincmd k<cr>
     " Move the cursor to the window right of the current one
         noremap <silent> <C-Right> :wincmd l<cr>
     " Close the window below this one
@@ -445,11 +441,19 @@ map <C-h> :py EvaluateCurrentRange()
         nmap <silent> ,gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
     " Swap two words
         nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
+    " Enter FUF File
+        nmap <silent> <leader>ff :FufFile<CR>
+    " Enter FUF Directory
+        nmap <silent> <leader>fd :FufDir<CR>
+    " Enter FUF Buffer
+        nmap <silent> <leader>fb :FufBuffer<CR>
+
+    " Enter CTRL-P
+       
+     " type table,,, to get <table></table>       ### Cool ###
+       imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
  " Abbreviations {
     " typos
-        iabbr slef self
-        iabbr sefl self
-        iabbr form from
         iabbr fi if
         iab Acheive    Achieve
         iab acheive    achieve
@@ -477,18 +481,18 @@ map <C-h> :py EvaluateCurrentRange()
         iab lifecycle  life-cycle
         iab Lifecycles Life-cycles
         iab lifecycles life-cycles
-        iab Seperate   Separate
-        iab seperate   separate
-        iab Seureth    Suereth
-        iab seureth    suereth
-        iab Shoudl     Should
-        iab shoudl     should
-        iab Taht       That
-        iab taht       that
-        iab Teh        The
-        iab teh        the
         iab vv         Vincent Vetsch
         iab ifm        if __name__ == '__main__':
+        iab td         # TODO --
+        iab fx         # FIXME --
+        iab xx         # XXX --
+        iab auth       @Author:\tVincent E Vetsch
+        iab authe      @Email:\tvincent.vetsch@gmail.com
+        iab imp        import
+        iab c'         ''''''
+        iab pp         print
+        iab #!         #!/usr/bin/env python
+        iab utf8       # coding: utf-8
  " Autocommands {
     "Setup for Task syntax and file type
         au BufNewFile,BufRead todo.txt,*.task,*.tasks  setfiletype task
@@ -506,21 +510,21 @@ map <C-h> :py EvaluateCurrentRange()
     au FileType python inoremap :: <End>:
     "Removes any extra whitespace from the ends of lines
         au BufWritePre *.py normal m`:%s/\s\+$//e
-        au FileType python set complete+=k~/.vim/syntax/python.vim isk+=.,(
         au FileType python setlocal omnifunc=pythoncomplete#Complete
         au FileType python setlocal expandtab
         au FileType python setlocal foldmethod=indent
         au FileType python setlocal tabstop=4
-        au FileType python setlocal makeprg=python\ %
-    " Error Formatting
+        au FileType python iab imp  import
+        "au FileType python let b:surround_100 = "\"\"\" \r \"\"\""
         au FileType python setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-        au FileType python let python_highlight_all = 1
-        au FileType python let b:surround_100 = "\"\"\" \r \"\"\""
+        au FileType python setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
         au FileType perl,python abbr sefl self
         au FileType perl,python abbr sf self
-        au FileType python nmap <buffer> <leader>l :PyLint<CR>
+        au FileType perl,python abbr sefd self
+        au FileType perl,python abbr seff self
+        au FileType python nmap <buffer> <Leader>l :PyLint<CR>
+        au Filetype python let g:pyref_mapping = 'KK'
+        au FileType python map <C-L> :python LP_python_import_search()
+        au FileType doctest map <C-L> :python LP_python_import_search()
         au FileType c,h,cpp,python,vala,javascript hi ExtraWhitespace ctermbg=red
         au FileType c,h,cpp,python,vala,javascript match ExtraWhitespace /\s\+\%#\@<!$/
-        au Filetype python let g:pyref_mapping = 'KK'
-        
-

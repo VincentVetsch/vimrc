@@ -8,20 +8,21 @@ import sys
 from DishDB import DishDB
 sys.path.append('/home/vince/Projects/Dish/src/DishDB/')
 
+
 class Product(DishDB):
     '''
     The Product Database
     '''
     #TODO:  Add methods to Product(DishDB) Class
 
-    def __init__(self):
+    def __init__( self ):
         '''
         Product database constructor
         '''
         self.theTable = "Product"
         self.theDB = "/home/vince/Databases/Dish.db"
 
-    def setTheTable(self, tableString):
+    def setTheTable( self, tableString ):
         """
         Setter for self.theTable
 
@@ -35,6 +36,8 @@ class Product(DishDB):
         #TODO-C:  Add Comments Completed:  Sun 03 Jun 2012 02:49:28 PM CDT
         self.theTable = tableString
 
+    def getTheTable( self ):
+        pass
 
 if __init__ == "__main__":
     pass

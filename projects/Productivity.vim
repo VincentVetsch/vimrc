@@ -51,19 +51,23 @@ noremap pnd :call RopeCreateDirectory()
 noremap pk :call RopeCloseProject()
 snoremap <silent>  `>a=XPTemplateStart(0,{'k':'<C-\++'})
 xnoremap <silent>  "0s=XPTemplatePreWrap(@0)
+nnoremap <silent>  :TComment
+nnoremap <silent> r :TCommentRight
 noremap s :TCommentAs =&ft_
 noremap n :TCommentAs =&ft 
 noremap a :TCommentAs 
 noremap b :TCommentBlock
 vnoremap <silent> r :TCommentRight
 vnoremap <silent> i :TCommentInline
-nnoremap <silent> r :TCommentRight
 onoremap <silent> r :TCommentRight
 noremap   :TComment 
 noremap <silent> p m`vip:TComment``
 vnoremap <silent>  :TCommentMaybeInline
-nnoremap <silent>  :TComment
 onoremap <silent>  :TComment
+snoremap <silent> ,__ :TComment
+nnoremap <silent> ,__ :TComment
+snoremap <silent> ,_r :TCommentRight
+nnoremap <silent> ,_r :TCommentRight
 nmap <silent> ,cv <Plug>VCSVimDiff
 nmap <silent> ,cu <Plug>VCSUpdate
 nmap <silent> ,cU <Plug>VCSUnlock
@@ -84,15 +88,11 @@ noremap ,_n :TCommentAs =&ft
 noremap ,_a :TCommentAs 
 noremap ,_b :TCommentBlock
 xnoremap <silent> ,_r :TCommentRight
-nnoremap <silent> ,_r :TCommentRight
-snoremap <silent> ,_r :TCommentRight
 onoremap <silent> ,_r :TCommentRight
 xnoremap <silent> ,_i :TCommentInline
 noremap ,_  :TComment 
 noremap <silent> ,_p vip:TComment
 xnoremap <silent> ,__ :TCommentMaybeInline
-nnoremap <silent> ,__ :TComment
-snoremap <silent> ,__ :TComment
 onoremap <silent> ,__ :TComment
 nnoremap ,s :call TextToSpeech()
 nnoremap ,r :call SpeechToText()
@@ -287,8 +287,8 @@ nmap <F2> :GrepBuffer -w #TODO:
 map <S-Insert> <MiddleMouse>
 imap S <Plug>ISurround
 imap s <Plug>Isurround
-inoremap <silent>  =XPTemplateStart(0,{'k':'<C-r++<C-\++','forcePum':1})
 inoremap <silent>  =XPTemplateStart(0,{'k':'<C-r++<C-r++<C-\++','popupOnly':1})
+inoremap <silent>  =XPTemplateStart(0,{'k':'<C-r++<C-\++','forcePum':1})
 imap  <Plug>Isurround
 inoremap <silent> OC <Right>
 inoremap <silent>  =XPTemplateStart(0,{'k':'<C-\++'})
@@ -300,6 +300,7 @@ inoremap <silent> r :TCommentRight
 inoremap   :TComment 
 inoremap <silent> p :norm! m`vip:TComment``
 inoremap <silent>  :TComment
+inoremap <silent> ,	 =XPTemplateStart(0,{'k':'<Leader++<Tab++','popupOnly':1})
 imap <>v ✓
 iabbr ifm if __name__ == '__main__':
 iabbr vv Vincent Vetsch
@@ -348,10 +349,10 @@ unlet s:cpo_save
 set autochdir
 set autoindent
 set autoread
-set background=dark
 set backspace=indent,eol,start
 set backup
 set backupdir=~/.vim/backup
+set balloondelay=300
 set balloonexpr=GetTagSignature()
 set clipboard=autoselect,exclude:cons\\|linux,vimclip
 set cmdheight=2
@@ -370,6 +371,7 @@ set hidden
 set history=100
 set hlsearch
 set ignorecase
+set imsearch=0
 set incsearch
 set infercase
 set iskeyword=@,48-57,_,192-255,_,$,@,%,#
@@ -379,7 +381,6 @@ set listchars=tab:>-,trail:-
 set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 set modelines=3
 set mouse=a
-set mousemodel=popup
 set omnifunc=syntaxcomplete#Complete
 set path=.,/usr/include,,,/usr/lib/python2.7,/usr/lib/python2.7/plat-linux2,/usr/lib/python2.7/lib-tk,/usr/lib/python2.7/lib-dynload,/usr/local/lib/python2.7/dist-packages,/usr/lib/python2.7/dist-packages,/usr/lib/python2.7/dist-packages/PIL,/usr/lib/python2.7/dist-packages/gst-0.10,/usr/lib/python2.7/dist-packages/gtk-2.0,/usr/lib/pymodules/python2.7,/usr/lib/python2.7/dist-packages/ubuntu-sso-client,/usr/lib/python2.7/dist-packages/ubuntuone-client,/usr/lib/python2.7/dist-packages/ubuntuone-installer,/usr/lib/python2.7/dist-packages/ubuntuone-storage-protocol,/usr/lib/python2.7/dist-packages/wx-2.8-gtk2-unicode
 set printoptions=paper:letter
@@ -415,8 +416,8 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +17 ~/Documents/Notes/Vincent\ Vetsch’s\ Opening\ Note.note
-badd +1 ~/Documents/Notes/Ideas.note
+badd +37 ~/Documents/Notes/Vincent\ Vetsch’s\ Opening\ Note.note
+badd +14 ~/Documents/Notes/Ideas.note
 silent! argdel *
 edit ~/Documents/Notes/Vincent\ Vetsch’s\ Opening\ Note.note
 set splitbelow splitright
@@ -555,12 +556,12 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 17 - ((16 * winheight(0) + 21) / 43)
+let s:l = 19 - ((17 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-17
-normal! 027l
+19
+normal! 010l
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

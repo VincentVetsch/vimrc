@@ -1,4 +1,4 @@
-     set nocompatible " explicitly get out of vi-compatible mode
+set nocompatible " explicitly get out of vi-compatible mode
      set noexrc " don't use local version of .(g)vimrc, .exrc
      "set background=dark " we plan to use a dark background
      "Enables 256 colors in vim
@@ -24,6 +24,7 @@
      "Get pathogen up and runing
      filetype off
      python import vim
+     set path+="/usr/lib/python2.7/**"
      call pathogen#infect()
      call pathogen#runtime_append_all_bundles()
      call pathogen#helptags()
@@ -41,7 +42,7 @@
      set autochdir " always switch to the current file directory 
      " When opening a new line and no filetype specific indenting is enabled, keep the same indent as the line you're currently on.
      set autoindent
-     set cmdheight=2
+     set cmdheight=3
      set backspace=indent,eol,start " make backspace a more flexible
      set backup " make backup files
      set backupdir=~/.vim/backup " where to put backup files
@@ -53,6 +54,8 @@
      set mouse=a " use mouse everywhere
      "set mousemodel=popup
      set noerrorbells " don't make noise
+     set ballooneval
+     set balloondelay=300
      set wildmenu " turn on command line completion wild style
      " ignore these list file extensions
      set wildignore=*.dll,*.o,*.obj,*.bak,*.exe,*.pyc,
@@ -88,7 +91,7 @@
      " }
  " NERD Tree Plugin Settings {
     " Show the bookmarks table on startup
-    let NERDTreeShowBookmarks=1
+    let NERDTreeShowBookmarks=0
 
     " Don't display these kinds of files
     let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$', '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$', '\.embed\.manifest$', '\.embed\.manifest.res$','\.intermediate\.manifest$', '^mt.dep$' ]
@@ -242,12 +245,12 @@
                     " set list on
  " Functions {
     "Snipple
-        com! Snippets call Snipple()
-        function! Snipple()
-            for myfiletype in split(&ft, "\\.")
-                exec "split ~/.vim/snippets/" .myfiletype. ".snippets"
-            endfor
-        endfunc
+       "" com! Snippets call Snipple()
+        ""function! Snipple()
+         ""   for myfiletype in split(&ft, "\\.")
+         ""       exec "split ~/.vim/snippets/" .myfiletype. ".snippets"
+         ""   endfor
+        ""endfunc
     "Update Tags
         function! UPDATE_TAGS()
             let _f_ = expand("%:p")
@@ -314,7 +317,9 @@
         " }
         "
     " `gf` jumps to the filename under the cursor.  Point at an import statement
-    " and jump to it!
+    " and jump to it!        
+    " " `gf` jumps to the filename under the cursor.  Point at an import statement
+        " and jump to it!
 python << EOF
 import os
 import sys
@@ -325,6 +330,7 @@ for p in sys.path:
 EOF
 " Execute a selection of code (very cool!)
 " Use VISUAL to select a range and then hit ctrl-h to execute it.
+
 python << EOL
 import vim
 def EvaluateCurrentRange():
@@ -355,6 +361,8 @@ map <C-h> :py EvaluateCurrentRange()
         nmap <C-S-F4> :NERDTreeToggle<CR>
     " Close the NERD Tree with Shift-F7
         nmap <C-F4> :NERDTreeClose<CR>
+    " Tasklist Mappings
+        map <leader>tt :TaskList<CR>
     " ConqueShell Mappings (Need to remap the <leader> something
         nmap <leader>ctsb :ConqueTermSplit bash
         nmap <leader>ctvb :ConqueTermVSplit bash
@@ -495,6 +503,8 @@ map <C-h> :py EvaluateCurrentRange()
         iab teh        the
         iab vv         Vincent Vetsch
         iab ifm        if __name__ == '__main__':
+        iab td         # TODO --
+        iab fx         # FIXME --
  " Autocommands {
     "Setup for Task syntax and file type
         au BufNewFile,BufRead todo.txt,*.task,*.tasks  setfiletype task
@@ -528,5 +538,6 @@ map <C-h> :py EvaluateCurrentRange()
         au FileType c,h,cpp,python,vala,javascript hi ExtraWhitespace ctermbg=red
         au FileType c,h,cpp,python,vala,javascript match ExtraWhitespace /\s\+\%#\@<!$/
         au Filetype python let g:pyref_mapping = 'KK'
-        
+    autocmd FileType python map <C-L> :python LP_python_import_search()
+    autocmd FileType doctest map <C-L> :python LP_python_import_search()
 
