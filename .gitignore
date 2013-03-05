@@ -1,5 +1,5 @@
 *.swp
 *.un~
 *.py[co]
-tmp/*
-backup/*
+tmp/
+backup/
