@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Case Statement</title>
+    </head>
+    <body>
+        <p>Click the button to display what day it is today.</p>
+        <button onclick="dayOfTheWeek('demo')">Try it</button>
+        <p id="demo"></p>
+        <script>
+                function dayOfTheWeek(theId) {
+                    /*.dayOfTheWeek:  Checks the date of the week verses the current
+                     *                Day
+                     *
+                     * Arguments:
+                     *   -theId:    The element ID attribute
+                     *
+                     * Return:
+                     *    The day of the week
+                     */
+                    var x;
+                    var d = new Date().getDay();
+                    switch ( d ) {
+                        case 0:
+                            x = "Sunday"
+                            break;
+                        case 1:
+                            x = "Monday"
+                            break;
+                        case 2:
+                            x = "Tuesday"
+                            break;
+                        case 3:
+                            x = "Wednesday"
+                            break;
+                        case 4:
+                            x = "Thursday"
+                            break;
+                        case 5:
+                            x = "Friday"
+                            break;
+                        case 6:
+                            x = "Saturday"
+                            break;
+                    }
+                    document.getElementById(theId).innerHTML = x
+                }
+        </script>
+    </body>
+</html> 

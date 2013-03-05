@@ -11,38 +11,41 @@ position your cursor on the highlighted name and press ‘gf’ in normal mode:
  • Note taking commands
 
  Current Locations and Files of Interest:
- • ~/Projects/Dish/
- • ~/Projects/TestCreator/
- • ~/Projects/ProjectCenter/
- • ~/Documents/DailyTasks/
- • ~/Documents/Research04JUN12to08JUN12.tasks
- • ~/.vimrc
- • ~/Documents/Notes/Ideas.note
+     ~/.vimrc
+     ~/.vim/
+ Projects:
+     ~/Projects/
+     ~/Projects/Dish/
+     ~/Projects/HTML/
+     ~/Projects/TestCreator/
+     ~/Projects/ProjectCenter/
+     ~/Projects/PythonClasses/
+     ~/Projects/JavascriptTutorials/
+ Documents:
+     ~/Documents/DailyTasks/
+     ~/Documents/Notes/Research04JUN12to08JUN12.task
+     ~/Documents/Notes/Ideas.note
+     ~/Documents/Notes/Crusades.notes
+     ~/Documents/Notes/CrusadersReferences.note
+     ~/Documents/Programming/Effective-go.pdf
 
  Important Tasks:
  • DONE — Create a vim Project for DishDB
  • DONE — Integrate Notes into my vim configuration
  • DONE — Research MRU
- • TODO — Research FuzzyFinder
- • TODO — Create UML diagram of my gvim plugin structure
+ • DONE — Research FuzzyFinder
  • DONE — Clean Up vimrc and commit changes
+ • DONE — Research ipdb for debugging
+ • DONE — Research sparkUp it’s definitely a time saver
+    ◦ http://net.tutsplus.com/tutorials/other/vim-essential-plugin-sparkup/
  • TODO — Continue work on TestCreate make into a plugin for vim
+ • TODO — Continue work on testwalk, which will become a python class browser 
+          and parts of it will become code for TestCreate.
  • TODO — Continue work on ProjectBuilder make into a plugin for vim
 
- Dish Network Upcomming Tasks:
- • DONE — Restock Van 06-10-2012
- • DONE — Order Consumables
- • DONE — Restock Van 06-11-2012
- • DONE — Restock Van 06-12-2012
- • DONE — Restock Van 06-13-2012
- • DONE — Restock Tote
- • DONE — Restock VAN
- • DONE — Sharpen Drill Bits
- • DONE — Perform hard count 06-13-2012
- • DONE — Sharpen Drill Bits
- • TODO — Contact Larry Nightingale (402) 750-5629
-
  Household Items Needed:
+ • Eggs
 
  Family Issues:
  • DONE — Check on the price of a tap and die set, see if you have on in the RV
+ • DONE — Monday afternoon drill holes for fertilizer, Austrian Pine

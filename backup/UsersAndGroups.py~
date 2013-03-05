@@ -1,0 +1,396 @@
+#!/usr/bin/env python
+"""
+30.03.2010 11:11:25 PDT
+File Name:            UsersAndGroups.py
+Project Description:  Gets the information from the '/etc/group' and
+'/etc/passwd' files and converts it to a list of dictionaries.
+
+Author:    Vincent Vetsch
+Email:     vincent.vetsch@gmail.com
+
+Notes:
+"""
+from os import path
+
+
+@singleton
+class Groups:
+    """ Gathers information about the groups of the Linux System
+
+    The basic structure is {gid: {'GroupName': name, 'Users':
+                                                    (csv of users)}
+    Note:   This is a singlton class.
+    """
+    def __init__ (self, group='/etc/group'):
+        """ Class initialiser """
+        if path.exists(group):
+            self.group_file = open(group, 'rU').readlines()
+        else:
+            raise IOError
+        self.names = ('GroupName', 'GroupID', 'Users')
+        self.the_dict = {}
+        self.groupdict = {}
+        self.iter_counter = 0
+        self.printstring = ('{0:5}   {1:20}   {2}\n'.\
+                            format('GID'.ljust(5), 'Group Name', 'Users'))
+        self.get_dict()
+        self.key_list = self.groupdict.keys()
+        self.key_list.sort()
+    def __iter__(self):
+        """The Iterator for Groups
+        
+        Arguments:
+        - self:     The instance
+        Returns:    self
+        """
+        return self
+    def next(self):
+        """Allows for forward iteration over the the Group object.
+
+        When the iteration occurs iter_counter will be incremented until
+        it is equal to self.key_list.  When the final_list has completed
+        Iteration it will reset the iter_counter.
+        Arguments:
+        - self:     The instance
+        Returns:    The next dictionary in the final_list
+        """
+        if (len(self.key_list)) > self.iter_counter - 1:
+            k_iter = self.key_list[self.iter_counter - 1]
+        else:
+            self.iter_counter = 0
+            raise StopIteration
+        returnval = {k_iter: dict(self.groupdict[k_iter])}
+        #returnval = self.groupdict[k_iter]
+        self.iter_counter += 1
+        return returnval
+    def get_record_by_name(self, group_name):
+        """Gets the record for group name
+        
+        Arguments:
+        - self:             The instance
+        - group_name:       The name of the group
+        Returns:            The record for the group  
+        """
+        test = self.groupdict[self.key_list[self.iter_counter]]['GroupName']
+        if test != group_name:
+            self.iter_counter += 1
+            self.get_record_by_name(group_name)
+        else:
+            self.the_dict = {self.key_list[self.iter_counter]: \
+                dict(self.groupdict[self.key_list[self.iter_counter]])}
+            self.iter_counter = 0
+        return self.the_dict
+    def get_record_by_id(self, gid):
+        """Gets the record for group id
+        
+        Arguments:
+        - self:         The instance
+        - gid:          The group id
+        Returns:        Returns the record for the group id
+        """
+        #return {gid: dict(self.groupdict[gid])}
+        return dict(self.groupdict[gid])
+    def get_record_by_user(self, user):
+        """Gets the record for a group user
+        
+        Arguments:
+        - self:     The instance
+        - user:     The user ascociated with the group
+        Returns:    The records that have a specific user        
+        """
+        # this prevents applying a index greater than length the
+        # self.key_list
+        if (len(self.key_list) - 1) < self.iter_counter:
+            pass
+        else:
+            test = self.groupdict[self.key_list[self.iter_counter]]['Users']
+        if (len(self.key_list) - 1) >= self.iter_counter:
+            if self.iter_counter == 0:
+                self.the_dict = {}
+            if test == 'None':
+                if test == user:
+                    record = dict(self.groupdict[self.key_list\
+                                    [self.iter_counter]])
+                    self.the_dict[self.key_list[self.iter_counter]] = \
+                                                            dict(record)
+                    del record
+                self.iter_counter += 1
+                self.get_record_by_user(user)
+            elif test == user or user in test:
+                record = dict(self.groupdict[self.key_list\
+                                [self.iter_counter]])
+                self.the_dict[self.key_list[self.iter_counter]] = \
+                                                            dict(record)
+                del record
+                self.iter_counter += 1
+                self.get_record_by_user(user)
+            else:
+                self.iter_counter += 1
+                self.get_record_by_user(user)
+        else:
+            self.iter_counter = 0
+        return self.the_dict
+    def get_dict(self, iterator=0):
+        """Parses the /etc/group file 
+        
+        Arguments:
+        - self:     The instance
+        - iterator: The iterator for the recursive method
+        Returns:    The final object
+        """
+        # Get the individual record and split into a list
+        the_list = (self.group_file[iterator].split(':'))
+        #remove the second entry
+        del the_list[1]
+        #remove the newline character in the fourth entry
+        the_list[-1] = the_list[-1].strip('\n') #.split(',')
+        # Test if the User is a empty tuple
+        if the_list[-1] == '':
+            the_list[-1] = 'None'
+        record = self.make_dict(self.names, the_list)
+        self.make_dict(record['GroupID'], record, add_dict='True')
+        if (len(self.group_file) - 1) > iterator:
+            iterator += 1
+            self.get_dict(iterator)
+    def make_dict(self, keynames, data, add_dict='False', increment=0):
+        """ Recursively creates a dictionary 
+    
+        Arguments:
+        - keylist:      Contains the keys
+        - datalist:     Contains the data for the dictionary
+        - increment:    The index number
+        - the_dict:     The Dictionary to add the keys and values
+    
+        Returns:        as a dictionary
+
+        Notes:          Do not use this method directly
+        """
+        # Add each entry into the final dictionary
+        if add_dict == 'True':
+            if increment <= 1:
+                # copy the data dictionary to temp
+                temp = dict(data)
+                # Remove 'GroupID' from temp
+                del temp['GroupID']
+                # Add the temp to the final dictionary key of value of
+                # data['GroupID']
+                self.groupdict[int(keynames)] = dict(temp)
+                # Remove temp
+                del temp
+        # Add entries into a dictionary 
+        else:
+            self.the_dict[keynames[increment]] = data[increment]
+        # Tail recursive call for both creating the record and adding it
+        # to the final product
+        if (len(keynames) - 1) > increment:
+            increment += 1
+            self.make_dict(keynames, data, add_dict, increment)
+        return self.the_dict
+    def printer(self, key_list, iterator=0):
+        """Recursive method designed to cleanly print a sorted goup list
+        
+        Arguments:
+        - self:         The instance
+        - key_list:     The list of group ids
+        - iterator:     The index number
+        Returns:        None
+        """
+        k_iter = key_list[iterator]
+        temp = ('{0:5}   {1:20}   {2}\n'.format(str(k_iter).ljust(5), \
+                self.groupdict[k_iter]['GroupName'], \
+                self.groupdict[k_iter]['Users']))
+        self.printstring = self.printstring + temp
+        del k_iter
+        if(len(key_list) - 1) > iterator:
+            iterator += 1
+            self.printer(key_list, iterator)
+    def __str__(self):
+        """Overides str method
+        Arguments:
+        - self:     The Instance
+        Returns:    A string with all entries
+        """
+        self.printer(self.key_list)
+        return str(self.printstring)
+
+
+@singleton
+class Users:
+    """ Gathers information about the users of the Linux System
+
+    The basic structure is {'UserName': name, 'UserID': id}
+
+    Note:   This is a singlton class.
+    """
+    def __init__ (self, user='/etc/passwd'):
+        """ Class initialiser """
+        if path.exists(user):
+            self.user_file = open(user, 'rU').readlines()
+        else:
+            raise IOError
+        self.names = ('UserName', 'UserID', 'GroupID', 'Name', 'Home', \
+                      'Shell')
+        self.the_dict = {}
+        self.userdict = {}
+        #self.final = {}
+        self.iter_counter = 0
+        self.printstring = ('{0:5}   {1:20}   {2:5}   {3:30}   {4:25}   {5}\n'.\
+                            format('UID'.ljust(5), 'User Name', 'GID',\
+                                   'Name', 'Home', 'Shell'))
+        self.get_dict()
+        self.key_list = self.userdict.keys()
+        self.key_list.sort()
+    def __iter__(self):
+        """The Iterator for Users
+        
+        Arguments:
+        - self:     The instance
+        Returns:    self
+        """
+        return self
+    def next(self):
+        """Allows for forward iteration over the the Users object.
+
+        When the iteration occurs iter_counter will be incremented until
+        it is equal to self.key_list.  When the final_list has completed
+        Iteration it will reset the iter_counter.
+        Arguments:
+        - self:     The instance
+        Returns:    The next dictionary in the final_list
+        """
+        if (len(self.key_list)) > self.iter_counter - 1:
+            k_iter = self.key_list[self.iter_counter - 1]
+        else:
+            self.iter_counter = 0
+            raise StopIteration
+        returnval = {k_iter: dict(self.userdict[k_iter])}
+        #returnval = self.groupdict[k_iter]
+        self.iter_counter += 1
+        return returnval
+    def get_dict(self, iterator=0):
+        """Parses the /etc/user file 
+        
+        Arguments:
+        - self:     The instance
+        - iterator: The iterator for the recursive method
+        Returns:    The final object
+        """
+        # Get the individual record and split into a list
+        the_list = (self.user_file[iterator].split(':'))
+        #remove the second entry
+        del the_list[1]
+        #remove the newline character in the fourth entry
+        the_list[-1] = the_list[-1].strip('\n') #.split(',')
+        record = self.make_dict(self.names, the_list)
+        self.make_dict(record['UserID'], record, add_dict='True')
+        if (len(self.user_file) - 1) > iterator:
+            iterator += 1
+            self.get_dict(iterator)
+    def make_dict(self, keynames, data, add_dict='False', increment=0):
+        """ Recursively creates a dictionary 
+    
+        Arguments:
+        - keylist:      Contains the keys
+        - datalist:     Contains the data for the dictionary
+        - increment:    The index number
+        - the_dict:     The Dictionary to add the keys and values
+    
+        Returns:        as a dictionary
+
+        Notes:          Do not use this method directly
+        """
+        # Add each entry into the final dictionary
+        if add_dict == 'True':
+            if increment <= 1:
+                # copy the data dictionary to temp
+                temp = dict(data)
+                # Remove 'GroupID' from temp
+                del temp['UserID']
+                # Add the temp to the final dictionary key of value of
+                # data['GroupID']
+                self.userdict[int(keynames)] = dict(temp)
+                # Remove temp
+                del temp
+        # Add entries into a dictionary 
+        else:
+            self.the_dict[keynames[increment]] = data[increment]
+        # Tail recursive call for both creating the record and adding it
+        # to the final product
+        if (len(keynames) - 1) > increment:
+            increment += 1
+            self.make_dict(keynames, data, add_dict, increment)
+        return self.the_dict
+    def get_record_by_name(self, user_name):
+        """Gets the record for user name
+        
+        Arguments:
+        - self:             The instance
+        - user_name:       The name of the user
+        Returns:            The record for the user  
+        """
+        test = self.userdict[self.key_list[self.iter_counter]]['UserName']
+        if test != user_name:
+            self.iter_counter += 1
+            self.get_record_by_name(user_name)
+        else:
+            ##self.the_dict = {self.key_list[self.iter_counter]: \
+                ##dict(self.userdict[self.key_list[self.iter_counter]])}
+            self.the_dict = dict(self.userdict[self.key_list[self.iter_counter]])
+            self.iter_counter = 0
+        return self.the_dict
+    def get_record_by_id(self, uid):
+        """Gets the record for User id
+        
+        Arguments:
+        - self:         The instance
+        - uid:          The User id
+        Returns:        Returns the record for the User id
+        """
+        return dict(self.userdict[uid])
+    def printer(self, key_list, iterator=0):
+        """Recursive method designed to cleanly print a sorted user list
+        
+        Arguments:
+        - self:         The instance
+        - key_list:     The list of group ids
+        - iterator:     The index number
+        Returns:        None
+        """
+        k_iter = key_list[iterator]
+        temp = ('{0:5}   {1:20}   {2:5}   {3:30}   {4:25}  {5}\n'.\
+                format(str(k_iter).ljust(5), \
+                self.userdict[k_iter]['UserName'], \
+                self.userdict[k_iter]['GroupID'], \
+                self.userdict[k_iter]['Name'], \
+                self.userdict[k_iter]['Home'], \
+                self.userdict[k_iter]['Shell']))
+        self.printstring = self.printstring + temp
+        del k_iter
+        if(len(key_list) - 1) > iterator:
+            iterator += 1
+            self.printer(key_list, iterator)
+    def __str__(self):
+        """Overides str method
+        Arguments:
+        - self:     The Instance
+        Returns:    A string with all entries
+        """
+        self.printer(self.key_list)
+        return str(self.printstring)
+
+
+if __name__ == "__main__":
+    G_ = Groups()
+    U_ = Users()
+    print 'Instance: ', INSTANCES
+    print(G_)
+    print (U_)
+    print G_.get_record_by_name('nobody')
+    print G_.get_record_by_id(65534)
+    print G_.get_record_by_user('lexx')
+    print U_.get_record_by_id(1000)
+    print U_.get_record_by_name('smbguest')
+    for u in U_:
+        print u
+    for g in G_:
+        print g

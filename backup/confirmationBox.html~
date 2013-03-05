@@ -1,0 +1,23 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html>
+     <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+         <title>confirmationBox</title>
+     </head>
+     <body>
+        <p id="demo">Push The button</p>
+        <input type="BUTTON" onclick="confirmFunc()" value="Confirmation Box" />
+        <script type="text/javascript">
+            function confirmFunc(){
+                var x;
+                var r = confirm("Press a Button!");
+                if (r === true){
+                    x = "You pressed OK";
+                } else {
+                    x = "You pressed Cancel";
+                }
+                document.getElementById("demo").innerHTML = x
+            };
+        </script>
+     </body>
+ </html>

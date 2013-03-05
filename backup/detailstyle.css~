@@ -1,0 +1,127 @@
+body {
+    font-family: sans-serif;
+    background:url(Images/sushi_gray.png);
+    text-shadow: 0px 0px 8px #6A5ACD;
+    color: #000080;
+}
+
+div.detail-tags {
+    background: #B9B9B9;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    text-shadow: 0px 0px 3px #6A5ACD;
+    box-shadow: 12px 12px 17px #000000;
+    color: #000080;
+    opacity: 0.8;
+    width:300px;
+    padding:10px;
+    border:1px solid gray;
+}
+
+details {
+    overflow: hidden;
+    background: #E6E6FA;
+    display: block;
+    padding-left: 10px;
+    text-shadow: 0px 0px 3px #6A5ACD;
+    color: #000080;
+    //opacity: 0.8;
+}
+
+details summary::-webkit-details-marker {
+    color: #000080;
+    font-size: 15px;
+    text-shadow: 0px 0px 13px #6A5ACD;
+}
+
+details summary {
+    cursor: pointer;
+    padding: 5px;
+}
+
+details li {
+    cursor: pointer;
+    margin-left: 40px;
+}
+
+details div {
+    float: left;
+    width: 65%;
+}
+
+h4 h3 h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-shadow: 0px 0px 10px #6A5ACD;
+    color: #000080;
+    voice-family:male;
+    richness:80;
+}
+
+details img {
+    float: left;
+    width: 200px;
+    padding: 0 30px 10px 10px;
+}
+input.rounded {
+    border: 1px solid gray;
+    background: #B9B9B9;
+    opacity: 0.8;
+    text-shadow: 0px 0px 3px #6A5ACD;
+    color: #000080;
+    /* Safari 5, Chrome support border-radius without vendor prefix.
+    * FF 3.0/3.5/3.6, Mobile Safari 4.0.4 require vendor prefix.
+    * No support in Safari 3/4, IE 6/7/8, Opera 10.0.
+    */
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    
+    /* Chrome, FF 4.0 support box-shadow without vendor prefix.
+    * Safari 3/4/5 and FF 3.5/3.6 require vendor prefix.
+    * No support in FF 3.0, IE 6/7/8, Opera 10.0, iPhone 3.
+    * change the offsets, blur and color to suit your design.
+    */
+    -moz-box-shadow: 2px 2px 3px #000000;
+    -webkit-box-shadow: 2px 2px 3px #000000;
+    //box-shadow: 2px 2px 3px #000000;
+    box-shadow: 12px 12px 17px #000000;
+    /* using a bigger font for demo purposes so the box isn't too small */
+    font-size: 15px;
+    
+    /* with a big radius/font there needs to be padding left and right
+    * otherwise the text is too close to the radius.
+    * on a smaller radius/font it may not be necessary
+    */
+    padding: 4px 7px;
+    
+    /* only needed for webkit browsers which show a rectangular outline;
+    * others do not do outline when radius used.
+    * android browser still displays a big outline
+    */
+    outline: 0;
+
+    /* this is needed for iOS devices otherwise a shadow/line appears at the
+    * top of the input. depending on the ratio of radius to height it will
+    * go all the way across the full width of the input and look really messy.
+    * ensure the radius is no more than half the full height of the input, 
+    * and the following is set, and everything will render well in iOS.
+    */
+    -webkit-appearance: none;
+}
+
+input.rounded:focus {
+    /* supported IE8+ and all other browsers tested.
+    * optional, but gives the input focues when selected.
+    * change to a color that suits your design.
+    */
+    border-color: black;
+}
+
+/* CSS text gradients */
+h1.head {
+        content: attr(data-text);
+        z-index: 10;
+        color: #e3e3e3;
+        -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), color-stop(50%, rgba(0,0,0,1)), to(rgba(0,0,0,0)));

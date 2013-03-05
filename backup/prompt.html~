@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Prompt DEMO</title>
+    </head>
+    <body>
+        <p>Click the button to demostrate the prompt box.</p>
+        <button onclick="promptBox('demo')">Try It</button>
+        <p id="demo"></p>
+        <script>
+            function promptBox(theID){
+                var x;
+                var defaultName = "Richard Head"
+                var name = prompt("Please enter your Name", defaultName);
+                if (name != null){
+                    if (name === defaultName){
+                        x = "Hello Dick Head, Fill out the box!"
+                    } else {
+                        x = "Hello " + name + "! How are you Today?";
+                    }
+                    document.getElementById(theID).innerHTML = x;
+                }
+            }
+        </script>
+    </body>
+</html>

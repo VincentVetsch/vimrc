@@ -1,0 +1,25 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Try Catch</title>
+    </head>
+    <script>
+        function message(){
+            try {
+                adddlert("Welcome Guest");
+            } catch(err) {
+                txt = "There was an Error on this page\n\n";
+                txt += "Error description: " + err.message + "\n\n";
+                txt += "Click Ok to continue ";
+                txt += "or Cancel to return to the home page.\n\n";
+                if (!confirm(txt)){
+                    document.location.href = "http://www.w3schools.com/";
+                }
+            }
+        }
+    </script>
+    <body>
+        <input type="button" value="View Message" onclick="message()" />
+    </body>
+</html>

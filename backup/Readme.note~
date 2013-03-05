@@ -1,0 +1,20 @@
+Readme
+
+Main.html -- Is the slideshow page and utilizes JQuery
+index.html -- Is the main index page for navigation and page graphics
+Appointment.html
+Blog.html
+Contact.html
+Credentials.html
+Documents.html
+Information.html
+Links.html
+McGlennInspection.css
+McGlennInspectioniLight.css
+R-Values.html
+Services.html
+Tips.html
+
+TODO:
+* TODO -- Add Django application
+

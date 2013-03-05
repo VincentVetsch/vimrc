@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <link href="list.css" type="text/css" rel="stylesheet" media="screen"/>
+        <title>List Item Manipilation</title>
+    </head>
+    <body>
+        <h2>Todo List</h2>
+        <ul id="edit" contenteditable = "true">
+            <li>Welcome Home</li>
+            <li>Welcome Home</li>
+            <li>Welcome Home</li>
+            <li>Welcome Home</li>
+        </ul>
+        <button onclick="clearLocalStorage()">Clear Local Storage</button>
+        <script>
+            /* Creates a localStorage for element with id of 'edit'
+             *
+             */
+            $(function() {
+                var edit = document.getElementById('edit');
+                $(edit).blur(function() {
+                    localStorage.setItem('todoData', this.innerHTML);
+                });
+                // when the page loads
+                if ( localStorage.getItem('todoData') ) {
+                    edit.innerHTML = localStorage.getItem('todoData');
+                }
+                // to reset
+                // localStorage.clear();
+            });
+            /* Clears localStorage for element with id of 'edit'
+             *
+             */
+            function clearLocalStorage() {
+                localStorage.clear();
+                window.location.reload()
+            };
+       </script>
+    </body>
+</html>

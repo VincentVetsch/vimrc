@@ -1,0 +1,24 @@
+
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html>
+     <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+         <title>While Loop Example</title>
+     </head>
+     <body>
+         <p>Click the button to loop through a block of code as <em>i</em> is less than five.</p>
+         <button onclick="theWhileLoop()">Try it</button>
+         <p id="demo"></p>
+         <script>
+            function theWhileLoop(){
+                var x = "",
+                i = 0;
+                while(i < 5){
+                    x += "The number is:  " + i + "<br />";
+                    i++;
+                }
+                document.getElementById("demo").innerHTML = x;
+            }
+         </script>
+     </body>
+ </html>

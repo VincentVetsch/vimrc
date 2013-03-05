@@ -1,0 +1,35 @@
+.button1{
+    width: 150px;
+    height: 40px;
+    padding-top:1px;
+    -moz-border-radius: 5px;  
+    -khtml-border-radius: 5px; 
+    -webkit-border-radius: 5px; 
+    border-radius: 5px; 
+    background: -moz-linear-gradient(top, #FFF, #000, #000000);
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#b4b3b4), to(#bcbcbc));
+    border: 1px solid #909090;
+}
+.button-shine1{
+    width:98%;
+    height:50%;
+    margin:0px auto 30px auto;
+    background-color:rgba(255,255,255,0.25);
+    -moz-border-radius: 5px;  
+    -khtml-border-radius: 5px; 
+    -webkit-border-radius: 5px; 
+    border-radius: 5px;
+}
+.button1-text{
+    width:100%;
+    text-align:center;
+    font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+    font-size:13px;
+    font-weight:bold;
+    color:#707070;
+    text-shadow: 1px 1px 2px #FFF;
+    letter-spacing: 1px;    
+    position:relative;
+    margin-top:-40px;
+} 
+

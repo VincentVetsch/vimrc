@@ -1,0 +1,23 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html>
+     <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+         <title>Do-While Loop Example</title>
+     </head>
+     <body>
+         <p>Click the button to loop through a block of code as <em>i</em> is less than five.</p>
+         <button onclick="theDoWhileLoop()">Try it</button>
+         <p id="demo"></p>
+         <script>
+            function theDoWhileLoop(){
+                var x = "",
+                i = 5;
+                do {
+                    x += "The number is:  " + i + "<br />";
+                    i++;
+                } while(i < 5)
+                document.getElementById("demo").innerHTML = x;
+             }
+         </script>
+     </body>
+ </html>

@@ -1,0 +1,37 @@
+package main
+
+import "fmt"
+
+type TT struct{
+        R int
+        S string
+        T float32
+        U bool
+}
+
+func main() {
+        p := []TT{
+            {1, "One", 4.1, true},
+            {2, "Two", 8.2, false},
+            {3, "Three", 12.3, true},
+            {4, "Four", 16.4, false},
+        } //Create an array of TT Structures
+        q := TT{5, "Five", 18.5, true} //Create the structure value
+        p = append(p, q) //Append the value to p slice
+        p = append(p, TT{6, "Six", 19.6, false}) //Append the structure directly
+        fmt.Println("p == ", p)
+
+        for i := 0; i < len(p); i++ {
+                if p[i].U == true {
+                    fmt.Println(p[i].S, "Is Odd")
+                }
+                if p[i].U == false {
+                    fmt.Println(p[i].S, "Is Even")
+                }
+                fmt.Printf("p[%d] == %d\t%v\t%v\t%v\n",
+                            i, p[i].R, p[i].S, p[i].T, p[i].U)
+        }
+        fmt.Println("p[1:2] ==", p[1:2])
+        fmt.Println("p[:2] ==", p[:2])
+        fmt.Println("p[2:] ==", p[2:])
+}

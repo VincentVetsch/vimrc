@@ -1,0 +1,448 @@
+#!/usr/bin/env python
+"""
+24.03.2010 16:56:21 PDT
+File Name:             mtabproc.py
+Project Description:  Gets the information from the '/etc/mtab' file and
+converts it to a list of dictionaries.
+
+Author:    Vincent Vetsch
+Email:     vincent.vetsch@gmail.com
+
+Notes:  To instanciate use the following:
+
+    from Mtab import MtabReader
+    m = MtabReader()
+
+or
+
+    import Mtab
+    m = Mtab.MtabReader()
+"""
+from os import path
+from os import stat
+from os import statvfs
+from Singleton import *
+def get_device_number(the_path):
+    """Gets the device number of specified device name
+    Arguments:
+    - thePath:     A path that represents the device
+
+    Returns:       A string that represents the device number
+    """
+    device_name = stat(the_path)
+    device_number = device_name.st_dev
+    return device_number
+def make_metric(value):
+    """Converts a integer into a string of a metric bytes.
+
+    1024 = 1K
+    10240000 = 1M
+    10240000000 = 1G
+    Arguments:
+        - value:        Needs to be an integer value
+    Returns:            A string that represents a integer value in metric
+                        bytes.
+    """
+    data = int(value)
+    kbytes = 1024
+    mbytes = kbytes * 1024
+    gbytes = mbytes * 1024
+    tbytes = gbytes * 1024
+    if data < kbytes:
+        return '{0} Btyes'.format(data)
+    elif data >= kbytes and data < mbytes:
+        return '{0} KBtyes'.format(round(data/kbytes))
+    elif data >= mbytes and data < gbytes:
+        return '{0} MBtyes'.format(round(data/mbytes))
+    elif data >= gbytes and data < tbytes:
+        return '{0} GBtyes'.format(round(data/gbytes))
+    elif data >= tbytes:
+        return '{0:.2f} TBtyes'.format(round(data/tbytes))
+    else:
+        raise ValueError, "Value is out of range."+ value
+def make_locale(value):
+    """Converts a integer into a string of with locale commafy
+
+    10024 = 10,024
+    10240000 = 10,240,000
+    10240000000 = 10,240,000,000
+    ...
+    
+    Arguments:
+    - value:        Needs to be an integer value
+    
+    Returns:        A string that represents a integer value in locale
+    """
+    import locale
+    data = int(value)
+    locale.setlocale(locale.LC_ALL, '')
+    return locale.format("%d", data, grouping=True)
+def get_size_of_device(the_path, human_readable='Default'):
+    """Gets the total size of the specified device
+    
+    Arguments:
+    - the_path:         A path that represents the device
+    - human_readable:   If "Default" then no change to will be applied.
+                        If "Metric" then apply K, M, G, T to number
+                        format.
+                        If "Locale" then apply system locale to number
+                        format.
+
+    Returns:        A tuple with block size, total blocks, total size,
+                    total free, total available, total used, percent
+                    free and percent used.  In order
+    """
+    the_device = statvfs(the_path)
+    block_size = the_device.f_frsize
+    total_blocks = the_device.f_blocks
+    total_size = block_size * total_blocks
+    total_free = the_device.f_bfree * block_size
+    total_available = the_device.f_bavail * block_size
+    total_used = total_size - total_free
+    # Compute the Percentages
+    if total_free == 0 or total_used == 0:
+        percent_free = '{0:.2f}%'.format(0.00)
+        percent_used = '{0:.2f}%'.format(100.00)
+    else:
+        percent_free = '{0:.2f}%'.format\
+            ((float(total_free) / total_size) * 100)
+        percent_used = '{0:.2f}%'.format\
+            ((float(total_used) / total_size) * 100)
+    # Format total_size, total_free, total_available, and total_used
+    # numbers.
+    if human_readable == 'Default':
+        size_list = block_size, total_blocks, total_size, total_free, \
+        total_available, total_used, percent_free, percent_used
+    elif human_readable == 'Metric':
+        size_list = block_size, total_blocks, make_metric(total_size), \
+        make_metric(total_free), make_metric(total_available), \
+        make_metric(total_used), percent_free, percent_used
+    elif human_readable == 'Locale':
+        size_list = block_size, total_blocks, make_locale(total_size), \
+        make_locale(total_free), make_locale(total_available), \
+        make_locale(total_used), percent_free, percent_used
+    else:
+        raise ValueError, "The value can only be Default, Metric, or "\
+        "Locale.  You entered:  "+ human_readable
+    return size_list
+@singleton
+class MtabReader:
+    """Gathers information about the Linux File System.
+    
+    Gets the information from the '/etc/mtab' file and converts it to
+    a list of dictionaries.  It also adds the Device Number, Total Size,
+    Space Available, Space Used, and Precentage Used.  The intended use
+    is for a graphical environment.  There is support for command line
+    usage.
+
+    Note:   This is a singlton class.
+    """
+    # mtabstructure is the key values for the_dict
+    mtabstructure = ('Device', 'MountPoint', 'FSType', 'MountOptions', \
+        'DeviceNumber', 'BlockSize', 'TotalBlocks', 'TotalSize', \
+        'TotalFree', 'TotalAvailable', 'TotalUsed', 'PercentFree', \
+        'PercentUsed')
+    def __init__ (self, human_readable='Default', mtab='/etc/mtab'):
+        """ Class initialiser
+        
+        Arguments:
+        - self:             The instance
+        - human_readable:   If "Default" then no change to will be
+                            applied.
+                            If "Metric" then apply K, M, G, T to number
+                            format.
+                            If "Locale" then apply system locale to
+                            number format.
+        - mtab:             The path to the mount table.
+        """
+        self.the_list = []
+        self.the_dict = {}
+        self.final_list = []
+        self.iter_counter = 0
+        self.dict_counter = 0
+        self.human_readable = human_readable
+        self.filtered_list = []
+        if path.exists(mtab):
+            self.get_mtab_lines(open(mtab, 'rU').readlines())
+        else:
+            raise IOError
+    def __iter__(self):
+        """The Iterator for MtabReader for the final_list
+        
+        Arguments:
+        - self:   The instance
+        Returns:  self
+        """
+        return self
+    def next(self):
+        """Allows for forward iteration over the final_list.
+
+        When the iteration occurs iter_counter will be incremented until
+        it is equal to self.length().  When the final_list has completed
+        Iteration it will reset the iter_counter.
+        Arguments:
+        - self:     The instance
+        Returns:    The next dictionary in the final_list
+        """
+        #print self.iter_counter
+        if self.length() - 1 >= self.iter_counter:
+            returnval = self.get_list_entry(self.iter_counter)
+            self.iter_counter += 1
+            return returnval
+        else:
+            self.iter_counter = 0
+            raise StopIteration
+    def next_dict(self, list_index):
+        """For each line item return the next key / value pair.   
+        
+        Arguments:
+        - self:         The instance
+        - list_index:   The list index number
+        Returns:        Of list entry, returns each key/value pair
+        """
+        if len(self.mtabstructure) - 1 > self.dict_counter:
+            key = self.mtabstructure[self.dict_counter]
+            value = self.final_list[list_index][key]
+            newdict = {key: value}
+            self.dict_counter += 1
+            return newdict
+        else:
+            self.dict_counter = 0
+    def find_index_for_value(self, key_name, value, increment=0, \
+                             prefilter='No'):
+        """Finds the value for key in index.
+        
+        Arguments:
+        - self:      The instance
+        - increment:  The counter for recursive call
+        - value:      The value to be searched for
+        - key_name:   The key that will be searched for
+        - prefilter:  If 'No' then normal processing occurs
+                      If 'is_special' then find special file systems
+                      If 'is_remote' then find remote file system
+                      If 'is_local' then find local file system
+        Returns:      The record assoiciated with key value
+        """
+        if prefilter == 'No':
+            # Clear the filtered_list for new filtered_list
+            if len(self.filtered_list) > 0 and increment == 0:
+                self.filtered_list = []
+            # Check if the current list item has the key/value
+            if self.final_list[increment][key_name] == value:
+                self.filtered_list.append(self.final_list[increment])
+        elif prefilter == 'is_special':
+            if self.is_special_fs(increment):
+                self.filtered_list.append(self.final_list[increment])
+        elif prefilter == 'is_remote':
+            if self.is_remote_fs(increment):
+                self.filtered_list.append(self.final_list[increment])
+        elif prefilter == 'is_local':
+            if self.is_local_fs(increment):
+                self.filtered_list.append(self.final_list[increment])
+        # Tail recurse for the next final_list item
+        if increment < self.length() - 1:
+            increment += 1
+            self.find_index_for_value(key_name, value, increment, prefilter)
+        # When the final_list has been filtered return a new filtered
+        # list to the user. 
+        return self.filtered_list
+    def filter_special(self):
+        """Filters everything but special file systems
+        
+        Arguments:
+        - self:     The instance
+        Returns:    Returns all special file systems
+        """
+        self.filtered_list = []
+        return self.find_index_for_value(0, 0, prefilter='is_special')
+    def filter_remote(self):
+        """Filters everything but remote file systems
+        
+        Arguments:
+        - self:     The instance
+        Returns:    Returns all remote file systems
+        """
+        self.filtered_list = []
+        return self.find_index_for_value(0, 0, prefilter='is_remote')
+    def filter_local(self):
+        """Filters everything but local file systems
+        
+        Arguments:
+        -self:      The instance
+        Returns:  Returns all local file systems
+        """
+        self.filtered_list = []
+        return self.find_index_for_value(0, 0, prefilter='is_local')
+    def length(self):
+        """Gets the length of the final_list
+        
+        Arguments:
+        - self:     The Instance
+        
+        Returns:  The count of dictionaries in the final_list
+        """
+        return len(self.final_list)
+    def make_list_of_dictionaries(self, the_dict):
+        """Creates a list of dictionaries
+    
+        Arguments:
+        - the_dict:      A Dictionary
+        - the_list:      The List to add dictionary
+    
+        Returns:        A list that contains dictionaries
+
+        Notes:          Do not use this method directly
+        """
+        self.the_list.append(dict(the_dict))
+        return self.the_list
+    def make_dict(self, keylist, datalist, increment=0):
+        """ Recursively creates a dictionary 
+    
+        Arguments:
+        - keylist:      Contains the keys
+        - datalist:     Contains the data for the dictionary
+        - increment:    The index number
+        - the_dict:     The Dictionary to add the keys and values
+    
+        Returns:        as a dictionary
+
+        Notes:          Do not use this method directly
+        """
+        self.the_dict[keylist[increment]] = datalist[increment]
+        if increment < (len(keylist) - 1):
+            increment += 1
+            self.make_dict(keylist, datalist, increment)
+        return self.the_dict
+    def get_mtab_lines(self, the_list, increment=0):
+        """ Recursive processing of the Mtab file
+    
+        Arguments:
+        - theList:      A list of strings
+        - increment:    The last index number 
+    
+        Returns:        A List of dictionaries
+    
+        The List makeup:
+        1.  The Device
+        2.  The mount point
+        3.  The file system type
+        4.  The Mount options(in a comma seperated list)
+        5.  The Device Number
+        
+        Notes:          Do not use this method directly
+        """
+        # Split the_list element into list items for mtablist
+        mtablist = the_list[increment].split()
+        # Delete the last two elements from mtablist, they contain two
+        # zeros
+        del mtablist[-2:]
+        # Add the device number to the end of the list
+        mtablist.append(get_device_number(mtablist[1]))
+        # Extend the mtablist with the device size list
+        mtablist.extend(get_size_of_device(mtablist[1], \
+                        self.human_readable))
+        # Create a dictionary from mtabstructure and mtablist
+        mtab_dict = self.make_dict(self.mtabstructure, mtablist)
+        # Add the dictionary values into the final_list
+        self.final_list = self.make_list_of_dictionaries(mtab_dict)
+        # Go throught the next item in the_list and increment the
+        # counter
+        if increment < (len(the_list) - 1):
+            increment += 1
+            self.get_mtab_lines(the_list, increment)
+        return self.final_list
+    def get_mtab(self):
+        """Retrieves the mtab as a list of dictionaries
+
+        Arguments:
+        - self:  The Instance
+        Returns:  The mtab as a list of dictionaries
+        """
+        return self.final_list
+    def get_list_entry(self, index):
+        """Retrieves a specific entry from the final_list index number
+
+        Arguments:
+        - self:     The Instance
+        - index:    The index number of the final_list
+        Returns:    A Dictionary of a mtab entry
+        """
+        return self.final_list[index]
+    def get_dict_entry(self, index, key):
+        """Retrieves a specific entry from the final_list index number
+        and the key within the index.
+    
+        Arguments:
+        - self:     The Instance
+        - index:    The index number of the final_list
+        - key:      The member of the dictionary that will be accessed
+        Returns:    The value of the list index and dictionary value at
+                    the key
+        """
+        return self.final_list[index][key]
+    def refresh(self):
+        """ Refreshes the data within the final_list.  It should be
+        called when the mtab file is changed.  The mtab file is updated
+        when a device is mounted or unmounted.
+        
+        Arguments:
+        - self:     The Instance
+        Returns:    Nothing
+        """
+        self.the_list = []
+        self.the_dict = {}
+        self.iter_counter = 0
+        self.dict_counter = 0
+        self.final_list = []
+        self.__init__(self.human_readable)
+    def is_remote_fs(self, index):
+        """Test if fs (as type) is a remote file system
+
+        Filesystem is remote if it is nfs, smbfs, cifs...
+        Arguments:
+        - self:     The Instance
+        - index:    The index number of the final_list
+        Returns:    True or False"""
+        return self.final_list[index]['FSType'].lower() in \
+        [ "nfs", "smbfs", "cifs", "ncpfs", "afs", "coda", "ftpfs", \
+          "mfs", "sshfs" ]
+    def is_special_fs(self, index):
+        """Is the device special.
+
+        Filesystem is special if it has number of blocks equal to 0.
+        Arguments:
+        - self:     The Instance
+        - index:    The index number of the final_list
+        Returns:    True or False
+        """
+        return self.final_list[index]['FSType'].lower() in \
+        [ "tmpfs", "devpts", "proc", "sysfs", "usbfs", "none", \
+        'gvfs-fuse-daemon' ]
+    def is_local_fs(self, index):
+        """Is the device a local file system
+        
+        Arguments:
+        - self:     The Instance
+        - index:    The index number of the final_list
+        Returns:    True of False
+        """
+        return self.final_list[index]['FSType'].lower() in ["ext", \
+        "ext2", "ext3", "ext4", "vfat", "fat", "ntfs", "iso9660", \
+        "jfs", "minux", "msdos", "reiserfs", "udf", "ufs", "xenix", \
+        "xfs", "xiafs"]
+if __name__ == "__main__":
+    print "Example\n"
+    M_ = MtabReader('Metric')
+    print "The number of mounted devices is:  ", M_.length()
+    print "The First Device:\n", M_.get_list_entry(0)
+    print "\nThe Singleton Instance:\n", INSTANCES
+    print "\nThe Mount Point and Device Number of the first entry: ", \
+    M_.get_dict_entry(0, 'MountPoint'), ":", M_.get_dict_entry\
+    (0, 'DeviceNumber')
+
+    M_.refresh() 
+    print "\nRemote Filter\n", M_.filter_remote()
+    print "\nSpecial Filter\n", M_.filter_special()
+    print "\nLocal Filter\n", M_.filter_local()
+    print "\n\nDevice 45825\n"
+    print M_.find_index_for_value('DeviceNumber', 45825)

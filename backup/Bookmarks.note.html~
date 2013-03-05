@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>~/Documents/Notes/Bookmarks.note.html</title>
+<meta name="Generator" content="Vim/7.3">
+<meta name="plugin-version" content="vim7.3_v10">
+<meta name="syntax" content="notes">
+<meta name="settings" content="use_css,pre_wrap,expand_tabs">
+<style type="text/css">
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #e6e1dc; background-color: #2b2b2b; }
+body { font-family: monospace; color: #e6e1dc; background-color: #2b2b2b; }
+.Folded { color: #f6f3e8; background-color: #444444; }
+.notesSubtleURL { color: #e6e1dc; text-decoration: underline; }
+.Underlined { color: #80a0ff; text-decoration: underline; }
+.Comment { color: #bc9458; }
+.Title { color: #ffffff; font-weight: bold; }
+.ModeMsg { font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<pre>
+<span class="ModeMsg">Bookmarks</span>
+
+<span class="Title">Help:</span>
+   <span class="Comment">•</span> Colors
+      <span class="Comment">•</span> Blue — Links to Notes
+      <span class="Comment">•</span> Green — Links to File System Objects
+   <span class="Comment">•</span> Key Mappings
+      <span class="Comment">•</span> gf — Goto File for system Directories, Notes or Text documents
+      <span class="Comment">•</span> F8 — HTTP, FTP Links and Complex Documents(PDF, ODC, ...)
+<span class="Title">Web Development:</span>
+   <span class="Comment">•</span>  <span class="Underlined">CSS</span>
+      <span class="Comment">•</span>  <span class="Underlined">CSS</span> Generator
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">css3.mikeplate.com/</span>
+      <span class="Comment">•</span>  Cross-Browser CSS3 Rule Generator
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">css3please.com/</span>
+      <span class="Comment">•</span>  Border Radius
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">border-radius.com/</span>
+      <span class="Comment">•</span>  ZURB <span class="Underlined">CSS</span> Grid Builder
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">www.zurb.com/playground/css-grid-builder</span>
+   <span class="Comment">•</span>  <span class="Underlined">HTML</span>
+      <span class="Comment">•</span>  Copy Paste Characters
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">copypastecharacter.com/</span>
+      <span class="Comment">•</span>  Place Holder Images
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">lorempixel.com</span>
+      <span class="Comment">•</span>  W3 Schools
+         <span class="Comment">◦</span>  <span class="notesSubtleURL">www.w3schools.com/tags/default.asp</span>
+   <span class="Comment">•</span>  NetTuts+
+      <span class="Comment">◦</span>  <span class="notesSubtleURL">net.tutsplus.com/</span>
+<span class="Underlined">Javascript</span>:
+<span class="Folded">   •  W3 Schools Javascript----------------------------------------------------------------------------</span>
+<span class="Underlined">Python</span>:
+<span class="Folded">   •  Writing your first Django App--------------------------------------------------------------------</span>
+<span class="Underlined">SysAdmin</span>:
+<span class="Folded">   • Setup NFS on Mac OS-------------------------------------------------------------------------------</span>
+<span class="Underlined">Golang</span>:
+<span class="Folded">   • Install Go----------------------------------------------------------------------------------------</span>
+<span class="Underlined">Vim</span>:
+<span class="Folded">   • Go Plugin For Vim---------------------------------------------------------------------------------</span>
+<span class="Title">Google:</span>
+<span class="Folded">   • My Email------------------------------------------------------------------------------------------</span>
+<span class="Title">E-Books:</span>
+<span class="Folded">   • Religion------------------------------------------------------------------------------------------</span>
+<span class="Title">Notes:</span>
+<span class="Folded">   • Directories---------------------------------------------------------------------------------------</span>
+</pre>
+</body>
+</html>

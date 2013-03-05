@@ -1,2 +1,2 @@
 --python-kinds=-i
-ctags --exclude=.svn --exclude=target -R .
+--exclude=.svn --exclude=target .

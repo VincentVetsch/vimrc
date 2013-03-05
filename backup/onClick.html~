@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Mouse Over</title>
+    </head>
+    <body>
+        <div onmousedown="mouseDown(this)"
+             onmouseup="mouseUp(this)"
+             style="background-color:#D94A38;
+             width:80px;
+             height:20px;
+             padding:10px;">Click Me
+         </div>
+         <script>
+             function mouseDown(obj){
+                obj.style.backgroundColor = "#1EC5E5";
+                obj.innerHTML = "Get Off of Me";
+             }
+             function mouseUp(obj){
+                obj.style.backgroundColor = "#D94A38";
+                obj.innerHTML = "Click Me";
+             }
+         </script>
+    </body>
+</html>

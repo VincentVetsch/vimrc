@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Add Text Variables</title>
+    </head>
+    <body>
+        <p>Click the button to create and add string variables.</p>
+        <button onclick="myFunction()">Try it</button>
+        <p id="demo"></p>
+        <script type="text/javascript">
+            function myFunction()
+                {
+                    txt1 = "What a very";
+                    txt2 = "Shitty day";
+                    txt3 = txt1 + " " + txt2;
+                    document.getElementById("demo").innerHTML = txt3;
+                }
+        </script>
+    </body>
+</html> 

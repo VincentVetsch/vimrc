@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>useVariables</title>
+    </head>
+    <body>
+        <p>Click the button to create a variable, and display the result</p>
+        <button onclick="myFunction()">Try it</button>
+        <p id="demo"></p>
+        <script type="text/javascript">
+            function myFunction()
+            {
+                var carname="Volvo";
+                document.getElementById("demo").innerHTML=carname;
+            }
+        </script>
+    </body>
+</html>

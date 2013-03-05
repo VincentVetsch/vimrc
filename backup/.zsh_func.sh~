@@ -1,0 +1,76 @@
+# Color settings
+RESET="\033[0m"
+BLUE="\033[1;34m"
+RED="\033[1;31m"
+YELLOW="\033[1;33m"
+GREEN="\033[1;32m"
+GREY="\033[1;30m"
+WHITE="\033[1;37m"
+function dgate(){
+    netstat -rn | awk '/UG/{print "Default Gateway: "$2}'
+}
+function syncLexx(){
+    cd ~
+    scp .zsh_alias.sh .zsh_func.sh .zshrc vince@Lexx-1:~
+    cd -
+}
+function bat(){
+    acpi -b | sed 's/,//g' | awk '{print "Battery is:  "$3 "\nCapacity is: "$4}'
+}
+function makeProject(){
+    # Create Web, django, javascript, go, or python project
+    # Add the project to a git repository
+    echo "MakeProject not complete"
+}
+function clearEnd(){
+    echo $1 | gawk -F/ 'sub(FS $NF,x)'
+}
+function fname(){
+    find -name "$1" -printf "$PWD/%P\n"
+}
+function allVideos() {
+    find ./ -maxdepth 1 -type f -print0 | xargs -0 file -iNf - | grep ": video/" | cut -d: -f1;
+}
+function videoTime(){
+    find . -iname "*.mp4" -print0 | xargs -0 mplayer -really-quiet -cache 64 -vo dummy -ao dummy -identify 2>/dev/null | awk '/ID_LENGTH/{gsub(/ID_LENGTH=/,"")}{SUM += $1}END{ printf "Total Video Time:  %02d:%02d:%02d\n",SUM/3600,SUM%3600/60,SUM%60}'
+}
+function fgit(){
+    echo "$GREEN"
+    echo "All GIT Repos in: $BLUE$PWD$WHITE"
+    DATA=`fname .git`
+    clearEnd $DATA
+}
+function fbzr(){
+    echo "$GREEN"
+    echo "All BZR Repos in $BLUE$PWD$WHITE"
+    DATA=`fname .bzr`
+    clearEnd $DATA
+}
+function fsvn(){
+    echo "$GREEN"
+    echo "All SVN Repos in $BLUE$PWD$WHITE"
+    DATA=`fname .svn`
+    clearEnd $DATA
+}
+function fhg(){
+    echo "$GREEN"
+    echo "All Mercurial Repos in $BLUE$PWD$WHITE"
+    DATA=`fname .hg`
+    clearEnd $DATA
+}
+function fcvs(){
+    echo "$GREEN"
+    echo "All CVS Repos in $BLUE$PWD$WHITE"
+    DATA=`fname CVS`
+    clearEnd $DATA
+}
+function localNet(){
+    #Returns the IP or hostname and the MAC address of connected computers
+    arp | awk '{ print $3"\t" $1 }'
+}
+function connectedIP(){
+    sudo netstat -anp | grep 'tcp\|udp' | awk '{ print $1"\t"$5"\t"$7"\t"$8 }' | cut -d: -f1 | sort | uniq -c | sort -n
+}
+function connectedPorts(){
+    sudo netstat -alpn |awk '{ print $1"\t"$5"\t"$7"\t"$8  }' | sort | uniq -c | sort -n
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Try Catch Throw</title>
+    </head>
+    <script>
+        var x = prompt("Enter a number between 5 and 10:","");
+        try {
+            if (x > 10) {
+                throw "Err1";
+            } else if (x < 5) {
+                throw "Err2";
+            } else if (isNaN(x)) {
+                throw "Err3";
+            }
+        } catch(err) {
+            if(err=="Err1") {
+                document.write("Error! The value is too high.");
+            } if(err=="Err2") {
+                document.write("Error! The value is too low.");
+            } if(err=="Err3") {
+                document.write("Error! The value is not a number.");
+            }
+        }
+    </script>
+    <body>
+        <input type="button" value="View Message" onclick="message()" />
+    </body>
+</html> 

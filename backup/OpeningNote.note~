@@ -1,0 +1,89 @@
+OpeningNote
+
+To get started enter a title for your note above. When you’re ready to save
+your note just use Vim’s :write or :update commands, a filename will be picked
+automatically based on the title.
+
+The notes plug-in comes with self hosting documentation. To jump to these notes
+position your cursor on the highlighted name and press ‘gf’ in normal mode:
+
+   • Note taking syntax
+   • Note taking commands
+   • Bookmarks.note
+
+ Notes:
+   • CrusadersReferences.note
+   • Crusades.note
+   • CSS.note
+   • Experiment.note
+   • GoLang.note
+   • Github.note
+   • HTML.note
+   • Javascript.note
+   • Programming.note
+   • Python.note
+   • Religion.note
+   • SysAdmin.note
+   • Vim.note
+ Current Locations and Files of Interest:
+     ~/.vimrc
+     ~/.vim/
+ Projects:
+     ~/Projects/
+     ~/Projects/Dish/
+     ~/Projects/HTML/
+     ~/Projects/GoLang/
+     ~/Projects/TestCreator/
+     ~/Projects/ProjectCenter/
+     ~/Projects/PythonClasses/
+     ~/Projects/JavascriptTutorials/
+ Documents:
+     ~/Documents/DailyTasks/
+     ~/Documents/Notes/Research04JUN12to08JUN12.task
+     ~/Documents/Notes/Ideas.note
+     ~/Documents/Notes/Crusades.notes
+     ~/Documents/Notes/CrusadersReferences.note
+     ~/Documents/Programming/Effective-go.pdf
+ Important Tasks:
+ • Completed
+   • DONE — Create a vim Project for DishDB
+   • DONE — Integrate Notes into my vim configuration
+   • DONE — Research MRU
+   • DONE — Research FuzzyFinder
+   • DONE — Clean Up vimrc and commit changes
+   • DONE — Research ipdb for debugging
+   • DONE — Research sparkUp it’s definitely a time saver
+      ◦ http://net.tutsplus.com/tutorials/other/vim-essential-plugin-sparkup/
+   • DONE — Install VIM update for Gist
+   • DONE — Pay For 2013 Registration
+   • DONE — Study the Crusades
+   • DONE — Study the Book of Enoch
+      ◦ ~/Documents/AllBooksOfEnoch.pdf
+   • DONE — Check on the price of a tap and die set, see if you have on in the RV
+   • DONE — Monday afternoon drill holes for fertilizer, Austrian Pine
+   • DONE — Install and play with phpmyadmin
+ • Outstanding
+   • TODO — Install Fugitive into VIM, and start playing with it
+   • TODO — Study GoLang.note
+   • TODO — Study Javascript
+   • TODO — Continue work on TestCreate make into a plugin for Vim
+   • TODO — Continue work on testwalk, which will become a python class browser
+            and parts of it will become code for TestCreate.
+   • TODO — Play around with goplayer.
+      ◦ ~/Projects/OffSite/goplayer/
+   • TODO — Continue work on ProjectBuilder make into a plugin for vim
+   • TODO — Downlond tinymce
+   • TODO — McGlennInspections Website
+      ◦ TODO — Demo sites
+      ◦ TODO — Make Django Application
+ Household Items Needed:
+
+ Family Issues:
+  • TODO — Insulate garage
+     ◦ TODO — Close in garage with sheet rock
+  • TODO — Plant spruce trees
+     ◦ Late March
+  • TODO — Install heat lamp in garage
+     ◦ This week
+  • TODO — Install Stair chair
+     ◦ Company has to install due to liability

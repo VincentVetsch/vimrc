@@ -1,0 +1,15 @@
+li {
+       //list-style-type: square;
+       //list-style-type: square;
+       //list-style: url(Images/Mask.png);
+       list-style: none;
+       //background: url(Images/Mask.png) no-repeat 0 10px;
+       //padding-left: 40px;
+       //padding-bottom: 20px;
+       //padding-top: 20px;
+}
+li:before {
+       content: '✓';
+       color: blue;
+       text-shadow: 0 1px black;
+}

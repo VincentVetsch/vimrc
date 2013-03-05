@@ -1,0 +1,22 @@
+package main
+
+import (
+        "fmt"
+        "math"
+)
+
+func pi(C float64, d float64) float64 {
+        return C / d
+}
+
+func pi1() float64 {
+        return math.Pi
+}
+
+func main() {
+        fmt.Println(pi(25.0, 8.0))
+        //Pi is 3.14.  Pi is a constant not computed
+        fmt.Println(math.Pi)
+        //Phi is 1:1.618.  Phi is a constant not computed
+        fmt.Println(math.Phi)
+}

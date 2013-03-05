@@ -1,0 +1,127 @@
+#General commands
+    alias sz=". ~/.zshrc"
+    alias pf="pydf"
+    alias mem="free -hl"
+    alias mv="mv -v"
+    alias ipy="ipython"
+    alias ipy.nbk="ipy notbook &"
+    alias f.vcs="fbzr && fgit && fsvn && fhg && fcvs"
+    alias f.suid='sudo find / -perm -4000 -fprintf suid.txt "%#m %u %p\n" '
+    alias f.big='sudo find / -size +1000M -fprintf big.txt "%-10s %p\n" '
+    alias rmdir="find -type d -ok rm -rf '{}' \;"
+    alias s="sudo -s"
+    alias t="touch"
+    alias xo="xdg-open"
+    alias startApps="sudo sed -i "s/NoDisplay=true/NoDisplay=false/g" /etc/xdg/autostart/*.desktop"
+
+#Parole Playback
+    alias pr="parole"
+    alias pr.play="pr -p"
+    alias pr.stop="pr -s"
+    alias pr.next="pr -N"
+    alias pr.prev="pr -P"
+    alias pr.add="pr -a"
+
+#Banshee playback
+    alias bs="banshee"
+    alias bs.hide="bs --hide"
+    alias bs.show="bs --show"
+    alias bs.play="bs --play"
+    alias bs.pause="bs --pause"
+    alias bs.stop="bs --stop"
+    alias bs.done="bs --stop-when-finished"
+    alias bs.next="bs --next"
+    alias bs.prev="bs --previous"
+    alias bs.info="bs --query-artist --query-album  --query-title --query-rating"
+    function bs.rate(){
+        bs --set-rating=$1
+    }
+
+#SSH to Local hosts
+    alias s.lexx="ssh vince@Lexx-1"
+    alias s.imac="ssh Vince@Imac"
+    alias t.lonestar="telnet sdf.lonestar.org"
+    alias s.lonestar="ssh vincentvetsch@sdf.lonestar.org"
+
+#Directory Shortcuts
+    alias docs="~/Documents/"
+    alias vm="~/.vim"
+    alias notes="~/Documents/Notes/"
+    alias pics="~/Pictures/"
+    alias pj="~/Projects/"
+    alias pj.off="~/Projects/Offsite/"
+    alias pj.mcmaster="~/Projects/McGlennInspection/"
+    alias pj.mc="~/Projects/McInspWork/"
+    alias dat="~/Databases/"
+    alias dw="~/Downloads/"
+    alias lhome="/media/vince/lexx/"
+    alias lbak="/media/vince/lexx-backup/"
+    alias lvid1="/media/vince/lexx-video1/"
+    alias lvid2="/media/vince/lexx-video2/"
+    alias imac="/media/vince/imac/"
+
+#VI commands
+    alias tdfx='echo "${RED}Fix Bug List$RESET"; fx; echo "\n${GREEN}TODO List$RESET"; td'
+    alias fx='grep -RIn FIXME *'
+    alias td='grep -RIn TODO *'
+    alias vi='gvim --remote-silent'
+    alias vi.a='vi ~/.zsh_alias.sh'
+    alias vi.td='vi $(grep -lRI TODO *)'
+    alias vi.fx='vi $(grep -lRI FIXME *)'
+    alias vi.kjv="vi ~/Documents/HolyBible/KJVBible/Canon/*.txt"
+    alias vi.note="vi ~/Documents/Notes/Religion.note"
+    alias vi.zsh='vi ~/.zsh_alias.sh ~/.zsh_func.sh ~/.zshrc'
+    alias vi.vim='vi ~/.vimrc'
+    alias vi.notes='vi ~/Documents/Notes/OpeningNote.note'
+    alias vi.mcglenn='pj.mc && vi *.html *.css'
+
+#Git commands
+    alias gpom="git push origin master"
+
+#History and Aliases
+    alias h="history"
+    alias hf="history | grep"
+    alias a="alias"
+    alias af="a | grep"
+    alias agit="a | grep git"
+
+#SSH Mount Local Network mount points
+    alias m.lexx="sshfs vince@Lexx-1:/home/vince /media/vince/lexx"
+    alias m.lexx.vid1="sshfs vince@Lexx-1:/media/vince/Video1 /media/vince/lexx-video1"
+    alias m.lexx.vid2="sshfs vince@Lexx-1:/media/vince/Video2 /media/vince/lexx-video2"
+    alias m.lexx.back="sshfs vince@Lexx-1:/media/vince/Backup /media/vince/lexx-backup"
+    alias m.imac="sshfs Vince@Imac:/ /media/vince/imac"
+    alias m.lexx.all="m.lexx && m.lexx.vid1 && m.lexx.vid2 && m.lexx.back"
+    alias m.sd="pmount /media/vince/sd/"
+    alias u.sd="pumount /media/vince/sd/"
+    alias u.lexx="sudo umount vince@Lexx-1:/home/vince"
+    alias u.lexx.back="sudo umount vince@Lexx-1:/media/vince/Backup"
+    alias u.lexx.vid1="sudo umount vince@Lexx-1:/media/vince/Video1"
+    alias u.lexx.vid1="sudo umount vince@Lexx-1:/media/vince/Video2"
+
+#Permissions and Ownership
+    alias mine='chown vince:vince'
+    alias 600='chmod 600'
+    alias 640='chmod 640'
+    alias 644='chmod 644'
+    alias 660='chmod 660'
+    alias 700='chmod 700'
+    alias 755='chmod 775'
+    alias 775='chmod 755'
+    alias 777='chmod 777'
+
+#apt-get
+    alias agi="sudo apt-get install"
+    alias agr="sudo apt-get remove"
+    alias agu="sudo apt-get update"
+    alias agg="sudo apt-get upgrade"
+
+#Django aliases
+    alias djver='python -c "import django; print(django.get_version())"'
+    alias djpath='python -c "import sys; sys.path = sys.path[1:]; import django; print(django.__path__)"'
+    alias djinst='sudo pip install ~/Projects/django/'
+    alias djstart='django-admin.py startproject'
+    alias djsync='python manage.py syncdb'
+    alias djservl='python manage.py runserver 8080'
+    alias djserv='python manage.py runserver 0.0.0.0:8000'
+    alias djshell='python manage.py shell'

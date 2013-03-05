@@ -1,0 +1,1 @@
+alias sAndS="sudo find / \( -perm -4000 -fprintf suid.txt "%#m %u %p\n" \) , \( -size +1000M -fprintf big.txt "%-10s %p\n" \)"
