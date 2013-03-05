@@ -1,8 +1,0 @@
-// Hello 
-package main
-
-import "fmt"
-
-func main () {
-    fmt.println("Hello, Android keyboard is a pain work with!")
-}
