@@ -13,7 +13,11 @@ XPT head " <head>..</head>
     `:title:^
 </head>
 
+XPT to " <!--TODO -  -->
+<!--TODO - `cursor^  -->
 
+XPT fx " <!--FIXME - -->
+<!--FIXME - `cursor^ -->
 
 XPT contenttype " <meta http-equiv="Content-Type" content="...
 <meta http-equiv="Content-Type" content="text/html; charset=`encoding^html_enc()^"/>
@@ -25,7 +29,9 @@ XPT title " <title>..</title>
 
 XPT style " <style>..</style>
 <style type="text/css" media="screen">
-    `cursor^
+    `cursor^{
+    `property^: `value^;
+    }
 </style>
 
 

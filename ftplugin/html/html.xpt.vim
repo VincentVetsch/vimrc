@@ -216,6 +216,12 @@ XPT head " <head>..</head>
     `:title:^
 </head>
 
+XPT to " <!--TODO -  -->
+<!--TODO - `cursor^ -->
+
+XPT fx " <!--FIXME - -->
+<!--FIXME - `cursor^ -->
+
 
 
 XPT contenttype " <meta http-equiv="Content-Type" content="...

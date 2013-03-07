@@ -113,6 +113,7 @@
     let g:xptemplate_key = '<C-\>'
     let g:xptemplate_always_show_pum = 1
     let g:xptemplate_vars="email=vincent.vetsch@gmail.com&author=Vincent Vetsch"
+    let g:xptemplate_snippet_folders = [ '~/.vim/personal/ftplugin/' ]
 " Pymode {
     "Python Mode Plugin configuration
     let g:pymode_lint_write=1 " Enable pylint checking every save
@@ -601,13 +602,13 @@
      " type table,,, to get <table></table>       ### Cool ###
        imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
 " Abbreviations {
-    iab <!         <!--  --><left><left><left><left>
-    iab <!T        <!--TODO - --><left><left><left><left>
+"   iab <!         <!--  --><left><left><left><left>
+"   iab <!T        <!--TODO - --><left><left><left><left>
     iab vv         Vincent Vetsch
     iab ifm        if __name__ == '__main__':
-    iab todo       # TODO --
-    iab fx         # FIXME --
-    iab xx         # XXX --
+"   iab todo       # TODO --
+"   iab fx         # FIXME --
+"   iab xx         # XXX --
     iab auth       @Author:\tVincent E Vetsch
     iab authe      @Email:\tvincent.vetsch@gmail.com
     iab imp        import
