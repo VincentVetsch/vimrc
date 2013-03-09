@@ -49,7 +49,7 @@
     set directory=~/.vim/tmp " directory to place swap files in
     set fileformats=unix,dos,mac " support all three, in this order
     set hidden " you can change buffers without saving
-    set iskeyword+=_,$,@,%,# " none of these are word dividers 
+    set iskeyword+=_,$,@,%,# " none of these are word dividers
     set mouse=a " use mouse everywhere
     "set mousemodel=popup
     set noerrorbells " don't make noise
@@ -185,22 +185,6 @@
 " Notes
     let g:notes_directory = '~/Documents/Notes' " The directory the notes will be stored
     let g:notes_suffix = '.note'
-" ConqueShell {
-    let g:ConqueTerm_PyVersion = 2
-    let g:ConqueTerm_EscKey = '<ESC>'
-    let g:ConqueTerm_ToggleKey = '<F8>'
-    let g:ConqueTerm_CWInsert = 0
-    let g:ConqueTerm_InsertOnEnter = 0
-    let g:ConqueTerm_ExecFileKey = '<F11>'
-    let g:ConqueTerm_SendFileKey = '<F10>'
-    let g:ConqueTerm_SendVisKey = '<F9>'
-    let g:ConqueTerm_SendFunctionKeys = 1
-    let g:ConqueTerm_FastMode = 1
-    let g:ConqueTerm_ReadUnfocused = 1
-    let g:ConqueTerm_InsertOnEnter = 1
-    let g:ConqueTerm_PromptRegex = '^-->'
-    let g:ConqueTerm_TERM = 'xterm'
-    "}
 " Setup gist
     let g:gist_browser_command = 'w3m %URL%'
     let g:gist_open_browser_after_post = 1
