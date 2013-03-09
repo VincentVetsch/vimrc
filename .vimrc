@@ -382,6 +382,8 @@
                 execute "normal! ".col_num."|"
             endfunction
 " Mappings
+    " Remove unused lines
+        nnoremap <Leader>dl :g/^$/d<CR>
     " Select text object in visual mode and perform a replace
         vmap <Leader>srr :%s/<c-r>=GetVisual()<cr>/
         vnoremap <Leader>sr "hy:%s/<C-r>h//gc<left><left><left>
