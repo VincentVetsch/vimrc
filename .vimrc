@@ -1,4 +1,5 @@
-" General Settings
+"vim: foldmethod=marker
+"General Settings {{{1
     set noexrc " don't use local version of .(g)vimrc, .exrc
     "set cpoptions=ces$ "used to add vi-compatible behavior.
     filetype off
@@ -96,152 +97,160 @@
         set isfname-=& isfname+=&
         let g:Browser_console = 'w3m'
         let g:Browser_x = 'chromium-browser'
-" NERD Tree Plugin Settings {
+    set incsearch " BUT do highlight as you type you search phrase
+    set laststatus=2 " always show the status line
+    set linespace=0 " don't insert any extra pixel lines betweens rows
+    set list " we do what to show tabs, to ensure we get them  out of my files
+    set listchars=tab:>-,trail:- " show tabs and trailing
+    set matchtime=5 " how many tenths of a second to blink matching brackets for
+    set nostartofline " leave my cursor where it was
+    set novisualbell " don't blink
+    set number " turn on line numbers
+    set numberwidth=5 " We are good up to 99999 lines
+    set report=0 " tell us when anything is changed via :...
+    set ruler " Always show current positions along the bottom
+    set scrolloff=10 " Keep 10 lines (top/bottom) for scope
+    set shortmess=aOstT " shortens messages to avoid 'press a key' prompt
+    set showcmd " show the command being typed
+    set sidescrolloff=10 " Keep 5 lines at the size
+    set completeopt=longest,menuone,preview "pop up menu for completions
+    set expandtab " no real tabs please!
+    set formatoptions=rq " Automatically insert comment leader on return, and let gq format comments
+    set ignorecase " case insensitive by default
+    set infercase " case inferred by default
+    set shiftround " when at 3 spaces, and I hit > ... go to 4, not 5
+    set smartcase " if there are caps, go case-sensitive
+    set shiftwidth=4 " auto-indent amount when using cindent, >>, << and stuff like that
+    set softtabstop=4 " when hitting tab or backspace, how many spaces should a tab be
+    set tabstop=8 " real tabs should be 8, and they will show with 
+"Jedi Python Settings {{{1
+    let g:jedi#auto_initialization = 1
+    let g:jedi#auto_vim_configuration = 1
+    let g:jedi#goto_command = "<leader>g"
+    let g:jedi#get_definition_command = "<leader>d"
+    let g:jedi#pydoc = "K"
+    let g:jedi#use_tabs_not_buffers = 1
+    let g:jedi#popup_on_dot = 1
+    let g:jedi#popup_select_first = 0
+    let g:jedi#rename_command = "<leader>r"
+    let g:jedi#related_names_command = "<leader>n"
+    let g:jedi#autocompletion_command = "<C-Space>"
+    let g:jedi#show_function_definition = "1"
+"NERD Tree Plugin Settings {{{1
     " Show the bookmarks table on startup
     let NERDTreeShowBookmarks=0
-
     " Don't display these kinds of files
     let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$', '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$', '\.embed\.manifest$', '\.embed\.manifest.res$','\.intermediate\.manifest$', '^mt.dep$' ]
-    " }
-" Minibuffer {
+"Minibuffer {{{1
     let g:miniBufExplMapWindowNavVim = 1
     let g:miniBufExplMapWindowNavArrows = 1
     let g:miniBufExplMapCTabSwitchBufs = 1
     let g:miniBufExplModSelTarget = 1
     " }
-" xptemplate http://goo.gl/zRW9g
+"XPTemplate {{{1
     let g:xptemplate_key = '<C-\>'
     let g:xptemplate_always_show_pum = 1
     let g:xptemplate_vars="email=vincent.vetsch@gmail.com&author=Vincent Vetsch"
     let g:xptemplate_snippet_folders = [ '~/.vim/personal/ftplugin/' ]
-" Pymode {
+"Pymode {{{1
     "Python Mode Plugin configuration
-    let g:pymode_lint_write=1 " Enable pylint checking every save
-    let g:pymode_doc=1 " Load show documentation plugin
-    let g:pymode_doc_key='K' " Key for show python documentation
-    let g:pymode_run=1  " Load run code plugin
-    let g:pymode_run_key='<leader>r' " Key for run python code
-    let g:pymode_lint=1 " Load pylint code plugin
-    let g:pymode_lint_checker="pyflakes,pep8,mccabe" " Switch pylint, pyflakes, pep8, mccabe code-checkers
-    let g:pymode_lint_ignore="E501,E201" " Skip errors and warnings
-    let g:pymode_lint_select="" " Select errors and warnings
-    let g:pymode_lint_onfly=1 " Run linter on the fly
-    let g:pymode_lint_config="$HOME/.pylintrc" " Pylint configuration file
-    let g:pymode_lint_write=1 " Check code every save
-    let g:pymode_lint_cwindow=1 " Auto open cwindow if errors be finded
-    let g:pymode_lint_message=1 " Show error message if cursor placed at the error line
-    let g:pymode_lint_jump=1 " Auto jump on first error
-    let g:pymode_lint_hold=1    " Hold cursor in current window when quickfix is open
-    let g:pymode_lint_signs=1 " Place error signs
-    let g:pymode_lint_mccabe_complexity=12 " Maximum allowed mccabe complexity
-    let g:pymode_lint_minheight=6 " Minimal height of pylint error window
-    let g:pymode_lint_maxheight=10 " Maximal height of pylint error window
-    let g:pymode_rope=1 " Load rope plugin
-    let g:pymode_rope_auto_project=1 " Auto create and open ropeproject
-    let g:pymode_rope_enable_autoimport=1 " Enable autoimport
-    " Auto generate global cache
-        let g:pymode_rope_autoimport_generate=1
-        let g:pymode_rope_autoimport_underlineds=0
-        let g:pymode_rope_codeassist_maxfixes=10
-        let g:pymode_rope_sorted_completions=1
-        let g:pymode_rope_extended_complete=1
-        let g:pymode_rope_autoimport_modules=["os","sys","shutil","datetime"]
-        let g:pymode_rope_confirm_saving=1
-        let g:pymode_rope_global_prefix="<C-x>p"
-        let g:pymode_rope_local_prefix="<C-c>r"
-        let g:pymode_rope_vim_completion=1
-        let g:pymode_rope_guess_project=0
-        let g:pymode_rope_goto_def_newwin=""
-        let g:pymode_rope_always_show_complete_menu=1
-    let g:pymode_folding=1 " Enable python folding
-    let g:pymode_motion=1 " Enable python objects and motion
-    let g:pymode_virtualenv=1 " Auto fix vim python paths if virtualenv enabled
-    " # TODO -- add sys.paths
-    let g:pymode_paths=['', '/usr/bin', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-linux2', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/HTMLgen', '/usr/lib/python2.7/dist-packages/PIL', '/usr/lib/InsightToolkit/WrapITK/Python', '/usr/lib/pymodules/python2.7/gtk-2.0', '/usr/lib/python2.7/dist-packages/omniORB/COS', '/usr/lib/python2.7/dist-packages/gst-0.10', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pymodules/python2.7', '/usr/lib/pymodules/python2.7/input-pad-1.0', '/usr/lib/pymodules/python2.7/scim-0.1', '/usr/lib/python2.7/dist-packages/stfio', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/usr/lib/python2.7/dist-packages/ubuntuone-client', '/usr/lib/python2.7/dist-packages/ubuntuone-control-panel', '/usr/lib/python2.7/dist-packages/ubuntuone-couch', '/usr/lib/python2.7/dist-packages/ubuntuone-dev-tools', '/usr/lib/python2.7/dist-packages/ubuntuone-installer', '/usr/lib/python2.7/dist-packages/ubuntuone-storage-protocol', '/usr/lib/python2.7/dist-packages/wx-2.6-gtk2-unicode', '/usr/lib/python2.7/dist-packages/IPython/extensions']
-    let g:pymode_breakpoint=1 " Load breakpoints plugin
-    let g:pymode_breakpoint_key='<leader>b' " Key for set/unset breakpoint
-    let g:pymode_utils_whitespaces=1 " Autoremove unused whitespaces
-    let g:pymode_options_indent=1 " Set default pymode python indent options
-    let g:pymode_options_other=1 " Set default pymode python other options
-    let g:pymode_syntax=1 " Enable pymode's custom syntax highlighting
-    let g:pymode_syntax_all=1 " Enable all python highlightings
-    let g:pymode_syntax_print_as_function=1 " Highlight "print" as function
-    let g:pymode_syntax_indent_errors=g:pymode_syntax_all " Highlight indentation errors
-    let g:pymode_syntax_space_errors=g:pymode_syntax_all " Highlight trailing spaces
-    let g:pymode_syntax_string_formatting=g:pymode_syntax_all " Highlight string formatting
-     let g:pymode_syntax_string_format=g:pymode_syntax_all " Highlight str.format syntax
-    let g:pymode_syntax_string_templates=g:pymode_syntax_all    " Highlight string.Template syntax
-    let g:pymode_syntax_doctests=g:pymode_syntax_all    " Highlight doc-tests
-    let g:pymode_syntax_builtin_objs=g:pymode_syntax_all    " Highlight builtin objects (__doc__, self, etc)
-    let g:pymode_syntax_builtin_funcs=g:pymode_syntax_all    " Highlight builtin functions
-    let g:pymode_syntax_highlight_exceptions=g:pymode_syntax_all    " Highlight exceptions
-    let g:pymode_syntax_slow_sync=0    " For fast machines
-" Tagbar Configuration {
+    "let g:pymode_lint_write=1 " Enable pylint checking every save
+    "let g:pymode_doc=1 " Load show documentation plugin
+    "let g:pymode_doc_key='K' " Key for show python documentation
+    "let g:pymode_run=1  " Load run code plugin
+    "let g:pymode_run_key='<leader>r' " Key for run python code
+    "let g:pymode_lint=1 " Load pylint code plugin
+    "let g:pymode_lint_checker="pyflakes,pep8,mccabe" " Switch pylint, pyflakes, pep8, mccabe code-checkers
+    "let g:pymode_lint_ignore="E501,E201" " Skip errors and warnings
+    "let g:pymode_lint_select="" " Select errors and warnings
+    "let g:pymode_lint_onfly=1 " Run linter on the fly
+    "let g:pymode_lint_config="$HOME/.pylintrc" " Pylint configuration file
+    "let g:pymode_lint_write=1 " Check code every save
+    "let g:pymode_lint_cwindow=1 " Auto open cwindow if errors be finded
+    "let g:pymode_lint_message=1 " Show error message if cursor placed at the error line
+    "let g:pymode_lint_jump=1 " Auto jump on first error
+    "let g:pymode_lint_hold=1    " Hold cursor in current window when quickfix is open
+    "let g:pymode_lint_signs=1 " Place error signs
+    "let g:pymode_lint_mccabe_complexity=12 " Maximum allowed mccabe complexity
+    "let g:pymode_lint_minheight=6 " Minimal height of pylint error window
+    "let g:pymode_lint_maxheight=10 " Maximal height of pylint error window
+    "let g:pymode_rope=1 " Load rope plugin
+    "let g:pymode_rope_auto_project=1 " Auto create and open ropeproject
+    "let g:pymode_rope_enable_autoimport=1 " Enable autoimport
+    "Auto generate global cache {{{2
+    "    let g:pymode_rope_autoimport_generate=1
+    "    let g:pymode_rope_autoimport_underlineds=0
+    "    let g:pymode_rope_codeassist_maxfixes=10
+    "    let g:pymode_rope_sorted_completions=1
+    "    let g:pymode_rope_extended_complete=1
+    "    let g:pymode_rope_autoimport_modules=["os","sys","shutil","datetime"]
+    "    let g:pymode_rope_confirm_saving=1
+    "    let g:pymode_rope_global_prefix="<C-x>p"
+    "    let g:pymode_rope_local_prefix="<C-c>r"
+    "    let g:pymode_rope_vim_completion=1
+    "    let g:pymode_rope_guess_project=0
+    "    let g:pymode_rope_goto_def_newwin=""
+    "    let g:pymode_rope_always_show_complete_menu=1
+    "let g:pymode_folding=1 " Enable python folding
+    "let g:pymode_motion=1 " Enable python objects and motion
+    "let g:pymode_virtualenv=1 " Auto fix vim python paths if virtualenv enabled
+    "" # TODO -- add sys.paths
+    "let g:pymode_paths=['', '/usr/bin', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-linux2', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/HTMLgen', '/usr/lib/python2.7/dist-packages/PIL', '/usr/lib/InsightToolkit/WrapITK/Python', '/usr/lib/pymodules/python2.7/gtk-2.0', '/usr/lib/python2.7/dist-packages/omniORB/COS', '/usr/lib/python2.7/dist-packages/gst-0.10', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pymodules/python2.7', '/usr/lib/pymodules/python2.7/input-pad-1.0', '/usr/lib/pymodules/python2.7/scim-0.1', '/usr/lib/python2.7/dist-packages/stfio', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/usr/lib/python2.7/dist-packages/ubuntuone-client', '/usr/lib/python2.7/dist-packages/ubuntuone-control-panel', '/usr/lib/python2.7/dist-packages/ubuntuone-couch', '/usr/lib/python2.7/dist-packages/ubuntuone-dev-tools', '/usr/lib/python2.7/dist-packages/ubuntuone-installer', '/usr/lib/python2.7/dist-packages/ubuntuone-storage-protocol', '/usr/lib/python2.7/dist-packages/wx-2.6-gtk2-unicode', '/usr/lib/python2.7/dist-packages/IPython/extensions']
+    "let g:pymode_breakpoint=1 " Load breakpoints plugin
+    "let g:pymode_breakpoint_key='<leader>b' " Key for set/unset breakpoint
+    "let g:pymode_utils_whitespaces=1 " Autoremove unused whitespaces
+    "let g:pymode_options_indent=1 " Set default pymode python indent options
+    "let g:pymode_options_other=1 " Set default pymode python other options
+    "let g:pymode_syntax=1 " Enable pymode's custom syntax highlighting
+    "let g:pymode_syntax_all=1 " Enable all python highlightings
+    "let g:pymode_syntax_print_as_function=1 " Highlight "print" as function
+    "let g:pymode_syntax_indent_errors=g:pymode_syntax_all " Highlight indentation errors
+    "let g:pymode_syntax_space_errors=g:pymode_syntax_all " Highlight trailing spaces
+    "let g:pymode_syntax_string_formatting=g:pymode_syntax_all " Highlight string formatting
+    " let g:pymode_syntax_string_format=g:pymode_syntax_all " Highlight str.format syntax
+    "let g:pymode_syntax_string_templates=g:pymode_syntax_all    " Highlight string.Template syntax
+    "let g:pymode_syntax_doctests=g:pymode_syntax_all    " Highlight doc-tests
+    "let g:pymode_syntax_builtin_objs=g:pymode_syntax_all    " Highlight builtin objects (__doc__, self, etc)
+    "let g:pymode_syntax_builtin_funcs=g:pymode_syntax_all    " Highlight builtin functions
+    "let g:pymode_syntax_highlight_exceptions=g:pymode_syntax_all    " Highlight exceptions
+    "let g:pymode_syntax_slow_sync=0    " For fast machines
+    "}}}
+"Tagbar Configuration {{{1
      let g:tagbar_foldlevel = 3
      let g:tagbar_expand = 1
      let g:tagbar_singleclick = 1
-     " }
-     "
-" Notes
+"Notes Configuration {{{1
     let g:notes_directory = '~/Documents/Notes' " The directory the notes will be stored
     let g:notes_suffix = '.note'
-" Setup gist
+"Setup Gist
     let g:gist_browser_command = 'w3m %URL%'
     let g:gist_open_browser_after_post = 1
     let g:gist_show_privates = 1
     let g:gist_clip_command = 'xclip -selection clipboard'
     let g:gist_use_password_in_gitconfig = 1
-" Gist commands
-    "List my gist's
-    :command! GistList :Gist -l
-    "List List everyone's gists
-    :command! GistPublicList :Gist -la
-    "Post Selected text
-    :command! GistPostSelection :'<,'>Gist
-    "Post buffer"
-    :command! GistPostBuffer :Gist
-    "Post all buffers"
-    :command! GistPostAllBuffers :Gist -m
-" Setup HTML Plugins
+    "Gist commands {{{2
+        "List my gist's
+        :command! GistList :Gist -l
+        "List List everyone's gists
+        :command! GistPublicList :Gist -la
+        "Post Selected text
+        :command! GistPostSelection :'<,'>Gist
+        "Post buffer"
+        :command! GistPostBuffer :Gist
+        "Post all buffers"
+        :command! GistPostAllBuffers :Gist -m
+"Setup HTML Plugins {{{1
     let g:html_indent_inctags = "html,body,head,p,tbody,div"
     let g:html_indent_script1 = "inc"
     let g:html_indent_style1  = "inc"
-" Powerline setup
+"Powerline setup {{{1
     set encoding=utf-8
     set fillchars+=stl:\ ,stlnc:\ ,vert:\ ,
-    "set fillchars=diff:⣿,vert:│
     set guifont=DroidSansMono\ 10
     let Powerline_symbols = 'compatible' " 'unicode' 'fancy'
     set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
-" Vim UI {
-     set incsearch " BUT do highlight as you type you search phrase
-     set laststatus=2 " always show the status line
-     set linespace=0 " don't insert any extra pixel lines betweens rows
-     set list " we do what to show tabs, to ensure we get them  out of my files
-     set listchars=tab:>-,trail:- " show tabs and trailing
-     set matchtime=5 " how many tenths of a second to blink matching brackets for
-     set nostartofline " leave my cursor where it was
-     set novisualbell " don't blink
-     set number " turn on line numbers
-     set numberwidth=5 " We are good up to 99999 lines
-     set report=0 " tell us when anything is changed via :...
-     set ruler " Always show current positions along the bottom
-     set scrolloff=10 " Keep 10 lines (top/bottom) for scope
-     set shortmess=aOstT " shortens messages to avoid 'press a key' prompt
-     set showcmd " show the command being typed
-     set sidescrolloff=10 " Keep 5 lines at the size
-     set completeopt=longest,menuone,preview "pop up menu for completions
-     set expandtab " no real tabs please!
-     set formatoptions=rq " Automatically insert comment leader on return, and let gq format comments
-     set ignorecase " case insensitive by default
-     set infercase " case inferred by default
-     set shiftround " when at 3 spaces, and I hit > ... go to 4, not 5
-     set smartcase " if there are caps, go case-sensitive
-     set shiftwidth=4 " auto-indent amount when using cindent, >>, << and stuff like that
-     set softtabstop=4 " when hitting tab or backspace, how many spaces should a tab be
-     set tabstop=8 " real tabs should be 8, and they will show with 
-" Functions
-    " Folding
+"Functions {{{1
+    "Folding {{{2
             function! MyFoldText()
                 let nl = v:foldend - v:foldstart + 1
                 let comment = substitute(getline(v:foldstart),"^ *","",1)
@@ -251,7 +260,7 @@
             endfunction
             set fillchars="fold: "
             set foldtext=MyFoldText()
-    " Update Tags
+    "Update Tags {{{2
             function! UPDATE_TAGS()
                 let _f_ = expand("%:p")
                 let _cmd_ = '"ctags -aR " '
@@ -261,7 +270,7 @@
                 unlet _resp
             endfunction
             au BufWrite *.cpp, *.h, *.c, *.py, *.html, *.js call UPDATE_TAGS()
-    " List Buffers in Quickfix buffev
+    "List Buffers in Quickfix buffev {{{2
             function s:ListBuffers()
                 let save_more = &more
                 set nomore
@@ -274,7 +283,7 @@
                 " 0putnmap <F2> :ls<CR>:b
             endfunction
             command -bar -nargs=0 LBuf call s:ListBuffers()
-    " Buffer window Jump
+    "Buffer window Jump {{{2
             function! s:BufferWindowJump()
                 let buffer = matchstr(getline('.'), '^\s*\(\d\+\)')
                 exe 'bd! '.s:bufferWindowBuffer
@@ -282,7 +291,7 @@
                 exec s:originWindow.'wincmd w'
                 exec 'buffer '.buffer
             endfunction
-    " BufferWindow - Creates a buffer window with a list of current buffers
+    "BufferWindow - Creates a buffer window with a list of current buffers  {{{2
             function! BufferWindow()
                 let s:windowRestore = winrestcmd()
                 let s:originWindow = winnr()
@@ -301,7 +310,7 @@
                 nmap <buffer><silent> q    :bd!<cr>
                 nmap <buffer><silent> <cr> :call <SID>BufferWindowJump()<CR>
             endfunction
-    " Toggle Line Numbering
+    "Toggle Line Numbering  {{{2
             function! NumberToggle()
                 if(&relativenumber == 1)
                     set number
@@ -309,7 +318,7 @@
                     set relativenumber
                 endif
             endfunction
-    "  Get Get Visual rand and perform substitution
+    "Get Visual rand and perform substitution  {{{2
         function! GetVisual() range
             let reg_save = getreg('"')
             let regtype_save = getregtype('"')
@@ -321,7 +330,7 @@
             let &clipboard = cb_save
             return selection
         endfunction
-    " Move Lines
+    "Move Lines {{{2
             function! MoveLineUp()
                 call MoveLineOrVisualUp(".", "")
             endfunction
@@ -365,7 +374,7 @@
                 execute "silent! ".a:move_arg
                 execute "normal! ".col_num."|"
             endfunction
-" Mappings
+"Mappings {{{1
     " Remove unused lines
         nnoremap <Leader>dl :g/^$/d<CR>
     " Select text object in visual mode and perform a replace
@@ -587,21 +596,16 @@
         nmap <silent> <leader>fb :FufBuffer<CR>
      " type table,,, to get <table></table>       ### Cool ###
        imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
-" Abbreviations {
-"   iab <!         <!--  --><left><left><left><left>
-"   iab <!T        <!--TODO - --><left><left><left><left>
+"Abbreviations {{{1
     iab vv         Vincent Vetsch
     iab ifm        if __name__ == '__main__':
-"   iab todo       # TODO --
-"   iab fx         # FIXME --
-"   iab xx         # XXX --
     iab auth       @Author:\tVincent E Vetsch
     iab authe      @Email:\tvincent.vetsch@gmail.com
     iab imp        import
     iab pp         print
     iab #!         #!/usr/bin/env python
-    iab utf8       # coding: utf-8
-" Autocommands {
+    iab utf8       # coding: utf-8 }}}
+"Autocommands {{{1
     " Make sure Vim returns to the same line when you reopen a file.
     " Thanks, Amit
         augroup line_return
@@ -645,7 +649,7 @@
     au FileType python inoremap :: <End>:
     "Removes any extra whitespace from the ends of lines
         au BufWritePre *.py normal m`:%s/\s\+$//e
-        au FileType python setlocal omnifunc=pythoncomplete#Complete
+        "au FileType python setlocal omnifunc=pythoncomplete#Complete
         "au FileType python setlocal expandtab
         au FileType python setlocal foldmethod=indent
         "au FileType python setlocal tabstop=4
@@ -663,6 +667,6 @@
         au FileType doctest map <C-L> :python LP_python_import_search()
         au FileType c,h,cpp,python,vala,javascript hi ExtraWhitespace ctermbg=red
         au FileType c,h,cpp,python,vala,javascript match ExtraWhitespace /\s\+\%#\@<!$/
-        autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-        autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-        autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType css set omnifunc=csscomplete#CompleteCSS
