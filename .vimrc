@@ -177,7 +177,7 @@
     "let g:pymode_rope=1 " Load rope plugin
     "let g:pymode_rope_auto_project=1 " Auto create and open ropeproject
     "let g:pymode_rope_enable_autoimport=1 " Enable autoimport
-    "Auto generate global cache {{{2
+    "Auto generate global cache
     "    let g:pymode_rope_autoimport_generate=1
     "    let g:pymode_rope_autoimport_underlineds=0
     "    let g:pymode_rope_codeassist_maxfixes=10
@@ -214,7 +214,6 @@
     "let g:pymode_syntax_builtin_funcs=g:pymode_syntax_all    " Highlight builtin functions
     "let g:pymode_syntax_highlight_exceptions=g:pymode_syntax_all    " Highlight exceptions
     "let g:pymode_syntax_slow_sync=0    " For fast machines
-    "}}}
 "Tagbar Configuration {{{1
      let g:tagbar_foldlevel = 3
      let g:tagbar_expand = 1
@@ -557,12 +556,12 @@
         noremap <silent> ,m<Left> <C-W>H
     " Move the current window to the bottom of the main Vim window
         noremap <silent> ,m<Down> <C-W>J
-        " Edit a file in the same directory as the current buffer.
+    " Edit a file in the same directory as the current buffer.
         map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>  
         map <leader>. :e %:p:h<CR> " Enter directory listing for the directory of/tag the current buffer
-        " Create a new window with directory listing of current buffer
+    " Create a new window with directory listing of current buffer
         map <leader>wn :new %:p:h<CR>
-        " Change global directory to the current directory of the current buffer
+    " Change global directory to the current directory of the current buffer
         map <leader>cd :cd %:p:h<CR>
     " Let's make it easy to edit this file (mnemonic for the key sequence is 'e'dit 'v'imrc)
         nmap <Leader>ev :e $MYVIMRC<cr>
