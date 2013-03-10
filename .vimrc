@@ -45,7 +45,7 @@
     ""highlight ColorColumn ctermbg=55
     set backup " make backup files
     set backupdir=~/.vim/backup " where to put backup files
-    set clipboard=unnamed " share windows clipboard
+    set clipboard=unnamedplus " share windows clipboard
     set directory=~/.vim/tmp " directory to place swap files in
     set fileformats=unix,dos,mac " support all three, in this order
     set hidden " you can change buffers without saving
@@ -486,8 +486,8 @@
     " Toggle the NERD Tree
         nmap <Leader>nt :NERDTreeToggle<CR>
     " Add double quotes
-        noremap! """ """""”<left><left><left>
-        noremap! ''' ''''''<left><left><left>
+        noremap! """ """""”<left><left><left><CR><CR><up><space><space><space><space>
+        noremap! ''' ''''''<left><left><left><CR><CR><up><space><space><space><space>
     " Tasklist Mappings
         map <Leader>tt :TaskList<CR>
     " ConqueShell Mappings (Need to remap the <leader> something
