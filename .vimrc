@@ -1,5 +1,5 @@
-"vim: foldmethod=marker
-"General Settings {{{1
+" vim: foldmethod=marker
+"General Configuration {{{1
     set noexrc " don't use local version of .(g)vimrc, .exrc
     "set cpoptions=ces$ "used to add vi-compatible behavior.
     filetype off
@@ -123,7 +123,7 @@
     set shiftwidth=4 " auto-indent amount when using cindent, >>, << and stuff like that
     set softtabstop=4 " when hitting tab or backspace, how many spaces should a tab be
     set tabstop=8 " real tabs should be 8, and they will show with 
-"Jedi Python Settings {{{1
+"Jedi Python Configuration {{{1
     let g:jedi#auto_initialization = 1
     let g:jedi#auto_vim_configuration = 1
     let g:jedi#goto_command = "<leader>g"
@@ -136,23 +136,38 @@
     let g:jedi#related_names_command = "<leader>n"
     let g:jedi#autocompletion_command = "<C-Space>"
     let g:jedi#show_function_definition = "1"
-"NERD Tree Plugin Settings {{{1
+"NERD Tree Plugin Configuration {{{1
     " Show the bookmarks table on startup
     let NERDTreeShowBookmarks=0
     " Don't display these kinds of files
     let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$', '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$', '\.embed\.manifest$', '\.embed\.manifest.res$','\.intermediate\.manifest$', '^mt.dep$' ]
-"Minibuffer {{{1
+"Minibuffer Configuration {{{1
     let g:miniBufExplMapWindowNavVim = 1
     let g:miniBufExplMapWindowNavArrows = 1
     let g:miniBufExplMapCTabSwitchBufs = 1
     let g:miniBufExplModSelTarget = 1
-    " }
-"XPTemplate {{{1
+"FuzzyFinder Configuration {{{1
+    "Enter FUF File
+        nmap <silent> <leader>ff :FufFile<CR>
+    "Enter FUF Directory
+        nmap <silent> <leader>fd :FufDir<CR>
+    "Enter FUF Buffer
+        nmap <silent> <leader>fb :FufBuffer<CR>
+    "Enter FUF Quickfix mode
+        nmap <silent> <leader>fq :FufQuickfix<CR>
+    "Enter FUF Line mode
+        nmap <silent> <leader>fl :FufLine<CR>
+    "Enter FUF Help Mode
+        nmap <silent> <leader>fh :FufHelp<CR>
+    "Enter FUF Tag mode
+        nnoremap <silent> <leader>ft :FufTagWithCursorWord!<CR>
+        vnoremap <silent> <leader>ft :FufTagWithSelectedText!<CR>
+"XPTemplate Configuration {{{1
     let g:xptemplate_key = '<C-\>'
     let g:xptemplate_always_show_pum = 1
     let g:xptemplate_vars="email=vincent.vetsch@gmail.com&author=Vincent Vetsch"
     let g:xptemplate_snippet_folders = [ '~/.vim/personal/ftplugin/' ]
-"Pymode {{{1
+"Pymode Configuration {{{1
     "Python Mode Plugin configuration
     "let g:pymode_lint_write=1 " Enable pylint checking every save
     "let g:pymode_doc=1 " Load show documentation plugin
@@ -221,7 +236,7 @@
 "Notes Configuration {{{1
     let g:notes_directory = '~/Documents/Notes' " The directory the notes will be stored
     let g:notes_suffix = '.note'
-"Setup Gist
+"Gist Configuration {{{1
     let g:gist_browser_command = 'w3m %URL%'
     let g:gist_open_browser_after_post = 1
     let g:gist_show_privates = 1
@@ -238,11 +253,11 @@
         :command! GistPostBuffer :Gist
         "Post all buffers"
         :command! GistPostAllBuffers :Gist -m
-"Setup HTML Plugins {{{1
+"HTML Plugins Configuration {{{1
     let g:html_indent_inctags = "html,body,head,p,tbody,div"
     let g:html_indent_script1 = "inc"
     let g:html_indent_style1  = "inc"
-"Powerline setup {{{1
+"Powerline Configuration {{{1
     set encoding=utf-8
     set fillchars+=stl:\ ,stlnc:\ ,vert:\ ,
     set guifont=DroidSansMono\ 10
@@ -587,12 +602,6 @@
         nmap <silent> ,gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
     " Swap two words
         nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
-    " Enter FUF File
-        nmap <silent> <leader>ff :FufFile<CR>
-    " Enter FUF Directory
-        nmap <silent> <leader>fd :FufDir<CR>
-    " Enter FUF Buffer
-        nmap <silent> <leader>fb :FufBuffer<CR>
      " type table,,, to get <table></table>       ### Cool ###
        imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
 "Abbreviations {{{1
