@@ -1,7 +1,8 @@
 *.swp
 *~
 *.un~
-*.py[co]
+*.pyc
+*.pyo
 tmp/
 backup/
 bundle/

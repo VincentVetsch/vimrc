@@ -26,7 +26,7 @@
     filetype plugin on
     filetype plugin indent on " load filetype plugins/indent settings
     set ofu=syntaxcomplete#Complete
-    set guioptions=Aiecg
+    set guioptions=Aiecgm
     "Don't update the display while executing macros
     "set lazyredraw
     "Show what mode you are in
@@ -41,9 +41,9 @@
     set autoindent
     set thesaurus+=~/.vim/mthesaur.txt
     set cmdheight=1
-    ""set colorcolumn=80
+    "set colorcolumn=80
     set backspace=indent,eol,start " make backspace a more flexible
-    ""highlight ColorColumn ctermbg=55
+    "highlight ColorColumn ctermbg=55
     set backup " make backup files
     set backupdir=~/.vim/backup " where to put backup files
     set clipboard=unnamedplus " share windows clipboard
@@ -73,8 +73,8 @@
     " Automatically read a file that has changed on the disk
     set cursorline                  " highlight current line
     set autoread
-    let g:pydiction_location = '~/.vim/ftplugin/complete-dict'
-    let g:pydiction_menu_height = 20
+    "let g:pydiction_location = '~/.vim/ftplugin/complete-dict'
+    "let g:pydiction_menu_height = 20
     set history=100
     " Allow the cursor to go in to "invalid" places
     set virtualedit=all
@@ -84,10 +84,10 @@
     if (&t_Co == 256 || &t_Co == 88) && !has('gui_running') &&
         \ filereadable(expand("$HOME/.vim/plugin/guicolorscheme.vim"))
         runtime! plugin/guicolorscheme.vim
-        GuiColorScheme railscasts2
+        GuiColorScheme maroloccio   "railscasts2
     else
         set lines=50
-        colorscheme railscasts2
+        colorscheme maroloccio   "railscasts2
     endif
     " Enable Txtfmt formatting inside notes.
     setlocal filetype=notes.txtfmt
@@ -131,7 +131,7 @@
     let g:jedi#pydoc = "K"
     let g:jedi#use_tabs_not_buffers = 1
     let g:jedi#popup_on_dot = 1
-    let g:jedi#popup_select_first = 0
+    let g:jedi#popup_select_first = 1
     let g:jedi#rename_command = "<leader>r"
     let g:jedi#related_names_command = "<leader>n"
     let g:jedi#autocompletion_command = "<C-Space>"
@@ -253,8 +253,11 @@
         :command! GistPostBuffer :Gist
         "Post all buffers"
         :command! GistPostAllBuffers :Gist -m
+"Markdown Configuration {{{1
+    "Markdown command
+    nmap <leader>md :%!/usr/bin/markdown --html4tags<CR>
 "HTML Plugins Configuration {{{1
-    let g:html_indent_inctags = "html,body,head,p,tbody,div"
+    let g:html_indent_inctags = "html,body,head,p,tbody,div,ul,ol,li"
     let g:html_indent_script1 = "inc"
     let g:html_indent_style1  = "inc"
 "Powerline Configuration {{{1
@@ -310,17 +313,14 @@
                 let s:windowRestore = winrestcmd()
                 let s:originWindow = winnr()
                 let originBuffer = bufnr('%')
-
                 redir => buffersOutput
                 silent! buffers
                 redir END
-
                 let lines = split(buffersOutput, '\n')
                 exe 'bot ' . min([20, len(lines)]) . ' new'
                 call setline(1, lines)
                 call search('^\s*'.originBuffer, 'w')
                 let s:bufferWindowBuffer = bufnr('%')
-
                 nmap <buffer><silent> q    :bd!<cr>
                 nmap <buffer><silent> <cr> :call <SID>BufferWindowJump()<CR>
             endfunction
@@ -348,21 +348,17 @@
             function! MoveLineUp()
                 call MoveLineOrVisualUp(".", "")
             endfunction
-
             function! MoveLineDown()
                 call MoveLineOrVisualDown(".", "")
             endfunction
-
             function! MoveVisualUp()
                 call MoveLineOrVisualUp("'<", "'<,'>")
                 normal gv
             endfunction
-
             function! MoveVisualDown()
                 call MoveLineOrVisualDown("'>", "'<,'>")
                 normal gv
             endfunction
-
             function! MoveLineOrVisualUp(line_getter, range)
                 let l_num = line(a:line_getter)
                 if l_num - v:count1 - 1 < 0
@@ -372,7 +368,6 @@
                 endif
                 call MoveLineOrVisualUpOrDown(a:range."move ".move_arg)
             endfunction
-
             function! MoveLineOrVisualDown(line_getter, range)
                 let l_num = line(a:line_getter)
                 if l_num + v:count1 > line("$")
@@ -382,7 +377,6 @@
                 endif
                 call MoveLineOrVisualUpOrDown(a:range."move ".move_arg)
             endfunction
-
             function! MoveLineOrVisualUpOrDown(move_arg)
                 let col_num = virtcol(".")
                 execute "silent! ".a:move_arg
@@ -497,11 +491,7 @@
     " TODO and FIXME> list of all open buffers
         nmap <Leader>dt "=strftime("%c")<cr>p
     " Switch and list buffers
-        " nmap <C-F6> :ls<cr>
         nmap <F6> :call BufferWindow()<cr>
-        "nmap <C-SPACE> :call BufferWindow()<cr>
-        "nmap <F6> :bn<cr>
-        "nmap <S-F6> :bp<cr>
     " Tagbar vim class outline viewer
         nmap <Leader>tgb :TagbarToggle<CR>
     " Gundo application toggle
@@ -513,10 +503,6 @@
         noremap! ''' ''''''<left><left><left><CR><CR><up><space><space><space><space>
     " Tasklist Mappings
         map <Leader>tt :TaskList<CR>
-    " ConqueShell Mappings (Need to remap the <leader> something
-        nmap <leader>ctb :ConqueTermSplit bash
-        nmap <leader>cti :ConqueTermSplit ipython
-        nmap <leader>ctix :execute 'ConqueTermSplit ipython '.expand('%:p')
     "pdb setting : insert pdb breakpoints
         imap <S-F1> import pdb; pdb.set_trace()
         nmap <S-F1> import pdb; pdb.set_trace()
@@ -605,7 +591,7 @@
      " type table,,, to get <table></table>       ### Cool ###
        imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
 "Abbreviations {{{1
-    iab vv         Vincent Vetsch
+    iab vv         Vincent Vetsch      
     iab ifm        if __name__ == '__main__':
     iab auth       @Author:\tVincent E Vetsch
     iab authe      @Email:\tvincent.vetsch@gmail.com
@@ -623,11 +609,10 @@
                 \     execute 'normal! g`"zvzz' |
                 \ endif
         augroup END
-    " Save when losing focus    
+    " Save when losing focus
         au FocusLost * :silent! wall
     " Resize splits when the window is resized
         au VimResized * :wincmd =
-    " au BufWritePost .vimrc so ~/.vimrc
     "Setup for Task syntax and file type
         au BufNewFile,BufRead todo.txt,*.task,*.tasks  setfiletype task
         au BufNewFile,BufRead todo.txt,*.task,*.tasks set syntax=task.vim
@@ -641,14 +626,18 @@
         au BufReadPre * setlocal foldmethod=indent
         au BufReadPre * setlocal expandtab
     augroup END
-    au BufNewFile,BufRead *.xml, *.html source ~/.vim/ftplugin/xml.vim
-    au BufNewFile,BufRead *.xml,*.htm,*.html so ~/.vim/plugin/XMLFolding.vim
     au BufRead,BufNewFile *.go setlocal filetype=go
     au BufRead,BufNewFile *.go setlocal syntax=go.vim
-    "au BufRead,BufNewFile *.go local nmap <silent> cmp !go build %
-    "au BufRead,BufNewFile *.go local nmap <silent> run !go run %
+    au BufNewFile,BufRead *.xml, *.html source ~/.vim/ftplugin/xml.vim
+    au BufNewFile,BufRead *.xml,*.htm,*.html so ~/.vim/plugin/XMLFolding.vim
     au BufNewFile,BufRead *.html set filetype=html
     au BufNewFile,BufRead  *.html source ~/.vim/ftplugin/xml.vim
+    " Customisations based on house-style (arbitrary)
+        au FileType html setlocal ts=2 sts=2 sw=2 expandtab
+        au FileType css setlocal ts=2 sts=2 sw=2 expandtab
+        au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+    " Treat .rss files as XML
+        au BufNewFile,BufRead *.rss setfiletype xml
     augroup html
        au FileType * setlocal foldenable
        au FileType * setlocal foldmethod=indent
@@ -660,8 +649,7 @@
         "au FileType python setlocal omnifunc=pythoncomplete#Complete
         "au FileType python setlocal expandtab
         au FileType python setlocal foldmethod=indent
-        "au FileType python setlocal tabstop=4
-        "au FileType python let b:surround_100 = "\"\"\" \r \"\"\""
+        au FileType python let b:surround_100 = "\"\"\" \r \"\"\""
         au FileType python setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
         au FileType python setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
         au FileType python iab sefl self
