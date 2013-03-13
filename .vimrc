@@ -84,10 +84,10 @@
     if (&t_Co == 256 || &t_Co == 88) && !has('gui_running') &&
         \ filereadable(expand("$HOME/.vim/plugin/guicolorscheme.vim"))
         runtime! plugin/guicolorscheme.vim
-        GuiColorScheme maroloccio   "railscasts2
+        GuiColorScheme lucius  "maroloccio railscasts2
     else
         set lines=50
-        colorscheme maroloccio   "railscasts2
+        colorscheme lucius "maroloccio railscasts2
     endif
     " Enable Txtfmt formatting inside notes.
     setlocal filetype=notes.txtfmt
@@ -591,7 +591,7 @@
      " type table,,, to get <table></table>       ### Cool ###
        imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
 "Abbreviations {{{1
-    iab vv         Vincent Vetsch      
+    iab vv         Vincent Vetsch
     iab ifm        if __name__ == '__main__':
     iab auth       @Author:\tVincent E Vetsch
     iab authe      @Email:\tvincent.vetsch@gmail.com
