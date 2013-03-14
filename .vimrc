@@ -267,6 +267,14 @@
     let Powerline_symbols = 'compatible' " 'unicode' 'fancy'
     set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
 "Functions {{{1
+    "Show syntax highlighting groups for word under cursor {{{2
+        nmap <C-S-P> :call <SID>SynStack()<CR>
+        function! <SID>SynStack()
+            if !exists("*synstack")
+                return
+            endif
+            echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+        endfunc
     "Folding {{{2
             function! MyFoldText()
                 let nl = v:foldend - v:foldstart + 1
@@ -383,6 +391,8 @@
                 execute "normal! ".col_num."|"
             endfunction
 "Mappings {{{1
+    " Show color for hex color
+        nmap <leader>h :call HexHighlight()<Return>
     " Remove unused lines
         nnoremap <Leader>dl :g/^$/d<CR>
     " Select text object in visual mode and perform a replace
