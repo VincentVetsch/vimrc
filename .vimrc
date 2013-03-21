@@ -26,7 +26,7 @@
     filetype plugin on
     filetype plugin indent on " load filetype plugins/indent settings
     set ofu=syntaxcomplete#Complete
-    set guioptions=Aiecgm
+    set guioptions=Aiecg
     "Don't update the display while executing macros
     "set lazyredraw
     "Show what mode you are in
@@ -52,7 +52,7 @@
     set hidden " you can change buffers without saving
     set iskeyword+=_,$,@,%,# " none of these are word dividers
     set mouse=a " use mouse everywhere
-    "set mousemodel=popup
+    set mousemodel=popup
     set noerrorbells " don't make noise
     "set ballooneval
     "set balloondelay=300
@@ -73,21 +73,27 @@
     " Automatically read a file that has changed on the disk
     set cursorline                  " highlight current line
     set autoread
-    "let g:pydiction_location = '~/.vim/ftplugin/complete-dict'
-    "let g:pydiction_menu_height = 20
     set history=100
     " Allow the cursor to go in to "invalid" places
     set virtualedit=all
     "Enable search highlighting
     set hlsearch
     set t_Co=256
+    "Colorize TODO and DONE and FIXME
+    if has('gui_running')
+        au Colorscheme * highlight Todo ctermbg=blue guibg=blue gui=None
+        au Colorscheme * highlight Done ctermbg=green guibg=green ctermfg=black guifg=black gui=None
+        au BufReadPre,BufEnter * :match Done /DONE/
+        au Colorscheme * highlight Fixme ctermbg=red guibg=red ctermfg=black guifg=black gui=None
+        au BufReadPre,BufEnter * :2match Fixme /FIXME/
+    endif
     if (&t_Co == 256 || &t_Co == 88) && !has('gui_running') &&
         \ filereadable(expand("$HOME/.vim/plugin/guicolorscheme.vim"))
         runtime! plugin/guicolorscheme.vim
-        GuiColorScheme lucius  "maroloccio railscasts2
+        GuiColorScheme railscasts2
     else
         set lines=50
-        colorscheme lucius "maroloccio railscasts2
+        colorscheme railscasts2
     endif
     " Enable Txtfmt formatting inside notes.
     setlocal filetype=notes.txtfmt
@@ -123,149 +129,96 @@
     set shiftwidth=4 " auto-indent amount when using cindent, >>, << and stuff like that
     set softtabstop=4 " when hitting tab or backspace, how many spaces should a tab be
     set tabstop=8 " real tabs should be 8, and they will show with 
-"Jedi Python Configuration {{{1
-    let g:jedi#auto_initialization = 1
-    let g:jedi#auto_vim_configuration = 1
-    let g:jedi#goto_command = "<leader>g"
-    let g:jedi#get_definition_command = "<leader>d"
-    let g:jedi#pydoc = "K"
-    let g:jedi#use_tabs_not_buffers = 1
-    let g:jedi#popup_on_dot = 1
-    let g:jedi#popup_select_first = 1
-    let g:jedi#rename_command = "<leader>r"
-    let g:jedi#related_names_command = "<leader>n"
-    let g:jedi#autocompletion_command = "<C-Space>"
-    let g:jedi#show_function_definition = "1"
-"NERD Tree Plugin Configuration {{{1
-    " Show the bookmarks table on startup
-    let NERDTreeShowBookmarks=0
-    " Don't display these kinds of files
-    let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$', '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$', '\.embed\.manifest$', '\.embed\.manifest.res$','\.intermediate\.manifest$', '^mt.dep$' ]
-"Minibuffer Configuration {{{1
-    let g:miniBufExplMapWindowNavVim = 1
-    let g:miniBufExplMapWindowNavArrows = 1
-    let g:miniBufExplMapCTabSwitchBufs = 1
-    let g:miniBufExplModSelTarget = 1
-"FuzzyFinder Configuration {{{1
-    "Enter FUF File
-        nmap <silent> <leader>ff :FufFile<CR>
-    "Enter FUF Directory
-        nmap <silent> <leader>fd :FufDir<CR>
-    "Enter FUF Buffer
-        nmap <silent> <leader>fb :FufBuffer<CR>
-    "Enter FUF Quickfix mode
-        nmap <silent> <leader>fq :FufQuickfix<CR>
-    "Enter FUF Line mode
-        nmap <silent> <leader>fl :FufLine<CR>
-    "Enter FUF Help Mode
-        nmap <silent> <leader>fh :FufHelp<CR>
-    "Enter FUF Tag mode
-        nnoremap <silent> <leader>ft :FufTagWithCursorWord!<CR>
-        vnoremap <silent> <leader>ft :FufTagWithSelectedText!<CR>
-"XPTemplate Configuration {{{1
-    let g:xptemplate_key = '<C-\>'
-    let g:xptemplate_always_show_pum = 1
-    let g:xptemplate_vars="email=vincent.vetsch@gmail.com&author=Vincent Vetsch"
-    let g:xptemplate_snippet_folders = [ '~/.vim/personal/ftplugin/' ]
-"Pymode Configuration {{{1
-    "Python Mode Plugin configuration
-    "let g:pymode_lint_write=1 " Enable pylint checking every save
-    "let g:pymode_doc=1 " Load show documentation plugin
-    "let g:pymode_doc_key='K' " Key for show python documentation
-    "let g:pymode_run=1  " Load run code plugin
-    "let g:pymode_run_key='<leader>r' " Key for run python code
-    "let g:pymode_lint=1 " Load pylint code plugin
-    "let g:pymode_lint_checker="pyflakes,pep8,mccabe" " Switch pylint, pyflakes, pep8, mccabe code-checkers
-    "let g:pymode_lint_ignore="E501,E201" " Skip errors and warnings
-    "let g:pymode_lint_select="" " Select errors and warnings
-    "let g:pymode_lint_onfly=1 " Run linter on the fly
-    "let g:pymode_lint_config="$HOME/.pylintrc" " Pylint configuration file
-    "let g:pymode_lint_write=1 " Check code every save
-    "let g:pymode_lint_cwindow=1 " Auto open cwindow if errors be finded
-    "let g:pymode_lint_message=1 " Show error message if cursor placed at the error line
-    "let g:pymode_lint_jump=1 " Auto jump on first error
-    "let g:pymode_lint_hold=1    " Hold cursor in current window when quickfix is open
-    "let g:pymode_lint_signs=1 " Place error signs
-    "let g:pymode_lint_mccabe_complexity=12 " Maximum allowed mccabe complexity
-    "let g:pymode_lint_minheight=6 " Minimal height of pylint error window
-    "let g:pymode_lint_maxheight=10 " Maximal height of pylint error window
-    "let g:pymode_rope=1 " Load rope plugin
-    "let g:pymode_rope_auto_project=1 " Auto create and open ropeproject
-    "let g:pymode_rope_enable_autoimport=1 " Enable autoimport
-    "Auto generate global cache
-    "    let g:pymode_rope_autoimport_generate=1
-    "    let g:pymode_rope_autoimport_underlineds=0
-    "    let g:pymode_rope_codeassist_maxfixes=10
-    "    let g:pymode_rope_sorted_completions=1
-    "    let g:pymode_rope_extended_complete=1
-    "    let g:pymode_rope_autoimport_modules=["os","sys","shutil","datetime"]
-    "    let g:pymode_rope_confirm_saving=1
-    "    let g:pymode_rope_global_prefix="<C-x>p"
-    "    let g:pymode_rope_local_prefix="<C-c>r"
-    "    let g:pymode_rope_vim_completion=1
-    "    let g:pymode_rope_guess_project=0
-    "    let g:pymode_rope_goto_def_newwin=""
-    "    let g:pymode_rope_always_show_complete_menu=1
-    "let g:pymode_folding=1 " Enable python folding
-    "let g:pymode_motion=1 " Enable python objects and motion
-    "let g:pymode_virtualenv=1 " Auto fix vim python paths if virtualenv enabled
-    "" # TODO -- add sys.paths
-    "let g:pymode_paths=['', '/usr/bin', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-linux2', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/HTMLgen', '/usr/lib/python2.7/dist-packages/PIL', '/usr/lib/InsightToolkit/WrapITK/Python', '/usr/lib/pymodules/python2.7/gtk-2.0', '/usr/lib/python2.7/dist-packages/omniORB/COS', '/usr/lib/python2.7/dist-packages/gst-0.10', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pymodules/python2.7', '/usr/lib/pymodules/python2.7/input-pad-1.0', '/usr/lib/pymodules/python2.7/scim-0.1', '/usr/lib/python2.7/dist-packages/stfio', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/usr/lib/python2.7/dist-packages/ubuntuone-client', '/usr/lib/python2.7/dist-packages/ubuntuone-control-panel', '/usr/lib/python2.7/dist-packages/ubuntuone-couch', '/usr/lib/python2.7/dist-packages/ubuntuone-dev-tools', '/usr/lib/python2.7/dist-packages/ubuntuone-installer', '/usr/lib/python2.7/dist-packages/ubuntuone-storage-protocol', '/usr/lib/python2.7/dist-packages/wx-2.6-gtk2-unicode', '/usr/lib/python2.7/dist-packages/IPython/extensions']
-    "let g:pymode_breakpoint=1 " Load breakpoints plugin
-    "let g:pymode_breakpoint_key='<leader>b' " Key for set/unset breakpoint
-    "let g:pymode_utils_whitespaces=1 " Autoremove unused whitespaces
-    "let g:pymode_options_indent=1 " Set default pymode python indent options
-    "let g:pymode_options_other=1 " Set default pymode python other options
-    "let g:pymode_syntax=1 " Enable pymode's custom syntax highlighting
-    "let g:pymode_syntax_all=1 " Enable all python highlightings
-    "let g:pymode_syntax_print_as_function=1 " Highlight "print" as function
-    "let g:pymode_syntax_indent_errors=g:pymode_syntax_all " Highlight indentation errors
-    "let g:pymode_syntax_space_errors=g:pymode_syntax_all " Highlight trailing spaces
-    "let g:pymode_syntax_string_formatting=g:pymode_syntax_all " Highlight string formatting
-    " let g:pymode_syntax_string_format=g:pymode_syntax_all " Highlight str.format syntax
-    "let g:pymode_syntax_string_templates=g:pymode_syntax_all    " Highlight string.Template syntax
-    "let g:pymode_syntax_doctests=g:pymode_syntax_all    " Highlight doc-tests
-    "let g:pymode_syntax_builtin_objs=g:pymode_syntax_all    " Highlight builtin objects (__doc__, self, etc)
-    "let g:pymode_syntax_builtin_funcs=g:pymode_syntax_all    " Highlight builtin functions
-    "let g:pymode_syntax_highlight_exceptions=g:pymode_syntax_all    " Highlight exceptions
-    "let g:pymode_syntax_slow_sync=0    " For fast machines
-"Tagbar Configuration {{{1
-     let g:tagbar_foldlevel = 3
-     let g:tagbar_expand = 1
-     let g:tagbar_singleclick = 1
-"Notes Configuration {{{1
-    let g:notes_directory = '~/Documents/Notes' " The directory the notes will be stored
-    let g:notes_suffix = '.note'
-"Gist Configuration {{{1
-    let g:gist_browser_command = 'w3m %URL%'
-    let g:gist_open_browser_after_post = 1
-    let g:gist_show_privates = 1
-    let g:gist_clip_command = 'xclip -selection clipboard'
-    let g:gist_use_password_in_gitconfig = 1
-    "Gist commands {{{2
-        "List my gist's
-        :command! GistList :Gist -l
-        "List List everyone's gists
-        :command! GistPublicList :Gist -la
-        "Post Selected text
-        :command! GistPostSelection :'<,'>Gist
-        "Post buffer"
-        :command! GistPostBuffer :Gist
-        "Post all buffers"
-        :command! GistPostAllBuffers :Gist -m
-"Markdown Configuration {{{1
-    "Markdown command
-    nmap <leader>md :%!/usr/bin/markdown --html4tags<CR>
-"HTML Plugins Configuration {{{1
-    let g:html_indent_inctags = "html,body,head,p,tbody,div,ul,ol,li"
-    let g:html_indent_script1 = "inc"
-    let g:html_indent_style1  = "inc"
-"Powerline Configuration {{{1
-    set encoding=utf-8
-    set fillchars+=stl:\ ,stlnc:\ ,vert:\ ,
-    set guifont=DroidSansMono\ 10
-    let Powerline_symbols = 'compatible' " 'unicode' 'fancy'
-    set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
+"Plugin Configuration {{{1
+    "Jedi Python Configuration {{{2
+        let g:jedi#auto_initialization = 1
+        let g:jedi#auto_vim_configuration = 1
+        let g:jedi#goto_command = "<leader>g"
+        let g:jedi#get_definition_command = "<leader>d"
+        let g:jedi#pydoc = "K"
+        let g:jedi#use_tabs_not_buffers = 1
+        let g:jedi#popup_on_dot = 1
+        let g:jedi#popup_select_first = 1
+        let g:jedi#rename_command = "<leader>r"
+        let g:jedi#related_names_command = "<leader>n"
+        let g:jedi#autocompletion_command = "<C-Space>"
+        let g:jedi#show_function_definition = "1"
+    "NERD Tree Plugin Configuration {{{2
+        "Show the bookmarks table on startup {{{3
+            let NERDTreeShowBookmarks=0
+        "Don't display these kinds of files  {{{3
+            let NERDTreeIgnore=[ '\.ncb$', '\.suo$', '\.vcproj\.RIMNET', '\.obj$', '\.ilk$', '^BuildLog.htm$', '\.pdb$', '\.idb$', '\.embed\.manifest$', '\.embed\.manifest.res$','\.intermediate\.manifest$', '^mt.dep$' ]
+        "Toggle the NERD Tree {{{3
+                nmap <Leader>nt :NERDTreeToggle<CR>
+    "Minibuffer Configuration {{{2
+        let g:miniBufExplMapWindowNavVim = 1
+        let g:miniBufExplMapWindowNavArrows = 1
+        let g:miniBufExplMapCTabSwitchBufs= 1
+        let g:miniBufExplModSelTarget = 1
+    "FuzzyFinder Configuration {{{2
+        "Enter FUF File {{{3
+            nmap <silent> <leader>ff :FufFile<CR>
+        "Enter FUF Directory {{{3
+            nmap <silent> <leader>fd :FufDir<CR>
+        "Enter FUF Buffer {{{3
+            nmap <silent> <leader>fb :FufBuffer<CR>
+        "Enter FUF Quickfix mode {{{3
+            nmap <silent> <leader>fq :FufQuickfix<CR>
+        "Enter FUF Line mode {{{3
+            nmap <silent> <leader>fl :FufLine<CR>
+        "Enter FUF Help Mode {{{3
+            nmap <silent> <leader>fh :FufHelp<CR>
+        "Enter FUF Tag mode {{{3
+            nnoremap <silent> <leader>ft :FufTagWithCursorWord!<CR>
+            vnoremap <silent> <leader>ft :FufTagWithSelectedText!<CR>
+    "XPTemplate Configuration {{{2
+        let g:xptemplate_key = '<C-\>'
+        let g:xptemplate_always_show_pum = 1
+        let g:xptemplate_vars="email=vincent.vetsch@gmail.com&author=Vincent Vetsch"
+        let g:xptemplate_snippet_folders = [ '~/.vim/personal/ftplugin/' ]
+    "Tagbar Configuration {{{2
+        let g:tagbar_foldlevel = 3
+        let g:tagbar_expand = 1
+        let g:tagbar_singleclick = 1
+        "Tagbar vim class outline viewer {{{3
+            nmap <Leader>tgb :TagbarToggle<CR>
+    "Gundo Configuration {{{2
+        nmap <Leader>gu :GundoToggle<CR>
+    "Notes Configuration {{{2
+        " The directory the notes will be stored     
+        let g:notes_directory = '~/Documents/Notes' 
+        let g:notes_suffix = '.note'
+    "Gist Configuration {{{2
+        let g:gist_browser_command = 'w3m %URL%'
+        let g:gist_open_browser_after_post = 1
+        let g:gist_show_privates = 1
+        let g:gist_clip_command = 'xclip -selection clipboard'
+        let g:gist_use_password_in_gitconfig = 1
+        "Gist commands {{{3 List my gist's
+            :command! GistList :Gist -l
+            "List List everyone's gists
+            :command! GistPublicList :Gist -la
+            "Post Selected text
+            :command! GistPostSelection :'<,'>Gist
+            "Post buffer"
+            :command! GistPostBuffer :Gist
+            "Post all buffers"
+            :command! GistPostAllBuffers :Gist -m
+    "Markdown Configuration {{{2
+        "Markdown command
+        nmap <leader>md :%!/usr/bin/markdown --html4tags<CR>
+    "HTML Plugins Configuration {{{2
+        let g:html_indent_inctags = "html,body,head,p,tbody,td,tr,div,ul,ol,li"
+        let g:html_indent_script1 = "inc"
+        let g:html_indent_style1  = "inc"
+    "Powerline Configuration {{{2
+        set encoding=utf-8
+        set fillchars+=stl:\ ,stlnc:\ ,vert:\ ,
+        set guifont=DroidSansMono\ 10
+        let Powerline_symbols = 'compatible'
+        "'unicode'  'compatible' "  'fancy'
+        " set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\
+        " [%b][0x%B]
 "Functions {{{1
     "Show syntax highlighting groups for word under cursor {{{2
         nmap <C-S-P> :call <SID>SynStack()<CR>
@@ -391,215 +344,228 @@
                 execute "normal! ".col_num."|"
             endfunction
 "Mappings {{{1
-    " Show color for hex color
-        nmap <leader>h :call HexHighlight()<Return>
-    " Remove unused lines
-        nnoremap <Leader>dl :g/^$/d<CR>
-    " Select text object in visual mode and perform a replace
-        vmap <Leader>srr :%s/<c-r>=GetVisual()<cr>/
-        vnoremap <Leader>sr "hy:%s/<C-r>h//gc<left><left><left>
-    " Close all other folds
-        nnoremap <Leader>z zMzvzz
-    " Use c-\ to do c-] but open it in a new split.
-        nnoremap <c-\> <c-w>v<c-]>zvzz
-    " Keep search matches in the middle of the window.
-        nnoremap n nzzzv
-        nnoremap N Nzzzv
-    " Same when jumping around
-        nnoremap g; g;zz
-        nnoremap g, g,zz
-        nnoremap <c-o> <c-o>zz
-    " Easier to type, and I never use the default behavior.
-        noremap H ^
-        noremap L $
-        vnoremap L g_ 
-    "Delete to end of line
-        nnoremap D d$
-    "Delete to beginning of line
-        nnoremap DB d0
-    "Clear Matches
-        noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
-    "Git Mappings
+    "Yanking and Pasting {{{2
+        nnoremap pn o<ESC>P
+        nnoremap pN O<ESC>P
+        nnoremap yl 0y$
+    "Custom commands {{{2
+        imap <C-o> <ESC>
+        command -nargs=? W :w <args>
+        command -nargs=? Qa :qa
+        nmap <Leader>W :w<CR>
+        nmap <Leader>w :w<CR>
+        nmap <Leader>wq :wq<CR>
+    "Movement Mappings {{{2
+        "Unmap the Arrow key {{{3
+            nnoremap <right> <Nop>
+            nnoremap <left> <Nop>
+            nnoremap <up> <Nop>
+            nnoremap <down> <Nop>
+            inoremap <left> <Nop>
+            inoremap <down> <Nop>
+            inoremap <right> <Nop>
+            inoremap <up> <Nop>
+            vnoremap <up> <Nop>
+            vnoremap <down> <Nop>
+            vnoremap <left> <Nop>
+            vnoremap <right> <Nop>
+        "Easier to type, and I never use the default behavior. {{{3
+            noremap H ^
+            noremap L $
+            vnoremap L g_ 
+        "Move selected lines up or down {{{3
+            nnoremap <silent> <C-k> :<C-u>call MoveLineUp()<CR>
+            nnoremap <silent> <C-j> :<C-u>call MoveLineDown()<CR>
+            inoremap <silent> <C-k> <C-o>:call MoveLineUp()<CR>
+            inoremap <silent> <C-j> <C-o>:call MoveLineDown()<CR>
+            xnoremap <silent> <C-k> :<C-u>call MoveVisualUp()<CR>
+            xnoremap <silent> <C-j> :<C-u>call MoveVisualDown()<CR>
+            "vnoremap <silent> AC-Down> :<C-u>call MoveVisualDown()<CR>
+            "vnoremap <silent> AC-Up> :<C-u>call MoveVisualUp()<CR>
+        "Move the cursor to the window left of the current one  {{{3
+            noremap <silent> <A-l> :wincmd l<cr>
+        "Move the cursor to the window right of the current one {{{3
+            noremap <silent> <A-h> :wincmd h<cr>
+        "Move the cursor to the window below the current one {{{3
+            noremap <silent> <A-j> :wincmd j<cr>
+        "Move the cursor to the window above the current one {{{3
+            noremap <silent> <A-k> :wincmd k<cr>
+        "Close the window below this one {{{3
+            noremap <silent> ,cj :wincmd j<cr>:close<cr>
+        "Close the window above this one {{{3
+            noremap <silent> ,ck :wincmd k<cr>:close<cr>
+        "Close the window to the left of this one {{{3
+            noremap <silent> ,ch :wincmd h<cr>:close<cr>
+        "Close the window to the right of this one  {{{3
+            noremap <silent> ,cl :wincmd l<cr>:close<cr>
+        "Close the current window {{{3
+            noremap <silent> ,cc :close<cr>
+        "Move the current window to the right of the main Vim window {{{3
+            noremap <silent> ,ml <C-W>L
+        "Move the current window to the top of the main Vim window {{{3
+            noremap <silent> ,mk <C-W>K
+        "Move the current window to the left of the main Vim window {{{3
+            noremap <silent> ,mh <C-W>H
+        "Move the current window to the bottom of the main Vim window {{{3
+            noremap <silent> ,mj <C-W>J
+    "Git Mappings {{{2
         noremap <Leader>bgw :bufdo Gwrite<CR>
-        noremap <Leader>gww :Gwrite<CR>
+        noremap <Leader>ga :Gwrite<CR>
         noremap <Leader>grr :Gread<CR>
         noremap <Leader>gss :Gstatus<CR>
         noremap <Leader>gcc :Gcommit<CR>
         noremap <Leader>gl :Glog<CR>
         noremap <Leader>gk :!gitk<CR>
         noremap <Leader>gp :Git push origin master<CR>
-    " Source
-        vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
-        nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
-    " Search for selected text, forwards or backwards.
-        vnoremap <silent> * :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy/<C-R><C-R>=substitute(
-            \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-        vnoremap <silent> # :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy?<C-R><C-R>=substitute(
-            \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
-    " Grep buffers for a string
-        nnoremap gp :GrepBuffer <CR>
-    " Search Chapters and Psalms
-        nnoremap <Leader>ps :/\cPSALM 
-        nnoremap <LEADER>ch :/\cCHAPTER 
-    " Open Experiment.notes
-        nnoremap <Leader>ex :e ~/Documents/Notes/Experiment.note<CR>
-    " Select to begining
-        nnoremap <Leader>vb v0
-    " Select to end
-        nnoremap <Leader>ve v$
-    " Select All
-        nnoremap <Leader>va 0GVgg
-    " Go Compile and run commands
-        nnoremap <Leader>goc :!go build %<CR>
-        nnoremap <Leader>gor :!go run %<CR>
-    " Get list of files
-        nnoremap <Leader>ls :r ! ls -d -1 $PWD/**
-    " Open Bookmarks
-        nnoremap <Leader>bb :e ~/Documents/Notes/Bookmarks.note<CR>
-    " On Linux, open URL under cursor in chromium.
-        nnoremap <silent> go :silent !xdg-open <cfile> &<CR>
-        nnoremap <silent> gO :update<Bar>silent !xdg-open %:p &<CR>
-    " Goto Next buffer
-        nnoremap <silent> gb :bn<CR>
-    " Goto Previous buffers
-        nnoremap <silent> gB :bp<CR>
-    " Delete buffers
-        nnoremap <silent> bd :bd<CR>
-    " Create a new file from a word under cursor
-        nnoremap <silent> gn :e <cfile><CR>
-    " Toggle Relative or absolute line numbering
-        nnoremap <Leader>nu :call NumberToggle()<CR>
-    " Toggle Spelling
-        nnoremap <Leader>ss :set spell!<CR>
-    " Force Saving Files the Require Root Permission
-        cmap w!! %!sudo tee > /dev/null %
-    " Reselect visual block after indent and outdent
-        vnoremap < <gv
-        vnoremap > >gv
-    " Map sotr function to a key
-       vnoremap <Leader>s :sort<CR>
-    " Easier formatting of paragraphs
-        vmap Q gq
-        nmap Q gqap
-    " Move selected lines up or down
-        nnoremap <silent> <C-k> :<C-u>call MoveLineUp()<CR>
-        nnoremap <silent> <C-j> :<C-u>call MoveLineDown()<CR>
-        inoremap <silent> <C-k> <C-o>:call MoveLineUp()<CR>
-        inoremap <silent> <C-j> <C-o>:call MoveLineDown()<CR>
-        xnoremap <silent> <C-k> :<C-u>call MoveVisualUp()<CR>
-        xnoremap <silent> <C-j> :<C-u>call MoveVisualDown()<CR>
-        "vnoremap <silent> AC-Up> :<C-u>call MoveVisualUp()<CR>
-        "vnoremap <silent> AC-Down> :<C-u>call MoveVisualDown()<CR>
-    " OmniComplete
-        inoremap <Nul> <C-x><C-o>
-    " TODO and FIXME> list of all open buffers
-        nmap <Leader>dt "=strftime("%c")<cr>p
-    " Switch and list buffers
-        nmap <F6> :call BufferWindow()<cr>
-    " Tagbar vim class outline viewer
-        nmap <Leader>tgb :TagbarToggle<CR>
-    " Gundo application toggle
-        nmap <Leader>gu :GundoToggle<CR>
-    " Toggle the NERD Tree
-        nmap <Leader>nt :NERDTreeToggle<CR>
-    " Add double quotes
-        noremap! """ """""”<left><left><left><CR><CR><up><space><space><space><space>
-        noremap! ''' ''''''<left><left><left><CR><CR><up><space><space><space><space>
-    " Tasklist Mappings
-        map <Leader>tt :TaskList<CR>
-    "pdb setting : insert pdb breakpoints
-        imap <S-F1> import pdb; pdb.set_trace()
-        nmap <S-F1> import pdb; pdb.set_trace()
-    "ipython.debugger breakpoint1
-        imap <C-S-F1> import ipdb; ipdb.set_trace()
-        nmap <C-S-F1> import ipdb; ipdb.set_trace()
-        au BufRead *.py nmap <C-S-F5> :!python %<cr>
-        au BufRead *.py nmap <C-F5> :!ipython %<cr>
+    "Search Mappings {{{2
+        "Search for selected text, forwards or backwards. {{{3
+            vnoremap <silent> * :<C-U>
+                \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+                \gvy/<C-R><C-R>=substitute(
+                \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+                \gV:call setreg('"', old_reg, old_regtype)<CR>
+            vnoremap <silent> # :<C-U>
+                \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+                \gvy?<C-R><C-R>=substitute(
+                \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+                \gV:call setreg('"', old_reg, old_regtype)<CR>
+        "Grep buffers for a string {{{3
+            nnoremap gp :GrepBuffer <CR>
+        "Search Chapters and Psalms {{{3
+            nnoremap <Leader>ps :/\cPSALM 
+            nnoremap <LEADER>ch :/\cCHAPTER 
+        "Find Double Words {{{3
+            nmap <leader>du :/\(\<\w\+\>\)\_s*\1<cr>
+        "Search the current file for what's currently in the search register {{{3
+        "and display matches
+           nmap <silent> ,gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+        "Search the current file for the word under the cursor and display matches {{{3
+           nmap <silent> ,gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+        "Search the current file for the WORD under the cursor and display matches {{{3
+           nmap <silent> ,gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+        "Swap two words {{{3
+           nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
+    "Opening Files {{{2
+        "Open .vimrc {{{3
+            nmap <Leader>ev :e $MYVIMRC<cr>
+        "Open .zshrc files {{{3
+            nmap <Leader>zs :args ~/.zsh*<CR>
+        "Open Bookmarks {{{3
+           nnoremap <Leader>bb :e ~/Documents/Notes/Bookmarks.note<CR>
+        "Opne OpeningNote {{{3
+            nnoremap <Leader>on :e ~/Documents/Notes/OpeningNote.note<CR>
+        "Open Notes Directory in Nerdtree
+            nnoremap <Leader>not :e ~/Documents/Notes/<CR>
+        "Open Experiment.notes {{{3
+           nnoremap <Leader>ex :e ~/Documents/Notes/Experiment.note<CR>
+    "Delete Characters {{{2
+        "Delete to end of line
+            nnoremap D d$
+        "Delete to beginning of line
+            nnoremap DB d0
+    "Selection in Visual Mode {{{2
+        "Select to begining {{{3 
+            nnoremap <Leader>vb v0
+        "Select to end {{{3
+            nnoremap <Leader>ve v$
+        "Select All {{{3
+            nnoremap <Leader>va 0GVgg
+        "Select to bottom {{{3
+            nnoremap <Leader>vB VG
+        "Select to top {{{3
+            nnoremap <Leader>vt Vgg
+        "Reselect visual block after indent and outdent {{{3
+            vnoremap < <gv
+            vnoremap > >gv
+        "Clear Matches {{{3
+            noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
+    "Buffer Commands {{{2
+        "Goto Next buffer {{{3
+           nnoremap <silent> gb :bn<CR>
+        "Goto Previous buffers {{{3
+           nnoremap <silent> gB :bp<CR>
+        "Delete buffers {{{3
+           nnoremap <silent> bd :bd<CR>
+        "Switch and list buffers {{{3
+            nmap <Leader>ll :call BufferWindow()<cr>
+        "Tasklist Mappings
+            nmap <Leader>tt :TaskList<CR>
+    "File Commands {{{2
+    "Other Commands {{{2
+    "Formatting Commands {{{2
+    "Show color for hex color
+       nmap <leader>h :call HexHighlight()<Return>
+    "Remove unused lines
+       nnoremap <Leader>dl :g/^$/d<CR>
+    "Select text object in visual mode and perform a replace
+       vmap <Leader>srr :%s/<c-r>=GetVisual()<cr>/
+       vnoremap <Leader>sr "hy:%s/<C-r>h//gc<left><left><left>
+    "Close all other folds
+       nnoremap <Leader>z zMzvzz
+    "Keep search matches in the middle of the window.
+       nnoremap n nzzzv
+       nnoremap N Nzzzv
+    "Same when jumping around
+        nnoremap g; g;zz
+        nnoremap g, g,zz
+        nnoremap <c-o> <c-o>zz
+    "Source lines or selected lines
+       vnoremap <leader>S y:execute @@<cr>:echo 'Sourced selection.'<cr>
+       nnoremap <leader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
+" TODO - Move to autocommands
+    "Go Compile and run commands
+       nnoremap <Leader>goc :!go build %<CR>
+       nnoremap <Leader>gor :!go run %<CR>
+    "Get list of files
+       nnoremap <Leader>ls :r ! ls -d -1 $PWD/**
+    "On Linux, open URL under cursor in chromium.
+       nnoremap <silent> go :silent !xdg-open <cfile> &<CR>
+       nnoremap <silent> gO :update<Bar>silent !xdg-open %:p &<CR>
+    "Create a new file from a word under cursor
+       nnoremap <silent> gn :e <cfile><CR>
+    "Toggle Relative or absolute line numbering
+       nnoremap <Leader>nu :call NumberToggle()<CR>
+    "Toggle Spelling
+       nnoremap <Leader>ss :set spell!<CR>
+    "Force Saving Files the Require Root Permission
+       cmap w!! %!sudo tee > /dev/null %
+    "Easier formatting of paragraphs
+       vmap Q gq
+       nmap Q gqap
+    "OmniComplete
+       inoremap <Nul> <C-x><C-o>
     "Add a check mark ✓✓
         nmap <leader>v R✓<ESC>
         imap <>v <C-R>✓<ESC>
-    " Show un printable characters
+    "Show un printable characters
         nmap <leader>tl :set list!<cr>
         nmap <leader>p : set paste!<cr>
-    " Find Double Words
-        nmap <leader>du :/\(\<\w\+\>\)\_s*\1<cr>
-    " cd to the directory containing the file in the buffer
+    "cd to the directory containing the file in the buffer
         nmap  <Leader>cd :lcd %:h
-    " Set up retabbing on a source file
+    "Set up retabbing on a source file
         nmap  <Leader>rr :1,$retab<CR>
-    " Make the directory that contains the file in the current buffer.
-    " This is useful when you edit a file in a directory that doesn't
-    " (yet) exist
-        nmap  <Leader>md :!mkdir -p %:p:h
-    " Create note from selection
-        vmap <Leader>ns :NoteFromSelectedText<CR>
-    " Remove extra Whitespace
-        nmap <Leader>w :call ToggleExtraWhitespace()<CR>
-    " Move the cursor to the window left of the current one
-        noremap <silent> <C-Right> :wincmd l<cr>
-    " Move the cursor to the window right of the current one
-        noremap <silent> <C-Left> :wincmd h<cr>
-    " Move the cursor to the window below the current one
-        noremap <silent> <C-Down> :wincmd j<cr>
-    " Move the cursor to the window above the current one
-        noremap <silent> <C-Up> :wincmd k<cr>
-    " Close the window below this one
-        noremap <silent> ,c<Down> :wincmd j<cr>:close<cr>
-    " Close the window above this one
-        noremap <silent> ,c<Up> :wincmd k<cr>:close<cr>
-    " Close the window to the left of this one
-        noremap <silent> ,c<Left> :wincmd h<cr>:close<cr>
-    " Close the window to the right of this one
-        noremap <silent> ,c<Right> :wincmd l<cr>:close<cr>
-    " Close the current window
-        noremap <silent> ,cc :close<cr>
-    " Move the current window to the right of the main Vim window
-        noremap <silent> ,m<Right> <C-W>L
-    " Move the current window to the top of the main Vim window
-        noremap <silent> ,m<Up> <C-W>K
-    " Move the current window to the left of the main Vim window
-        noremap <silent> ,m<Left> <C-W>H
-    " Move the current window to the bottom of the main Vim window
-        noremap <silent> ,m<Down> <C-W>J
-    " Edit a file in the same directory as the current buffer.
-        map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>  
-        map <leader>. :e %:p:h<CR> " Enter directory listing for the directory of/tag the current buffer
-    " Create a new window with directory listing of current buffer
-        map <leader>wn :new %:p:h<CR>
-    " Change global directory to the current directory of the current buffer
-        map <leader>cd :cd %:p:h<CR>
-    " Let's make it easy to edit this file (mnemonic for the key sequence is 'e'dit 'v'imrc)
-        nmap <Leader>ev :e $MYVIMRC<cr>
-        nmap <Leader>zs :args ~/.zsh*<CR>
-    " And to source this file as well (mnemonic for the key sequence is 's'ource 'v'imrc)
-        nmap <silent> ,sv :so $MYVIMRC<cr>
-    " put the vim directives for my file editing settings in
-        nmap <silent> ,vi ovim:set ts=2 sts=2 sw=2:<CR>vim600:fdm=marker fdl=1 fdc=0:<ESC>
-    " Show all available VIM servers
-        "nmap <silent> ,ss :echo serverlist()<CR>
-    " The following beast is something i didn't write.. it will return the 
-    " syntax highlighting group that the current "thing" under the cursor
-    " belongs to -- very useful for figuring out what to change as far as 
-    " syntax highlighting goes.
+    "Make the directory that contains the file in the current buffer.
+    "This is useful when you edit a file in a directory that doesn't
+    "(yet) exist
+       nmap  <Leader>md :!mkdir -p %:p:h
+    "Create note from selection
+       vmap <Leader>ns :NoteFromSelectedText<CR>
+    "Edit a file in the same directory as the current buffer.
+       map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>  
+       map <leader>. :e %:p:h<CR> " Enter directory listing for the directory of/tag the current buffer
+    "Create a new window with directory listing of current buffer
+       map <leader>wn :new %:p:h<CR>
+    "Change global directory to the current directory of the current buffer
+       map <leader>cd :cd %:p:h<CR>
+    "And to source this file as well (mnemonic for the key sequence is 's'ource 'v'imrc)
+       nmap <silent> ,sv :so $MYVIMRC<cr>
+    "The following beast is something i didn't write.. it will return the 
+    "syntax highlighting group that the current "thing" under the cursor
+    "belongs to -- very useful for figuring out what to change as far as 
+    "syntax highlighting goes.
         nmap <silent> ,qq :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-    " set text wrapping toggles
+    "set text wrapping toggles
         nmap <silent> ,ww :set invwrap<CR>:set wrap?<CR>
-    " Search the current file for what's currently in the search register and display matches
-        nmap <silent> ,gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-    " Search the current file for the word under the cursor and display matches
-        nmap <silent> ,gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-    " Search the current file for the WORD under the cursor and display matches
-        nmap <silent> ,gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-    " Swap two words
-        nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
-     " type table,,, to get <table></table>       ### Cool ###
-       imap ,,, <esc>bdwa<<esc>pa><cr></<esc>pa><esc>kA
 "Abbreviations {{{1
     iab vv         Vincent Vetsch
     iab ifm        if __name__ == '__main__':
@@ -610,8 +576,8 @@
     iab #!         #!/usr/bin/env python
     iab utf8       # coding: utf-8 }}}
 "Autocommands {{{1
-    " Make sure Vim returns to the same line when you reopen a file.
-    " Thanks, Amit
+    "Make sure Vim returns to the same line when you reopen a file. {{{2
+    "Thanks, Amit
         augroup line_return
             au!
             au BufReadPost *
@@ -619,45 +585,59 @@
                 \     execute 'normal! g`"zvzz' |
                 \ endif
         augroup END
-    " Save when losing focus
+    "Save when losing focus {{{2
         au FocusLost * :silent! wall
-    " Resize splits when the window is resized
+    "Resize splits when the window is resized {{{2
         au VimResized * :wincmd =
-    "Setup for Task syntax and file type
+    "Setup for Task syntax and file type {{{2
         au BufNewFile,BufRead todo.txt,*.task,*.tasks  setfiletype task
         au BufNewFile,BufRead todo.txt,*.task,*.tasks set syntax=task.vim
-    augroup task
-        au BufReadPre * setlocal textwidth=70
-        au BufReadPre * setlocal foldenable
-        au BufReadPre * setlocal wrap
-        au BufReadPre * setlocal linebreak
-        au BufReadPre,BufRead * setlocal textwidth=0
-        au BufReadPre,BufRead * setlocal wrapmargin=0
-        au BufReadPre * setlocal foldmethod=indent
-        au BufReadPre * setlocal expandtab
-    augroup END
-    au BufRead,BufNewFile *.go setlocal filetype=go
-    au BufRead,BufNewFile *.go setlocal syntax=go.vim
-    au BufNewFile,BufRead *.xml, *.html source ~/.vim/ftplugin/xml.vim
-    au BufNewFile,BufRead *.xml,*.htm,*.html so ~/.vim/plugin/XMLFolding.vim
-    au BufNewFile,BufRead *.html set filetype=html
-    au BufNewFile,BufRead  *.html source ~/.vim/ftplugin/xml.vim
-    " Customisations based on house-style (arbitrary)
-        au FileType html setlocal ts=2 sts=2 sw=2 expandtab
-        au FileType css setlocal ts=2 sts=2 sw=2 expandtab
-        au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
-    " Treat .rss files as XML
-        au BufNewFile,BufRead *.rss setfiletype xml
-    augroup html
-       au FileType * setlocal foldenable
-       au FileType * setlocal foldmethod=indent
-       au FileType * setlocal expandtab
-    augroup END
-    au FileType python inoremap :: <End>:
-    "Removes any extra whitespace from the ends of lines
-        au BufWritePre *.py normal m`:%s/\s\+$//e
+    "Task Auto Group {{{2
+        augroup task 
+            au BufReadPre * setlocal textwidth=70
+            au BufReadPre * setlocal foldenable
+            au BufReadPre * setlocal wrap
+            au BufReadPre * setlocal linebreak
+            au BufReadPre,BufRead * setlocal textwidth=0
+            au BufReadPre,BufRead * setlocal wrapmargin=0
+            au BufReadPre * setlocal foldmethod=indent
+            au BufReadPre * setlocal expandtab
+        augroup END
+    "Go Auto Commands {{{2
+        au BufRead,BufNewFile *.go setlocal syntax=go.vim
+        au BufRead,BufNewFile *.go setlocal filetype=go
+    "HTML, XML, and CSS Auto Commands {{{2
+        au BufNewFile,BufRead *.xml, *.html source ~/.vim/ftplugin/xml.vim
+        au BufNewFile,BufRead *.xml,*.htm,*.html so ~/.vim/plugin/XMLFolding.vim
+        au BufNewFile,BufRead *.html set filetype=html
+        au BufNewFile,BufRead *.html source ~/.vim/ftplugin/xml.vim
+        "Treat .rss files as XML {{{3
+            au BufNewFile,BufRead *.rss setfiletype xml
+        "Customisations based on house-style (arbitrary) {{{3
+            au FileType html setlocal ts=2 sts=2 sw=2 expandtab
+            au FileType css setlocal ts=2 sts=2 sw=2 expandtab
+            au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+    "HTML Auto Groups {{{2
+        augroup html
+        au FileType * setlocal foldenable
+        au FileType * setlocal foldmethod=indent
+        au FileType * setlocal expandtab
+        augroup END
+    "Python Auto Group {{{2
+    augroup python
+        "pdb setting : insert pdb breakpoints {{{3
+            au FileType python imap <S-F1> Iimport vimpdb; vimpdb.set_trace()
+            au FileType python nmap <S-F1> Iimport vimpdb; vimpdb.set_trace()
+        "ipython.debugger breakpoint1 {{{3
+            au FileType python imap <C-S-F1> Iimport ipdb; ipdb.set_trace()
+            au FileType python nmap <C-S-F1> Iimport ipdb; ipdb.set_trace()
+        "Add double quotes {{{3
+            au FileType python noremap! """ """""”<left><left><left><CR><CR><up><space><space><space><space>
+            au FileType python noremap! ''' ''''''<left><left><left><CR><CR><up><space><space><space><space>
+        au FileType python inoremap :: <End>:
+        "Removes any extra whitespace from the ends of lines {{{3
+            au BufWritePre *.py normal m`:%s/\s\+$//e
         "au FileType python setlocal omnifunc=pythoncomplete#Complete
-        "au FileType python setlocal expandtab
         au FileType python setlocal foldmethod=indent
         au FileType python let b:surround_100 = "\"\"\" \r \"\"\""
         au FileType python setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
@@ -668,11 +648,20 @@
         au FileType python iab seff self
         au FileType python iab imp  import
         au FileType python nmap <buffer> <Leader>l :PyLint<CR>
-        au Filetype python let g:pyref_mapping = 'KK'
-        au FileType python map <C-L> :python LP_python_import_search()
-        au FileType doctest map <C-L> :python LP_python_import_search()
         au FileType c,h,cpp,python,vala,javascript hi ExtraWhitespace ctermbg=red
         au FileType c,h,cpp,python,vala,javascript match ExtraWhitespace /\s\+\%#\@<!$/
+    augroup END
     autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
     autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
     autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+    "perl style # commenting {{{2
+        autocmd FileType php,yaml,python,sh  vmap <Leader><F5> :s/\v^(\s*)/\1#/ <CR>
+        autocmd FileType php,yaml,python,sh  vmap <Leader><F6> :s/\v^(\s*)#/\1/ <CR>
+        autocmd FileType php,yaml,python,sh  nmap <Leader><F5> :s/\v^(\s*)/\1#/ <CR>
+        autocmd FileType php,yaml,python,sh  nmap <Leader><F6> :s/\v^(\s*)#/\1/ <CR>
+    "C style // commenting {{{2
+        autocmd FileType c,cpp,php,javascript nmap <Leader><F5> :s+\v^(\s*)+\1//+ <CR>
+        autocmd FileType c,cpp,php,javascript nmap <Leader><F6> :s+\v^(\s*)//+\1+ <CR>
+    "vim commenting {{{2
+        autocmd FileType vim nmap <Leader><F5> :s/\v^(\s*)/\1"/ <CR>
+        autocmd FileType vim nmap <Leader><F6> :s/\v^(\s*)"/\1/ <CR>

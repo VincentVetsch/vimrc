@@ -4,8 +4,8 @@
 *.pyc
 *.pyo
 tmp/
-backup/
-bundle/
+backup/**
+bundle/**
 
 # Compiled source #
 ###################
