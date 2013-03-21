@@ -1,0 +1,11 @@
+:A/C (AC): :Abbreviation for air conditioner and air conditioning.
+:A/C circuit: :Alternating current, which is the flow of electrical current through a conductor, first in one direction, then in reverse. It is used exclusively in residential and commercial wiring because it provides greater flexibility in voltage selection and simplicity of equipment design.
+:A/C condenser: :The outside fan unit of the air-conditioning system that removes the heat from the Freon® gas and turns the gas back into a liquid, then pumps the liquid back to the coil in the furnace.
+:A/C disconnect: :The main electrical ON-OFF switch near the A/C condenser.
+:above-grade wall: :A wall that is mostly above grade and encloses conditioned space.
+:ABS: :Acronym for acrylonitrile butadiene styrene; rigid black plastic pipe used only for drain lines.
+:absolute humidity: :Amount of moisture in the air indicated in grains per cubic foot.
+:accelerator: :Any material added to stucco, plaster or mortar that speeds up the natural set.
+
+s/^:\(\_.\{-}\)\:\s:
+s/^:\(\_.\{-}\)\:\s:/:\1:_\L\1:/

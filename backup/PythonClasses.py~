@@ -1,0 +1,491 @@
+#!/usr/bin/env python
+# coding: utf-8
+"""
+    Goals:  1) Be very good at one thing, then contain it in a class.
+            2) Document everything...Memory is a tricky thing.
+            3) Remember PEP8, but it is only a guide line.
+
+    This is the beginning of a vim plugin that will show the path data for the python
+    environment.  It is more of a proof of concept application right now.  Methods will
+    be added later that will display the import statements only.
+
+    This application shall
+        * Cache all path information
+            - File Name
+            - Line Numbers
+            - MD5 Sum
+            - Class Names
+            - Class Methods
+            - Functions
+        * Search for Function Names
+        * Search for Class Names
+        * Search for Packages
+
+    @Date:      04JUL2012
+    @Author:    Vincent E Vetsch
+    @Email:     vincent.vetsch@gmail.com
+    @Editor:    Gvim version 7.3.429
+"""
+import os
+import sys
+import cPickle
+import hashlib
+
+
+# Begin Classes
+class PythonClasses(object):
+    '''Class used to locate and represent all python classes in sys.path
+
+        Variables:
+            dataCache:          The path to the cache file
+            pythonPaths:        Is the dictionary of dictionarys that contain all
+                                sys.path information.
+            pythonFiles:        Contains a list of keys from pythonPaths, which are all
+                                path-files in sys.path
+            currentFile:        The file that can be used as a look up value
+        Methods:
+            __init__:           Initializer
+            getCurrentFile:     The Getter for currentFile
+            setCurrentFile:     The Setter for currentFile
+            getAllFiles:        The Getter for pythonPaths.keys()
+            getFunctions:       The Getter for pythonPaths Functions
+            getMethods:         The Getter for pythonPaths Methods
+            getClasses:         The Getter for pythonPaths Classes
+            getmd5sumfromfile:  The Getter for md5 checksum of currentFile
+            getmd5sumfromcache: The Getter for md5 checksum of pythonPaths currentFile
+            getallmd5sumsfromcache:  The Getter for md5 checksums of all files in pythonPaths
+            openCache:          Opens dataCache and loads the data into pythonPaths
+            findFileinPyPath:   Finds file in sys.path
+            fileTest:           Test if file is python and not __init__.py
+            findClassesInFile:  Finds all Classes, methods, functions, line numbers and md5sums.
+            createCache:        Creates the cache
+            createPythonPathCacheFile:  Writes cache to files
+            __freindly_len__:   Returns message of number of keys
+            __len__:            Returns length
+            __str__:            Returns all records as a string
+            __repr__:           Returns a easy to read dict of all records
+            __iter__:           Not implemented
+            _bp:                    Private:  used for debugging
+            _findPrivateMethods:    Private:  Not implemented
+            _findUserMethods:       Private:  Not implemented
+            _str_checksum:          Private:  String representation of md5sums.
+            _str_function:          Private:  String representation of functions.
+            _str_class:             Private:  String representation of classes
+            _str_method:            Private:  String representation of methods
+            _setPythonPaths:        Private:  The Setter for pythonPaths normally set
+                                              by self.openCache().
+    '''
+    # TODO -- Code all methods and implement the class
+    dataCache = os.path.expanduser('~/.pythonPathCache.pickle')
+    pythonPaths = {}
+
+    def __init__(self):
+        '''Initialize the class with data from DATA_CACHE.  See if there is a dataCache
+        and read from it and check for correct md5sums. If the md5sums are not correct,
+        recreate the cache in the background.  If the dataCache is not present, make it
+
+        return:     PythonClasses object
+        '''
+        if os.path.exists(self.dataCache) and self.openCache():
+            # TODO -- Do something here, check the md5sums in the background
+            #         against current files, if no differance do nothing, otherwise
+            #         Recreate it in the background and refresh self.pythonPaths.
+            pass
+        else:
+            for v in sys.path:
+                self.createCache(v)
+        # FIXME -- Dummy, you need to write self.pythonPaths to a file
+        self.pythonFiles = self.getAllFiles()
+        self.currentFile = ''
+
+    def _setPythonPaths(self, data):
+        '''Setter for self.pythonPaths
+
+        data:       The dictionary of Classes, methods, and functions
+        return:     No return value
+        '''
+        self.pythonPaths = data
+
+    def getCurrentFile(self):
+        '''Getter for self.currentFile
+
+        return:     self.currentFile
+        '''
+        return self.currentFile
+
+    def setCurrentFile(self, fileName):
+        '''Setter for self.currentFile
+
+        fileName:   The current file as string
+        return:     No return value.
+        '''
+        self.currentFile = fileName
+
+    def getAllFiles(self):
+        '''Getter for the keys in self.pythonPaths
+
+        return:     A list of files
+        '''
+        return self.pythonPaths.keys()
+
+    def getFunctions(self, record):
+        '''Get Functions for record(the file), and returns a dictionary of functions.
+        The line number is the key and the function is the value.
+
+        fileName:   A string that contains the path and the name of the fileName
+        return:     All line numbers and functions as a dictionary, if fileName
+                    does not contain any functions, it will return false.
+        '''
+        if self.pythonPaths[record][-1].__contains__('Functions'):
+            return self.pythonPaths[record][-1]['Functions']
+        else:
+            return False
+
+    def getMethods(self, record, lineNo, className):
+        '''Gets the Methods for record(the file) and specific class, returns a dictionary
+        of methods.  The line number is the key and the method is the value.
+
+        record:     The python file within the cache
+        lineNo:     The line number of the Class
+        cName:      The Class name
+        return:     All line numbers and methods within a Class, if the class does
+                    not contain any methods, it will return false.
+        '''
+        methDict = {}
+        if type(record) != '':
+            for k, v in sorted(self.pythonPaths[record][-1]['Classes'][lineNo][className].items()):
+                methDict[k] = v
+            return methDict
+        else:
+            return False
+
+    def getClasses(self, record):
+        '''Get Classes for record(the file), and returns a dictionary of classes.
+        The line number is the key and the class is the value.
+
+        record:     A string that contains the path and the name of the file
+        return:     All line numbers and classes as a dictionary, if the file does
+                    not contain any classes, it will return false
+        '''
+        output = {}
+        if self.pythonPaths[record][-1].__contains__('Classes'):
+            for k, v in sorted(self.pythonPaths[record][-1]['Classes'].items()):
+                for v1 in self.pythonPaths[record][-1]['Classes'][k]:
+                    output[k] = v1
+            return output
+        else:
+            return False
+
+    def getmd5sumfromfile(self, fileName):
+        '''Gets the md5 sum of specified file name
+
+        fileName:   The file name and path as string
+        return:     The md5 sum of file opened
+        '''
+        # Used to store the md5 hash
+        m = hashlib.md5()
+        try:
+            with open(fileName, "rb") as f:
+                data = f.read()
+        except IOError:
+            return None
+        m.update(data)
+        return m.hexdigest()
+
+    def getmd5sumfromcache(self, theKey):
+        '''Get the MD5 Sum of file from the cache
+
+        theKey:     The name of the file you want the MD5 Sum of
+        return:     The MD5 Sum of theKey
+        '''
+        return  self.pythonPaths[theKey][-1]['Checksum']
+
+    def getallmd5sumsfromcache(self):
+        '''Gets the MD5 Sums from all files in cache
+
+        return:     A string representation of all files and checksums
+        '''
+        md5sums = ''
+        for k in self.pythonPaths.keys():
+            md5sums += k + '\n\t' + str(self.pythonPaths[k][-1]['Checksum'])
+        return md5sums
+
+    def openCache(self):
+        '''Opens DATA_CACHE and writes the Dictionary to PYTHON_PATHS
+
+        return:     True if successful, False on I/O Error
+        '''
+        try:
+            with open(self.dataCache) as f:
+                self._setPythonPaths(cPickle.load(f))
+            return True
+        except IOError as (errno, strerror):
+            print "I/O Error({0}):  {1}".format(errno, strerror)
+            return False
+
+    def findFileinPyPath(self, fileName):
+        '''Returns a specific python file from the class path
+
+        fileName:   The file name only, in string from
+        return:     Full path and file name
+        '''
+        for p in sys.path:
+            tree = os.walk(p)
+            for files in tree:
+                for file in files[2]:
+                    if os.path.splitext(file)[1] == ".py" and os.path.splitext(file)[0] == fileName:
+                        return str(files[0]) + "/" + file
+        return None
+
+    def fileTest(self, fileName):
+        '''Test for python source file and not an __init__ fileName
+
+        fileName:   The file name to be tested
+        return:     True if the above conditions are true
+        '''
+        f = os.path.splitext(os.path.split(fileName)[1])
+        return f[1] == ".py" and f[0] != "__init__"
+
+    def createCache(self, thePath):
+        '''Creates the entries for DATA_CACHE
+
+        thePath:    A string representation of the path to python files
+        return:     True when complete
+        '''
+        # TODO -- Figure out how to read egg files
+        tree = os.walk(thePath, followlinks=True)
+        for files in tree:
+            for file in filter(self.fileTest, files[2]):
+                fileKey = '{0}/{1}'.format(files[0], file)
+                newData = self.findClassesInFile(fileKey)
+                if newData == None:
+                    pass
+                elif type(newData) == dict:
+                    self.pythonPaths[fileKey] = newData.values()
+                fileKey = None
+                newData = None
+        return True
+
+    def createPythonPathCacheFile(self):
+        '''Creates the DATA_CACHE file.
+
+        return:     True if the file has been written to, False if error
+        '''
+        try:
+            with open(self.dataCache, 'w') as pythonData:
+                cPickle.dump(self.pythonPaths, pythonData, True)
+                return True
+        except IOError as (errno, strerror):
+            print "I/O Error({0}):  {1}".format(errno, strerror)
+            return False
+
+    def findClassesInFile(self, fileName):
+        '''Processes the file for class names and methods within each class and functions.  It will
+        find the md5sum of the file.  It also finds the line number for each class, method, or function.
+
+        fileName:   The file to be tested
+        return:     The dictionary of class, method, functions, line numbers, and md5sum of file
+        '''
+        fileNameDict = {}  # FileNameDict - is used to store the functions, classes and methods of the file
+        className = {}  # []  # Used to store the class and it's methods
+        methodNames = {}  # []  # Used to store methods for the class under viewer
+        functionNames = {}  # []  # Used to store module functions
+        theClass = ''  # Used to store the current class
+        beginClass = False  # Used to indicate that the current group of lines under test are within a class
+        m = hashlib.md5()  # Used to store the md5 hash of the file which will be used later when determining whether a file needs to be read or ignored
+        lineNumber = 0
+        theClassLine = 0
+        data = None
+
+        try:
+            with open(fileName, "rb") as f:
+                data = f.read()
+        except IOError:
+            return None
+        m.update(data)
+        md5sum = m.hexdigest()
+
+        for line in data.splitlines():
+            lineNumber += 1
+            # Reset beginClass and endClass when a new class occurs and stores
+            # the dictionary for the next run
+            if line.startswith('class') and beginClass == True:
+                className[theClassLine] = {theClass: methodNames}
+                beginClass = False
+                methodNames = {}
+                theClassLine = 0
+
+            # Read the class until the next class
+            if line.startswith('class') and beginClass == False:
+                theClass = line.strip().rstrip(':')
+                theClassLine = lineNumber
+                beginClass = True
+            elif beginClass == True:
+                # Read the methods of the class
+                if line.find('def ') > 0:
+                    # TODO -- if the line doesn't begin with def after line.strip()
+                    # then shitcan it
+                    methodNames[lineNumber] = line.strip().rstrip(':')
+
+            # Read Functions in a non class
+            if line.startswith('def '):
+                functionNames[lineNumber] = line.strip().rstrip(':')
+
+        className[theClassLine] = {theClass: methodNames}
+        # Weed out the blank junk lists and dictionarys
+        if className == {0: {'': {}}} and functionNames != {}:
+            fileNameDict = {fileName: {'Functions': functionNames, 'Checksum': md5sum}}
+        elif className != {0: {'': {}}} and functionNames == {}:
+            fileNameDict = {fileName: {'Classes': className, 'Checksum': md5sum}}
+        elif className != {0: {'': {}}} and functionNames != {}:
+            fileNameDict = {fileName: {'Functions': functionNames, 'Classes': className, 'Checksum': md5sum}}
+        else:
+            return None
+        return fileNameDict
+
+    def getDocString(self, fileName):
+        ''' '''
+        # TODO -- Add code to method, this could be really, neat
+        pass
+
+    def __freindly_len__(self):
+        '''Gets the number of files located within self.pythonPaths
+
+        return:     Freindly print out of file count as string
+        '''
+        return "The Number of files:  " + str(self.pythonPaths.__len__())
+
+    def __len__(self):
+        '''Gets the number of files located with self.pythonPaths
+
+        return:     The integer count of files
+        '''
+        return self.pythonPaths.__len__()
+
+    def __str__(self, all=True):
+        '''Generates a string representation of the PythonClasses object
+        all:        reserved for future used
+        return:     None
+        '''
+        for d in self.pythonPaths.keys():
+            print '\nFile:\t' + d
+            print self._str_checksum(d)
+            print self._str_class(d)
+            print self._str_function(d)
+
+    def _bp():
+        '''Creates a breakpoint'''
+        import ipdb
+        ipdb.set_trace()
+
+    def _str_function(self, record):
+        '''Creates a string representation of functions within a python file
+
+        record:     The python file within the cache
+        return:     A sorted string of Functions within the specified record
+        '''
+        functStr = ''
+        if type(record) != '' and self.pythonPaths[record][-1].__contains__('Functions'):
+            for k, v in sorted(self.pythonPaths[record][-1]['Functions'].items()):
+                functStr += "\t" + str(k) + "\t" + str(v) + "\n"
+            return 'Functions:\n' + functStr
+        else:
+            return 'Functions:\n\tNone'
+
+    def _str_checksum(self, record):
+        '''Creates a string representation of the checksum of the python file within
+        the record.
+
+        record:     The python file within the cache
+        return:     The string of the python file checksum
+        '''
+        if type(record) != '':
+            return 'Checksum:\n\t' + self.pythonPaths[record][-1]['Checksum']
+        else:
+            return 'Checksum:\n\tIs unknown.'
+
+    def _str_class(self, record):
+        '''Creates a string representation of the Classes with the record.
+
+        record:     The python file within the cache
+        return:     A sorted string of Classes and Methods within the specified record
+        '''
+        classStr = ''
+        if type(record) != '' and self.pythonPaths[record][-1].__contains__('Classes'):
+            for k, v in sorted(self.pythonPaths[record][-1]['Classes'].items()):
+                for k1, v1 in v.items():
+                    classStr += str(k) + "\t" + str(k1) + "\n" + self._str_method(record, k, k1)
+            return 'Classes:\n' + classStr
+        else:
+            return 'Classes:\n\tNone'
+
+    def _str_method(self, record, lineNo, cName):
+        '''Creates a string representation of the Methods within a Classes
+
+        record:     The python file within the cache
+        lineNo:     The line number of the Class
+        cName:      The Class name
+        return:     A sorted string of Methods within a Classes
+        '''
+        methStr = ''
+        if type(record) != '':
+            for k, v in sorted(self.pythonPaths[record][-1]['Classes'][lineNo][cName].items()):
+                methStr += "\t" + str(k) + "\t" + str(v) + "\n"
+            return methStr
+        else:
+            return "\tNo Methods"
+
+    def __repr__(self):
+        pass
+
+    def __iter__(self):
+        pass
+
+    def _findPrivateMethods(self):
+        pass
+
+    def _findUserMethods(self):
+        pass
+
+
+def breakpoint():
+    '''Creates a breakpoint if sys.argv[-1] is debug'''
+    if sys.argv[-1] == "debug":
+        import ipdb
+        ipdb.set_trace()  # Added breakpoint
+
+
+def profile():
+    '''Creates a profiling point if sys.argv[-1] is profile'''
+    global PYTHON_PATHS
+    global DATA_CACHE
+    if sys.argv[-1] == 'profile':
+        import cProfile
+        cProfile.run('main()')
+
+
+def main():
+    '''The main function
+
+    return:     True if all data is read into DATA_CACHE, False if IOError
+    '''
+    # TODO -- remake for use of class.
+    if len(sys.argv) > 0:
+        breakpoint()
+        profile()
+
+    #if os.path.exists(DATA_CACHE) and openCache():
+        #print PYTHON_PATHS.keys()
+        #print str1()
+    #   print "The Number of files:  " + str(PYTHON_PATHS.__len__())
+   #else:
+   #    for v in sys.path:
+   #        createCache(v)
+   #    createPythonPathCacheFile()
+        #print PYTHON_PATHS.keys()
+   #    print "The Number of files: " + str(PYTHON_PATHS.__len__())
+
+    return True
+
+if __name__ == "__main__":
+    main()

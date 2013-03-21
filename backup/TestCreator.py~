@@ -1,0 +1,182 @@
+#!/usr/bin/env python
+#
+# @Author:      Vincent Vetsch
+# @Email:       vincent.vetsch@gmail.com
+#
+#from IPython.core.debugger import Tracer
+#TODO-C:  Find proper import for regular expressions Completed: Fri 15 Jun 2012 02:18:42 PM CDT
+import pdb
+from os import path
+from string import Template
+from re import findall
+import cPickle
+from sys import stdin
+
+class TestCreator:
+    '''Creates a test class for a python class '''
+    InputFile = ''
+    OutputFile = ''
+    fileData = ''
+    ClassName = []
+    MethodNameList = []
+    TestCaseMethodList = []
+    authorDict = {}
+    shebang = "#!/usr/bin/env python\n"
+    author = Template('# Author:' + 8 * ' ' + '$author\n')
+    email = Template('# Email: ' + 8 * ' ' + '$email\n')
+    imports = "import unittest\n"
+    testClass = "class Test(unittest.TestCase):"
+    mainmethod = "if __name__ == '__main__':\n"
+    unitTest = 8 * ' ' + "unittest.main()"
+
+    def __init__(self, inputFileName, outputFileName):
+        ''' Class Constructor '''
+        pdb.set_trace()  # Breakpoint for debugging
+        self.InputFile = self.setImputFile(inputFileName)  # String
+        self.OutputFile = self.setOutputFile(outputFileName)  # String
+        self.fileContents()
+        self.fileData = self.setFileData()  # String
+        self.ClassName = self.setClassName(self.fileData)  # List
+        self.MethodNamesList = self.setMethodNamesList()  # List
+        self.TestCaseMethodList = self.setTestCaseMethodList()  # List
+        self.authorDict = self.setEmailandAuthor()  # Dictionary
+
+    def setInputFile(self, fileName):
+        ''' Sets self.inputFile to the handle '''
+        # returns Null
+        if path.exists(fileName):
+            return open(fileName, 'r')
+        else:
+            raise IOError
+
+    def closeInputFile(self):
+        ''' Closes self.InputFile '''
+        return self.getInputFile().close
+
+    def getInputFile(self):
+        ''' Gets the data from the inputFile '''
+        # returns String
+        return self.InputFile
+
+    def setClassName(self, fileContents):
+        ''' Sets self.className to the name of the class contained within self.fileContents '''
+        # returns
+        self.ClassName = findall(r'class+\s\w+\:', self.fileData)
+        self.ClassName += findall(r'class+\s\w+\(\w+\):', self.fileData)
+
+    def getClassName(self):
+        ''' Gets the contents of ClassName '''
+        # returns List
+        return self.ClassName
+
+    def setOutputFile(self, fileName):
+        ''' Sets self.outputFile to a filehandle for writing the testCase.  Creates a new file. '''
+        # returns Null
+        #TODO-C:  Add code Completed:  Fri 15 Jun 2012 05:44:47 PM CDT
+        if path.exists(path.split(fileName)[0]):
+            return open(fileName, 'a')
+        else:
+            raise IOError
+
+    def getOutputFile(self):
+        ''' Gets the contents of the output file. '''
+        # returns List
+        #TODO-C:  Add code Completed: Fri 15 Jun 2012 05:45:50 PM CDT
+        return self.OutputFile
+
+    def closeOutputFile(self):
+        ''' Closes the output file '''
+        return self.getOutputFile().close
+
+    def setFileData(self, fileHandle):
+        ''' Sets self.fileData to a list of strings '''
+        # returns Null
+        #TODO-C:  Add code Completed:  Fri 15 Jun 2012 07:28:36 PM CDT
+        self.fileData = self.getInputFile().read()
+        self.closeInputFile()
+
+    def getFileData(self):
+        ''' Gets the data from the inputFile as readlines and composes a list '''
+        # returns List
+        return self.fileData
+
+    def setMethodNamesList(self):
+        ''' Sets the self.MethodNamesList to the values of methods of the class '''
+        # returns Null
+        self.MethodNamesList = findall(r'def+\s\w+', self.fileData)
+
+    def getMethodNamesList(self):
+        ''' Gets the List of method names from the input class '''
+        # returns List
+        return self.MethodNamesList
+
+    def setTestCaseMethodList(self):
+        ''' Creates the method names for the test case. '''
+        # returns Null
+        #TODO-C:  Add code Completed: Fri 15 Jun 2012 07:11:33 PM CDT
+        for x in self.getMethodNamesList():
+            if x != 'def __init__(self)':
+                self.TestCaseMethodList.append('def test' + x.split()[1] + '(self):')
+
+    def getTestCaseMethodList(self):
+        ''' Gets the Test case method names '''
+        # returns List
+        return self.TestCaseMethodList
+
+    def writeTestCaseToFile(self):
+        ''' Writes the test cases to the output file. '''
+        # returns Boolean
+        #TODO:  Add code
+        # Use Template to create the test case class
+        # Use template to create the test cases
+        # Use template for buildup and tear down methods
+        # Write the shebang to the outputfile
+        self.setOutputFile(self.shebang)
+        # Write the comments to the outputfile
+        self.setOutputFile(self.author.substitute(author=self.authorDict["Author"]))
+        self.setOutputFile(self.email.substitute(email=self.authorDict["Email"]))
+        # Write the imports to the outputfile
+        self.setOutputFile(self.imports)
+        # Write the testClass to the outputfile
+        self.setOutputFile(self.testClass)
+        # Write the test cases methods to the outputfile
+        for x in self.getTestCaseMethodList():
+            print x
+
+        # Write the class name to the outputfile
+
+        # Write the mainmethod to the output file
+        self.setOutputFile(self.mainmethods)
+        self.setOutputFile(self.unitTest)
+        # Close the Output file after writing to it.
+        self.closeOutputFile()
+
+    def appendTestCase(self, methodName):
+        ''' Appends a test method to a test class '''
+        # returns Boolean
+        #TODO:  Add code
+        pass
+
+    def setEmailandAuthor(self, authorFile='~/.testAuthor'):
+        ''' Gets data from the author file .testAuthor,
+        if it doesn't exist it will ask for the author
+        information and create the file'''
+        if path.exists(path.expanduser(authorFile)):
+            f = open(path.expanduser(authorFile), "r")
+            p = cPickle.Unpickler(f)
+            self.authorDict = p.load()
+            f.close()
+        else:
+            f = open(path.expanduser(authorFile), "w")
+            p = cPickle.Pickler(f)
+            # Read input from user
+            print "Enter the Author Name:  "
+            self.authorDict["Author"] = stdin.readlines()
+            print "Enter the Email Address:  "
+            self.authorDict["Email"] = stdin.readlines()
+            p.dump(self.authorDict)
+            f.close()
+
+
+if __name__ == '__main__':
+    pass

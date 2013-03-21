@@ -1,0 +1,7 @@
+ {% extends "base.html" %}
+
+    {% block content %}
+      <h1>Customer Feedback Form</h1>
+      <hr />
+    {%  endblock %}
+
