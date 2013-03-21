@@ -3,7 +3,7 @@
 *.un~
 *.pyc
 *.pyo
-tmp/
+tmp/**
 backup/**
 bundle/**
 
