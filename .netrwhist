@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/vince'
-let g:netrw_dirhist_2='/home/vince/Shared Files'
-let g:netrw_dirhist_3='/home/vince'
-let g:netrw_dirhist_4='/home/vince/Projects'
-let g:netrw_dirhist_5='/home/vince/Projects/McInspWork'
-let g:netrw_dirhist_6='/home/vince/Projects/McInspWork/McGlennInspections'
-let g:netrw_dirhist_7='/home/vince/Projects/McInspWork/McGlennInspections/appointment'

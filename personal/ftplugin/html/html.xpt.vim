@@ -1,3 +1,5 @@
+XPTemplate priority=personal
+
 XPT html " <html><head>..<head><body>...
 <!DOCTYPE html>
 <html>
@@ -12,6 +14,42 @@ XPT head " <head>..</head>
     `:contenttype:^
     `:title:^
 </head>
+
+XPT bc " Django content block {% block content ...
+{%block content %}
+  `cursor^
+{% endblock %}
+
+XPT bif " Django If {% if value %} ...
+{% if `value^ `operator^ `condition^ %}
+  `cursor^
+{% endif %}
+
+XPT bifel  " Django if - else {% if value %} {% else...
+{% if `value^ `operator^ `condition^ %}
+  `cursor^
+{% else %}
+  
+{% endif %}
+
+XPT bifelif  " Django if - else {% if value %} {% else...
+{% if `value1^ `operator1^ `condition1^ %}
+  `cursor^
+{% elif `value2^ `operator2^ `condition2^%}
+  
+{% endif %}
+
+XPT bvar "Django variable {{ value }}
+{{ `value^ }} `cursor^
+
+XPT baddelif " Django add elif {% elif ...
+{% elif `value^ `operator^ `condition^ %}
+  `cursor^
+
+XPT bfor " Django For {% for i in ....
+{% for `value^ in `list^ %}
+  `cursor^
+{% endfor %}
 
 XPT to " <!--TODO -  -->
 <!--TODO - `cursor^  -->

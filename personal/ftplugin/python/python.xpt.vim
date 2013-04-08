@@ -50,11 +50,20 @@ Date    : `date()^
 
 `$PYTHON_DOC_MARK^
 
+XPT elif " Add elif to if ...
+elif `expression^:
+    `cursor^
 
-XPT docstr  " Comments
+XPT fix " # FIXME - Personal
+# FIXME - `cursor^
+
+XPT todo " # TODO - Personal
+# TODO - `cursor^
+
+XPT doc  " ''' Docstring ''' Personal
 '''`cursor^'''
 
-XPT init " def __init__
+XPT init " def __init__ Personal
 XSET arg*|post=ExpandInsideEdge( ',$SPop', '' )
 def __init__`$SPfun^(`$SParg^self`,$SPop`arg*^`$SParg^):
     '''The Constructor
@@ -63,7 +72,7 @@ def __init__`$SPfun^(`$SParg^self`,$SPop`arg*^`$SParg^):
     '''
     `cursor^
 
-XPT class " class .. : def __init__ ...
+XPT class " class .. : def __init__ ... Personal
 class `ClassName^(`object^):
     '''`ClassName^:  `classComment^'''
     `:init:^
@@ -78,3 +87,18 @@ def `name^(`input^):
         `return values^
     '''
     `cursor^
+
+XPT setup " Python C setup.py Personal
+from distutils.core import setup, Extension
+
+module1 = Extension('exmod',
+                    include_dirs=['/usr/include/'],
+                    libraries=['pthread'],
+                    sources=['exmodmodule.c'])
+setup(name='exmod',
+    version='0.1',
+    description='This is an example c package',
+    author='Vincent Vetsch',
+    url='http://www.mcglenninspections.com',
+    ext_modules=[module1])
+
